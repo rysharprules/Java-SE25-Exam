@@ -11,24 +11,24 @@ This breaks the syllabus into 14 chapters.
 
 ### Chapters
 
-| Chapter | Assessment | Notes | Description |
-|---------|------------|-------|-------------|
-| 00 - Pre-Assessment | [Assessment](src/rysharp/jdk21/base/chapter/_00_Pre-Assessment/assessment.md) | [Notes](src/rysharp/jdk21/base/chapter/_00_Pre-Assessment/notes.md) | Pre-Assessment |
-| 01 - Building Blocks | [Assessment](src/rysharp/jdk21/base/chapter/_01_Building_Blocks/assessment.md) | [Notes](src/rysharp/jdk21/base/chapter/_01_Building_Blocks/notes.md) | Java basics, variables, flow |
-| 02 - Operators | [Assessment](src/rysharp/jdk21/base/chapter/_02_Operators/assessment.md) | [Notes](src/rysharp/jdk21/base/chapter/_02_Operators/notes.md) | Operators and expressions |
-| 03 - Making Decisions | [Assessment](src/rysharp/jdk21/base/chapter/_03_Making_Decisions/assessment.md) | [Notes](src/rysharp/jdk21/base/chapter/_03_Making_Decisions/notes.md) | Conditionals, switch, loops |
-| 04 - Core APIs | [Assessment](src/rysharp/jdk21/base/chapter/_04_Core_APIs/assessment.md) | [Notes](src/rysharp/jdk21/base/chapter/_04_Core_APIs/notes.md) | Strings, arrays, dates |
-| 05 - Methods | [Assessment](src/rysharp/jdk21/base/chapter/_05_Methods/assessment.md) | [Notes](src/rysharp/jdk21/base/chapter/_05_Methods/notes.md) | Methods, parameters |
-| 06 - Class Design | [Assessment](src/rysharp/jdk21/base/chapter/_06_Class_Design/assessment.md) | [Notes](src/rysharp/jdk21/base/chapter/_06_Class_Design/notes.md) | Classes, inheritance |
-| 07 - Beyond Classes | [Assessment](src/rysharp/jdk21/base/chapter/_07_Beyond_Classes/assessment.md) | [Notes](src/rysharp/jdk21/base/chapter/_07_Beyond_Classes/notes.md) | Abstract, sealed, records |
-| 08 - Lambdas & Functional Interfaces | [Assessment](src/rysharp/jdk21/base/chapter/_08_Lambdas_and_Functional_Interfaces/assessment.md) | [Notes](src/rysharp/jdk21/base/chapter/_08_Lambdas_and_Functional_Interfaces/notes.md) | Lambdas, functional APIs |
-| 09 - Collections & Generics | [Assessment](src/rysharp/jdk21/base/chapter/_09_Collections_and_Generics/assessment.md) | [Notes](src/rysharp/jdk21/base/chapter/_09_Collections_and_Generics/notes.md) | Collections, generics |
-| 10 - Streams | [Assessment](src/rysharp/jdk21/base/chapter/_10_Streams/assessment.md) | [Notes](src/rysharp/jdk21/base/chapter/_10_Streams/notes.md) | Streams, pipelines |
-| 11 - Exceptions & Localisation | [Assessment](src/rysharp/jdk21/base/chapter/_11_Exceptions_and_Localisation/assessment.md) | [Notes](src/rysharp/jdk21/base/chapter/_11_Exceptions_and_Localisation/notes.md) | Exceptions, localisation |
-| 12 - Modules | [Assessment](src/rysharp/jdk21/base/chapter/_12_Modules/assessment.md) | [Notes](src/rysharp/jdk21/base/chapter/_12_Modules/notes.md) | Java modules |
-| 13 - Concurrency | [Assessment](src/rysharp/jdk21/base/chapter/_13_Concurrency/assessment.md) | [Notes](src/rysharp/jdk21/base/chapter/_13_Concurrency/notes.md) | Threads, concurrency |
-| 14 - Input/Output | [Assessment](src/rysharp/jdk21/base/chapter/_14_Input_Output/assessment.md) | [Notes](src/rysharp/jdk21/base/chapter/_14_Input_Output/notes.md) | Input/Output |
-| Summary | [Assessment Summary](src/rysharp/jdk21/base/assessment_summary.md) | - | Overall scores and stats |
+| Chapter | Notes | Assessment | Description |
+|---------|-------|------------|-------------|
+| 00 - Pre-Assessment | [Notes](src/rysharp/jdk21/base/chapter/_00_Pre-Assessment/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_00_Pre-Assessment/assessment.md) | Pre-Assessment |
+| 01 - Building Blocks | [Notes](src/rysharp/jdk21/base/chapter/_01_Building_Blocks/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_01_Building_Blocks/assessment.md) | Java basics, variables, flow |
+| 02 - Operators | [Notes](src/rysharp/jdk21/base/chapter/_02_Operators/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_02_Operators/assessment.md) | Operators and expressions |
+| 03 - Making Decisions | [Notes](src/rysharp/jdk21/base/chapter/_03_Making_Decisions/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_03_Making_Decisions/assessment.md) | Conditionals, switch, loops |
+| 04 - Core APIs | [Notes](src/rysharp/jdk21/base/chapter/_04_Core_APIs/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_04_Core_APIs/assessment.md) | Strings, arrays, dates |
+| 05 - Methods | [Notes](src/rysharp/jdk21/base/chapter/_05_Methods/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_05_Methods/assessment.md) | Methods, parameters |
+| 06 - Class Design | [Notes](src/rysharp/jdk21/base/chapter/_06_Class_Design/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_06_Class_Design/assessment.md) | Classes, inheritance |
+| 07 - Beyond Classes | [Notes](src/rysharp/jdk21/base/chapter/_07_Beyond_Classes/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_07_Beyond_Classes/assessment.md) | Abstract, sealed, records |
+| 08 - Lambdas & Functional Interfaces | [Notes](src/rysharp/jdk21/base/chapter/_08_Lambdas_and_Functional_Interfaces/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_08_Lambdas_and_Functional_Interfaces/assessment.md) | Lambdas, functional APIs |
+| 09 - Collections & Generics | [Notes](src/rysharp/jdk21/base/chapter/_09_Collections_and_Generics/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_09_Collections_and_Generics/assessment.md) | Collections, generics |
+| 10 - Streams | [Notes](src/rysharp/jdk21/base/chapter/_10_Streams/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_10_Streams/assessment.md) | Streams, pipelines |
+| 11 - Exceptions & Localisation | [Notes](src/rysharp/jdk21/base/chapter/_11_Exceptions_and_Localisation/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_11_Exceptions_and_Localisation/assessment.md) | Exceptions, localisation |
+| 12 - Modules | [Notes](src/rysharp/jdk21/base/chapter/_12_Modules/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_12_Modules/assessment.md) | Java modules |
+| 13 - Concurrency | [Notes](src/rysharp/jdk21/base/chapter/_13_Concurrency/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_13_Concurrency/assessment.md) | Threads, concurrency |
+| 14 - Input/Output | [Notes](src/rysharp/jdk21/base/chapter/_14_Input_Output/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_14_Input_Output/assessment.md) | Input/Output |
+| Summary | - | [Assessment Summary](src/rysharp/jdk21/base/assessment_summary.md) | Overall scores and stats |
 
 ## JDK 25 Addendum
 An addendum for additions introduced across JDK 22–25 that show up in
