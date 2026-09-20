@@ -11,10 +11,12 @@ argument preparation.
 ## Unnamed Variables and Patterns (_):
 The underscore is a valid identifier for unused variables in catch blocks, 
 lambdas, enhanced for-loops, and record patterns (e.g., `Point(int x, int _)`).
+See [Unnamed Variables](UnnamedVariables.md) for more detail.
 
 ## Module Import Declarations (JEP 511):
 `import module java.base;` 
 imports all public packages exported by that module in a single stroke.   
+See [Module Import Declarations](ModuleImportDeclarations.md) for more detail.
 
 ## Compact Source Files and Instance Main Methods (JEP 512):
 You can drop `public static void main(String[] args)` down to a simple `void main()`.
