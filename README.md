@@ -7,7 +7,8 @@ Notes to support the Oracle 1Z0-831 Java 25 SE Developer exam.
 My base learning is from [OCP Oracle Certified Professional Java SE 21 Developer Study Guide: Exam 1z0-830](https://www.amazon.co.uk/Oracle-Certified-Professional-Developer-Study/dp/1394286619) via [O'Reilly](https://learning.oreilly.com/library/view/ocp-oracle-certified/9781394286614/).
 This breaks the syllabus into 14 chapters.
 
-![OCP Java SE 21 Developer Study Guide](img/ocp21book.jpg)
+<img src="img/ocp21book.jpg" alt="OCP Java SE 21 Developer Study Guide" width="200"/>
+
 ### Chapters
 
 | Chapter | Assessment | Notes | Description |
@@ -51,6 +52,7 @@ For tracking the exact exam blueprint changes against Java 21, the [Enthuware OC
 
 ### Udemy
 
-![Udemy](img/udemy.png)
+<img src="img/udemy.png" alt="Udemy" width="200"/>
+
 
 [Java 25 Professional Certification - 6 full Tests (1Z0-831)](https://www.udemy.com/course/ocp-oracle-certified-professional-java-developer-prep/)
