@@ -13,18 +13,18 @@
 | 9  | IO/NIO                    | h         |               |                |                                                                                 |
 | 10 | Path                      | cde       |               |                |                                                                                 |
 | 11 | IO interfaces & classes   | e         |               |                |                                                                                 |
-| 12 |                           |           |               |                |                                                                                 |
-| 13 |                           |           |               |                |                                                                                 |
-| 14 |                           |           |               |                |                                                                                 |
-| 15 |                           |           |               |                |                                                                                 |
-| 16 |                           |           |               |                |                                                                                 |
-| 17 |                           |           |               |                |                                                                                 |
-| 18 |                           |           |               |                |                                                                                 |
-| 19 |                           |           |               |                |                                                                                 |
-| 20 |                           |           |               |                |                                                                                 |
-| 21 |                           |           |               |                |                                                                                 |
-| 22 |                           |           |               |                |                                                                                 |
-| 23 |                           |           |               |                |                                                                                 |
+| 12 | Files                     | a         |               |                |                                                                                 |
+| 13 | Serializable              | afg       |               |                |                                                                                 |
+| 14 | Path                      | adf       |               |                |                                                                                 |
+| 15 | IO/NIO                    | bdef      |               |                |                                                                                 |
+| 16 | IO interfaces & classes   | d         |               |                |                                                                                 |
+| 17 | IO/NIO                    | bcde      |               |                |                                                                                 |
+| 18 | mark/skip                 | c         |               |                |                                                                                 |
+| 19 | Files                     | c         |               |                |                                                                                 |
+| 20 | Files                     | c         |               |                |                                                                                 |
+| 21 | Files                     | c         |               |                |                                                                                 |
+| 22 | Serializable              | abde      |               |                |                                                                                 |
+| 23 | Files                     | b         |               |                |                                                                                 |
 | 24 | Files                     | e         |               |                |                                                                                 |
 | 25 | IO interfaces & classes   | bc        |               |                |                                                                                 |
 
