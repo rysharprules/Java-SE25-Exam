@@ -36,13 +36,13 @@ the 1Z0-831 exam objectives.
 
 | Feature | Description | Notes |
 |---------|-------------|-------|
-| Flexible Constructor Bodies (JEP 513) | Allows statements in constructor before `super()` or `this()`. | [Notes](src/rysharp/jdk25/addendum/flexible_constructor_bodies.md) |
-| Unnamed Variables and Patterns (_) | Use `_` for unused variables. | [Notes](src/rysharp/jdk25/addendum/unnamed_variables.md) |
-| Module Import Declarations (JEP 511) | `import module java.base;` | [Notes](src/rysharp/jdk25/addendum/module_import_declarations.md) |
-| Compact Source Files and Instance Main Methods (JEP 512) | Streamlined main methods. | [Notes](src/rysharp/jdk25/addendum/compact_source_files_and_instance_main_methods.md) |
-| Stream Gatherers | Flexible intermediate operations. | [Notes](src/rysharp/jdk25/addendum/stream_gatherers.md) |
-| Scoped Values (JEP 506) | Immutable alternative to thread-local variables. | [Notes](src/rysharp/jdk25/addendum/scoped_values.md) |
-| Minor API Additions | Various small updates. | [Notes](src/rysharp/jdk25/addendum/minor_api_additions.md) |
+| Flexible Constructor Bodies (JEP 513) | Allows statements in constructor before `super()` or `this()`. | [Notes](src/rysharp/jdk25/addendum/Flexible_Constructor_Bodies/flexible_constructor_bodies.md) |
+| Unnamed Variables and Patterns (_) | Use `_` for unused variables. | [Notes](src/rysharp/jdk25/addendum/Unnamed_Variables/unnamed_variables.md) |
+| Module Import Declarations (JEP 511) | `import module java.base;` | [Notes](src/rysharp/jdk25/addendum/Module_Import_Declarations/module_import_declarations.md) |
+| Compact Source Files and Instance Main Methods (JEP 512) | Streamlined main methods. | [Notes](src/rysharp/jdk25/addendum/Compact_Source_Files_and_Instance_Main_Methods/compact_source_files_and_instance_main_methods.md) |
+| Stream Gatherers | Flexible intermediate operations. | [Notes](src/rysharp/jdk25/addendum/Stream_Gatherers/stream_gatherers.md) |
+| Scoped Values (JEP 506) | Immutable alternative to thread-local variables. | [Notes](src/rysharp/jdk25/addendum/Scoped_Values/scoped_values.md) |
+| Minor API Additions | Various small updates. | [Notes](src/rysharp/jdk25/addendum/Minor_Api_Additions/minor_api_additions.md) |
 
 For a comprehensive breakdown of the platform updates, you can check the [Oracle JDK 25 Release Notes](https://www.oracle.com/asean/java/technologies/javase/25-relnote-issues.html).
 
