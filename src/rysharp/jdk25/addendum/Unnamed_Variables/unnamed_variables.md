@@ -60,9 +60,9 @@ For Java 25, that includes:
 int _ = calculateSomething();
 
 // for loop
-for (int _ = 0; _ < 10; _++) {
-    doSomething();
-}
+// for (int _ = 0; _ < 10; _++) { // ❌ DOES NOT COMPILE
+//    doSomething();
+// }
 
 // enhanced for
 for (String _ : names) {
@@ -92,50 +92,6 @@ if (obj instanceof String _) {
     // We only care that obj IS a String.
 }
 ```
-
-#### The simple mental rule
-
-Think:
-
-**Local → Loop → Catch → Lambda → Pattern**
-
-`_` is legal for:
-
-* **Local variables**
-
-  ```java
-  int _ = calculate();
-  ```
-
-* **`for` variables**
-
-  ```java
-  for (int _ : numbers) { }
-  ```
-
-* **try-with-resources**
-
-  ```java
-  try (var _ = resource()) { }
-  ```
-
-* **catch parameters**
-
-  ```java
-  catch (Exception _) { }
-  ```
-
-* **lambda parameters**
-
-  ```java
-  list.forEach(_ -> doSomething());
-  ```
-
-* **patterns**, including record patterns and `switch`
-
-  ```java
-  if (obj instanceof Point(_, _)) { }
-  ```
 
 ### The big exam rule: **you cannot refer to `_`**
 

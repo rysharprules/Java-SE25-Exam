@@ -20,7 +20,7 @@ This page summarizes the assessment scores for the Java SE 21/25 certification s
 | 11 | 46.00%    | [Assessment](chapter/_11_Exceptions_and_Localisation/assessment.md) |
 | 12 | 64.00%    | [Assessment](chapter/_12_Modules/assessment.md) |
 | 13 | 52.00%    | [Assessment](chapter/_13_Concurrency/assessment.md) |
-| 14 | 36.00%    | [Assessment](chapter/_14_Input_Output/assessment.md) |
+| 14 | 40.00%    | [Assessment](chapter/_14_Input_Output/assessment.md) |
 
 ## Analysis
 
