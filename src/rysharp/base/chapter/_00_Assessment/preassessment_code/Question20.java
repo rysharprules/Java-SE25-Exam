@@ -1,4 +1,4 @@
-package rysharp.base.chapter._00;
+package rysharp.base.chapter._00_Assessment.preassessment_code;
 
 import java.util.Collections;
 import java.util.SequencedMap;

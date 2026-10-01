@@ -1,4 +1,4 @@
-package rysharp.base.chapter._01;
+package rysharp.base.chapter._01_Building_Blocks.assessment_code;
 
 public class Question16 {
 

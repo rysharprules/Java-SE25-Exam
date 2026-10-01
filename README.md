@@ -13,7 +13,7 @@ This breaks the syllabus into 14 chapters.
 
 | Chapter | README | Assessment | Description |
 |---------|--------|------------|-------------|
-| 00 - Assessment | [README](src/rysharp/base/chapter/_00_Assessment/README.md) | [Pre-Assessment](src/rysharp/base/chapter/_00_Assessment/preassessment.md) | Pre-Assessment |
+| 00 - Assessment | - | [Pre-Assessment](src/rysharp/base/chapter/_00_Assessment/preassessment.md) | Pre-Assessment |
 | 01 - Building Blocks | [README](src/rysharp/base/chapter/_01_Building_Blocks/README.md) | [Assessment](src/rysharp/base/chapter/_01_Building_Blocks/assessment.md) | Java basics, variables, flow |
 | 02 - Operators | [README](src/rysharp/base/chapter/_02_Operators/README.md) | [Assessment](src/rysharp/base/chapter/_02_Operators/assessment.md) | Operators and expressions |
 | 03 - Making Decisions | [README](src/rysharp/base/chapter/_03_Making_Decisions/README.md) | [Assessment](src/rysharp/base/chapter/_03_Making_Decisions/assessment.md) | Conditionals, switch, loops |

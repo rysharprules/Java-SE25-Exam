@@ -1,4 +1,4 @@
-package rysharp.base.chapter._06;
+package rysharp.base.chapter._06_Class_Design.assessment_code;
 
 class Person {
      static String name;
