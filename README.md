@@ -11,24 +11,24 @@ This breaks the syllabus into 14 chapters.
 
 ### Chapters
 
-| Chapter | Notes | Assessment | Description |
-|---------|-------|------------|-------------|
-| 00 - Pre-Assessment | [Notes](src/rysharp/jdk21/base/chapter/_00_Pre-Assessment/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_00_Pre-Assessment/assessment.md) | Pre-Assessment |
-| 01 - Building Blocks | [Notes](src/rysharp/jdk21/base/chapter/_01_Building_Blocks/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_01_Building_Blocks/assessment.md) | Java basics, variables, flow |
-| 02 - Operators | [Notes](src/rysharp/jdk21/base/chapter/_02_Operators/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_02_Operators/assessment.md) | Operators and expressions |
-| 03 - Making Decisions | [Notes](src/rysharp/jdk21/base/chapter/_03_Making_Decisions/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_03_Making_Decisions/assessment.md) | Conditionals, switch, loops |
-| 04 - Core APIs | [Notes](src/rysharp/jdk21/base/chapter/_04_Core_APIs/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_04_Core_APIs/assessment.md) | Strings, arrays, dates |
-| 05 - Methods | [Notes](src/rysharp/jdk21/base/chapter/_05_Methods/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_05_Methods/assessment.md) | Methods, parameters |
-| 06 - Class Design | [Notes](src/rysharp/jdk21/base/chapter/_06_Class_Design/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_06_Class_Design/assessment.md) | Classes, inheritance |
-| 07 - Beyond Classes | [Notes](src/rysharp/jdk21/base/chapter/_07_Beyond_Classes/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_07_Beyond_Classes/assessment.md) | Abstract, sealed, records |
-| 08 - Lambdas & Functional Interfaces | [Notes](src/rysharp/jdk21/base/chapter/_08_Lambdas_and_Functional_Interfaces/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_08_Lambdas_and_Functional_Interfaces/assessment.md) | Lambdas, functional APIs |
-| 09 - Collections & Generics | [Notes](src/rysharp/jdk21/base/chapter/_09_Collections_and_Generics/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_09_Collections_and_Generics/assessment.md) | Collections, generics |
-| 10 - Streams | [Notes](src/rysharp/jdk21/base/chapter/_10_Streams/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_10_Streams/assessment.md) | Streams, pipelines |
-| 11 - Exceptions & Localisation | [Notes](src/rysharp/jdk21/base/chapter/_11_Exceptions_and_Localisation/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_11_Exceptions_and_Localisation/assessment.md) | Exceptions, localisation |
-| 12 - Modules | [Notes](src/rysharp/jdk21/base/chapter/_12_Modules/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_12_Modules/assessment.md) | Java modules |
-| 13 - Concurrency | [Notes](src/rysharp/jdk21/base/chapter/_13_Concurrency/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_13_Concurrency/assessment.md) | Threads, concurrency |
-| 14 - Input/Output | [Notes](src/rysharp/jdk21/base/chapter/_14_Input_Output/notes.md) | [Assessment](src/rysharp/jdk21/base/chapter/_14_Input_Output/assessment.md) | Input/Output |
-| Summary | - | [Assessment Summary](src/rysharp/jdk21/base/assessment_summary.md) | Overall scores and stats |
+| Chapter | README | Assessment | Description |
+|---------|--------|------------|-------------|
+| 00 - Assessment | - | [Pre-Assessment](src/rysharp/base/chapter/_00_Assessment/preassessment.md) | Pre-Assessment |
+| 01 - Building Blocks | [README](src/rysharp/base/chapter/_01_Building_Blocks/README.md) | [Assessment](src/rysharp/base/chapter/_01_Building_Blocks/assessment.md) | Java basics, variables, flow |
+| 02 - Operators | [README](src/rysharp/base/chapter/_02_Operators/README.md) | [Assessment](src/rysharp/base/chapter/_02_Operators/assessment.md) | Operators and expressions |
+| 03 - Making Decisions | [README](src/rysharp/base/chapter/_03_Making_Decisions/README.md) | [Assessment](src/rysharp/base/chapter/_03_Making_Decisions/assessment.md) | Conditionals, switch, loops |
+| 04 - Core APIs | [README](src/rysharp/base/chapter/_04_Core_APIs/README.md) | [Assessment](src/rysharp/base/chapter/_04_Core_APIs/assessment.md) | Strings, arrays, dates |
+| 05 - Methods | [README](src/rysharp/base/chapter/_05_Methods/README.md) | [Assessment](src/rysharp/base/chapter/_05_Methods/assessment.md) | Methods, parameters |
+| 06 - Class Design | [README](src/rysharp/base/chapter/_06_Class_Design/README.md) | [Assessment](src/rysharp/base/chapter/_06_Class_Design/assessment.md) | Classes, inheritance |
+| 07 - Beyond Classes | [README](src/rysharp/base/chapter/_07_Beyond_Classes/README.md) | [Assessment](src/rysharp/base/chapter/_07_Beyond_Classes/assessment.md) | Abstract, sealed, records |
+| 08 - Lambdas & Functional Interfaces | [README](src/rysharp/base/chapter/_08_Lambdas_and_Functional_Interfaces/README.md) | [Assessment](src/rysharp/base/chapter/_08_Lambdas_and_Functional_Interfaces/assessment.md) | Lambdas, functional APIs |
+| 09 - Collections & Generics | [README](src/rysharp/base/chapter/_09_Collections_and_Generics/README.md) | [Assessment](src/rysharp/base/chapter/_09_Collections_and_Generics/assessment.md) | Collections, generics |
+| 10 - Streams | [README](src/rysharp/base/chapter/_10_Streams/README.md) | [Assessment](src/rysharp/base/chapter/_10_Streams/assessment.md) | Streams, pipelines |
+| 11 - Exceptions & Localisation | [README](src/rysharp/base/chapter/_11_Exceptions_and_Localisation/README.md) | [Assessment](src/rysharp/base/chapter/_11_Exceptions_and_Localisation/assessment.md) | Exceptions, localisation |
+| 12 - Modules | [README](src/rysharp/base/chapter/_12_Modules/README.md) | [Assessment](src/rysharp/base/chapter/_12_Modules/assessment.md) | Java modules |
+| 13 - Concurrency | [README](src/rysharp/base/chapter/_13_Concurrency/README.md) | [Assessment](src/rysharp/base/chapter/_13_Concurrency/assessment.md) | Threads, concurrency |
+| 14 - Input/Output | [README](src/rysharp/base/chapter/_14_Input_Output/README.md) | [Assessment](src/rysharp/base/chapter/_14_Input_Output/assessment.md) | Input/Output |
+| Summary | - | [Assessment Summary](src/rysharp/base/chapter/_00_Assessment/assessment_summary.md) | Overall scores and stats |
 
 ## JDK 25 Addendum
 An addendum for additions introduced across JDK 22–25 that show up in
@@ -36,13 +36,13 @@ the 1Z0-831 exam objectives.
 
 | Feature | Description | Notes |
 |---------|-------------|-------|
-| Flexible Constructor Bodies (JEP 513) | Allows statements in constructor before `super()` or `this()`. | [Notes](src/rysharp/jdk25/addendum/Flexible_Constructor_Bodies/flexible_constructor_bodies.md) |
-| Unnamed Variables and Patterns (_) | Use `_` for unused variables. | [Notes](src/rysharp/jdk25/addendum/Unnamed_Variables/unnamed_variables.md) |
-| Module Import Declarations (JEP 511) | `import module java.base;` | [Notes](src/rysharp/jdk25/addendum/Module_Import_Declarations/module_import_declarations.md) |
-| Compact Source Files and Instance Main Methods (JEP 512) | Streamlined main methods. | [Notes](src/rysharp/jdk25/addendum/Compact_Source_Files_and_Instance_Main_Methods/compact_source_files_and_instance_main_methods.md) |
-| Stream Gatherers | Flexible intermediate operations. | [Notes](src/rysharp/jdk25/addendum/Stream_Gatherers/stream_gatherers.md) |
-| Scoped Values (JEP 506) | Immutable alternative to thread-local variables. | [Notes](src/rysharp/jdk25/addendum/Scoped_Values/scoped_values.md) |
-| Minor API Additions | Various small updates. | [Notes](src/rysharp/jdk25/addendum/Minor_Api_Additions/minor_api_additions.md) |
+| Flexible Constructor Bodies (JEP 513) | Allows statements in constructor before `super()` or `this()`. | [Notes](src/rysharp/addendum/Flexible_Constructor_Bodies/flexible_constructor_bodies.md) |
+| Unnamed Variables and Patterns (_) | Use `_` for unused variables. | [Notes](src/rysharp/addendum/Unnamed_Variables/unnamed_variables.md) |
+| Module Import Declarations (JEP 511) | `import module java.base;` | [Notes](src/rysharp/addendum/Module_Import_Declarations/module_import_declarations.md) |
+| Compact Source Files and Instance Main Methods (JEP 512) | Streamlined main methods. | [Notes](src/rysharp/addendum/Compact_Source_Files_and_Instance_Main_Methods/compact_source_files_and_instance_main_methods.md) |
+| Stream Gatherers | Flexible intermediate operations. | [Notes](src/rysharp/addendum/Stream_Gatherers/stream_gatherers.md) |
+| Scoped Values (JEP 506) | Immutable alternative to thread-local variables. | [Notes](src/rysharp/addendum/Scoped_Values/scoped_values.md) |
+| Minor API Additions | Various small updates. | [Notes](src/rysharp/addendum/Minor_Api_Additions/minor_api_additions.md) |
 
 For a comprehensive breakdown of the platform updates, you can check the [Oracle JDK 25 Release Notes](https://www.oracle.com/asean/java/technologies/javase/25-relnote-issues.html).
 
