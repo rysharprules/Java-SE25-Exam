@@ -7,8 +7,8 @@ A `ScopedValue` lets you make a value available to code further down the call ch
 ### Code Example
 You can find two code examples demonstrating Scoped Values:
 
-1. A basic example in `src\rysharp\jdk25\addendum\Scoped_Values\code\ScopedValueExample.java`.
-2. A more real-life example (Request Context) in `src\rysharp\jdk25\addendum\Scoped_Values\code\RealLifeScopedValueExample.java`.
+1. [A basic example](code\ScopedValueExample.java).
+2. [A more real-life example (Request Context)](code\RealLifeScopedValueExample.java).
 
 The key idea is:
 
