@@ -9,6 +9,13 @@ This breaks the syllabus into 14 chapters.
 
 <img src="img/ocp21book.jpg" alt="OCP Java SE 21 Developer Study Guide" width="200"/>
 
+### Rating and Review
+★★★★★
+ > I recommend this book as a great way to learn what you need for Java SE 21, specifically for the exam. It covers all the topics 
+in the exam syllabus and provides clear explanations and examples. The book also includes tricky practice questions and answers 
+to help you prepare for the exam. I've used books from these authors for previous exams with success. Sadly, their Java SE 25 book
+was not released before I took the exam.
+
 ### Chapters
 
 | Chapter | README | Assessment | Description |
@@ -31,8 +38,7 @@ This breaks the syllabus into 14 chapters.
 | Summary | - | [Assessment Summary](src/rysharp/base/chapter/_00_Assessment/assessment_summary.md) | Overall scores and stats |
 
 ## JDK 25 Addendum
-An addendum for additions introduced across JDK 22–25 that show up in
-the 1Z0-831 exam objectives.
+An addendum for additions introduced across JDK 22–25 that show up in the 1Z0-831 exam objectives.
 
 | Feature | Description | README |
 |---------|-------------|--------|
@@ -54,5 +60,8 @@ For tracking the exact exam blueprint changes against Java 21, the [Enthuware OC
 
 <img src="img/udemy.png" alt="Udemy" width="200"/>
 
-
-[Java 25 Professional Certification - 6 full Tests (1Z0-831)](https://www.udemy.com/course/ocp-oracle-certified-professional-java-developer-prep/)
+| Course | Notes | Link | Rating | Review |
+|---------|-------------|--------|--------|--|
+| Java SE 25 Developer Professional 1Z0-831 Practice Tests | 150 practice questions (3 exams) with detailed explanations. | [Link](https://www.udemy.com/course/java-se-25-developer-professional-1z0-831-practice-tests/) | ★★★⯪☆ | <blockquote>The second tests questions and answers were completely out of sync so correct answers were almost always incorrectly flagged as incorrect. On a couple of occasions the question was out of date (e.g. saying super/this must be the first statement in the constructor despite flexible constructor bodies). Code examples were not formatted so difficult to read. Many questions were about things not included in the exam objectives, but loosely associated, so acceptable. The explanations were mostly pretty good. Generally this was worthwhile as a tool but likely there are better mocks out there.</blockquote> |
+| Java 25 Professional Certification - 6 full Tests (1Z0-831) | 6 exams | [Link](https://www.udemy.com/course/ocp-oracle-certified-professional-java-developer-prep/) | TBD | |
+|Oracle 1Z0-830 > Java SE 21 Developer Certification Exam Prep Course with Lambda Expression & Java Collections Framework|226 videos|[Link](https://www.udemy.com/course/java-se-21-developer-oracle-certified-professional-1z0-830)|TBD| |
