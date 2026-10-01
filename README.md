@@ -13,7 +13,7 @@ This breaks the syllabus into 14 chapters.
 
 | Chapter | README | Assessment | Description |
 |---------|--------|------------|-------------|
-| 00 - Assessment | - | [Pre-Assessment](src/rysharp/base/chapter/_00_Assessment/preassessment.md) | Pre-Assessment |
+| 00 - Assessment | [README](src/rysharp/base/chapter/_00_Assessment/README.md) | [Pre-Assessment](src/rysharp/base/chapter/_00_Assessment/preassessment.md) | Pre-Assessment |
 | 01 - Building Blocks | [README](src/rysharp/base/chapter/_01_Building_Blocks/README.md) | [Assessment](src/rysharp/base/chapter/_01_Building_Blocks/assessment.md) | Java basics, variables, flow |
 | 02 - Operators | [README](src/rysharp/base/chapter/_02_Operators/README.md) | [Assessment](src/rysharp/base/chapter/_02_Operators/assessment.md) | Operators and expressions |
 | 03 - Making Decisions | [README](src/rysharp/base/chapter/_03_Making_Decisions/README.md) | [Assessment](src/rysharp/base/chapter/_03_Making_Decisions/assessment.md) | Conditionals, switch, loops |
@@ -34,15 +34,15 @@ This breaks the syllabus into 14 chapters.
 An addendum for additions introduced across JDK 22–25 that show up in
 the 1Z0-831 exam objectives.
 
-| Feature | Description | Notes |
-|---------|-------------|-------|
-| Flexible Constructor Bodies (JEP 513) | Allows statements in constructor before `super()` or `this()`. | [Notes](src/rysharp/addendum/Flexible_Constructor_Bodies/flexible_constructor_bodies.md) |
-| Unnamed Variables and Patterns (_) | Use `_` for unused variables. | [Notes](src/rysharp/addendum/Unnamed_Variables/unnamed_variables.md) |
-| Module Import Declarations (JEP 511) | `import module java.base;` | [Notes](src/rysharp/addendum/Module_Import_Declarations/module_import_declarations.md) |
-| Compact Source Files and Instance Main Methods (JEP 512) | Streamlined main methods. | [Notes](src/rysharp/addendum/Compact_Source_Files_and_Instance_Main_Methods/compact_source_files_and_instance_main_methods.md) |
-| Stream Gatherers | Flexible intermediate operations. | [Notes](src/rysharp/addendum/Stream_Gatherers/stream_gatherers.md) |
-| Scoped Values (JEP 506) | Immutable alternative to thread-local variables. | [Notes](src/rysharp/addendum/Scoped_Values/scoped_values.md) |
-| Minor API Additions | Various small updates. | [Notes](src/rysharp/addendum/Minor_Api_Additions/minor_api_additions.md) |
+| Feature | Description | README |
+|---------|-------------|--------|
+| Flexible Constructor Bodies (JEP 513) | Allows statements in constructor before `super()` or `this()`. | [README](src/rysharp/addendum/Flexible_Constructor_Bodies/README.md) |
+| Unnamed Variables and Patterns (_) | Use `_` for unused variables. | [README](src/rysharp/addendum/Unnamed_Variables/README.md) |
+| Module Import Declarations (JEP 511) | `import module java.base;` | [README](src/rysharp/addendum/Module_Import_Declarations/README.md) |
+| Compact Source Files and Instance Main Methods (JEP 512) | Streamlined main methods. | [README](src/rysharp/addendum/Compact_Source_Files_and_Instance_Main_Methods/README.md) |
+| Stream Gatherers | Flexible intermediate operations. | [README](src/rysharp/addendum/Stream_Gatherers/README.md) |
+| Scoped Values (JEP 506) | Immutable alternative to thread-local variables. | [README](src/rysharp/addendum/Scoped_Values/README.md) |
+| Minor API Additions | Various small updates. | [README](src/rysharp/addendum/Minor_Api_Additions/README.md) |
 
 For a comprehensive breakdown of the platform updates, you can check the [Oracle JDK 25 Release Notes](https://www.oracle.com/asean/java/technologies/javase/25-relnote-issues.html).
 
