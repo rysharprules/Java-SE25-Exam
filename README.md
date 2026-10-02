@@ -18,6 +18,8 @@ was not released before I took the exam.
 
 ### Chapters
 
+**Note: README notes cover aspects which I personally felt needed exam-specific shortcuts/notes/references to support memorization and nuance awareness. I also attempt to call out where JDK25 differs from JDK21. The README does not cover _every_ topic of that chapter, nor does the associated example code.**
+
 | Chapter | README | Assessment | Description |
 |---------|--------|------------|-------------|
 | 00 - Assessment | - | [Pre-Assessment](src/rysharp/base/chapter/_00_Assessment/preassessment.md) | Pre-Assessment |
