@@ -1,10 +1,11 @@
-### Class Initialization & Constructor Execution Order
+# Class Initialization & Constructor Execution Order
 
 The key is to separate:
 
 1. **Static initialization** — happens when the class is initialized.
 2. **Instance initialization** — happens every time an object is created.
 3. **Constructor execution** — superclass construction happens before subclass construction.
+4. **Constructor prologues** — Java 25 allows certain code to execute before `this(...)` or `super(...)`.
 
 ---
 
@@ -91,7 +92,7 @@ Mental rule:
 
 ---
 
-# 3. Inheritance
+## 3. Inheritance
 
 With inheritance, the **superclass initializes before the subclass**.
 
@@ -156,9 +157,11 @@ INSTANCE:
 Parent → Child
 ```
 
+There is only **one object** being created — the `Child`. The superclass portion of that object is initialized before the subclass portion.
+
 ---
 
-# 4. Full Order
+## 4. Full Order
 
 For the first:
 
@@ -198,7 +201,7 @@ Child constructor
 
 ---
 
-# 5. Constructor Chaining — `super()`
+## 5. Constructor Chaining — `super()`
 
 Every constructor ultimately invokes a superclass constructor.
 
@@ -248,15 +251,18 @@ think:
 
 ```text
 constructor invocation:
+
 Child → Parent → Object
 
+
 constructor bodies complete:
+
 Object → Parent → Child
 ```
 
 ---
 
-# 6. Constructor Overloading
+## 6. Constructor Overloading
 
 Constructors can be **overloaded**:
 
@@ -279,7 +285,7 @@ Constructors are **not overridden** because constructors are not inherited.
 
 ---
 
-# 7. `this()` Constructor Chaining
+## 7. `this()` Constructor Chaining
 
 One constructor can invoke another constructor in the same class:
 
@@ -314,7 +320,7 @@ The delegated constructor completes before execution returns to the calling cons
 
 ---
 
-# 8. Instance Initializers Do NOT Run for Every `this()` Call
+## 8. Instance Initializers Do NOT Run for Every `this()` Call
 
 This is an important trap.
 
@@ -361,13 +367,13 @@ No-arg
 
 The object is only being initialized once.
 
-Mental model:
+Mental rule:
 
 > **Instance initializers run once per object, not once per constructor in a `this()` chain.**
 
 ---
 
-# 9. `this()` vs `super()`
+## 9. `this()` vs `super()`
 
 A constructor ultimately delegates using either:
 
@@ -419,7 +425,7 @@ Does not compile.
 
 ---
 
-# 10. Java 25 Flexible Constructor Bodies
+## 10. Java 25 Flexible Constructor Bodies
 
 Java 25 allows certain statements before an explicit:
 
@@ -448,15 +454,160 @@ Child(String name) {
 
 The code before `super()` is the **constructor prologue**.
 
-However, this does not change the fundamental initialization order.
+The code after the explicit constructor invocation is the normal constructor body that executes after superclass construction and the current class's instance initialization.
 
-The prologue cannot use the object currently being constructed in ways that require it to have been initialized.
+The prologue cannot freely use the object currently being constructed. For example, it cannot access the current object's instance fields or call its instance methods as though the object were already initialized.
 
-After the superclass constructor completes, normal instance initialization/construction continues.
+The important Java 25 difference is that a prologue can execute **before superclass construction**.
 
 ---
 
-# 11. Overridden Methods During Construction — Dangerous Trap
+## 11. How Prologues Affect the Order
+
+Traditionally, a useful mental model was:
+
+```text
+Travel UP the hierarchy
+        ↓
+Construct back DOWN
+```
+
+Java 25 adds a small but important detail:
+
+> **Constructor prologues execute while following the constructor chain upwards.**
+
+Consider:
+
+```text
+Animal
+  ↑
+Mammal
+  ↑
+Dog
+```
+
+Suppose both `Dog` and `Mammal` have constructor prologues.
+
+For the **first**:
+
+```java
+new Dog();
+```
+
+the broad order is:
+
+```text
+STATIC INITIALIZATION
+
+Animal static fields/blocks
+        ↓
+Mammal static fields/blocks
+        ↓
+Dog static fields/blocks
+
+
+CONSTRUCTION
+
+Dog prologue
+        ↓
+Dog calls super(...)
+        ↓
+Mammal prologue
+        ↓
+Mammal calls super(...)
+        ↓
+Animal instance fields/blocks
+        ↓
+Animal constructor body
+        ↓
+Mammal instance fields/blocks
+        ↓
+Mammal constructor body
+        ↓
+Dog instance fields/blocks
+        ↓
+Dog constructor body
+```
+
+This gives a useful Java 25 memory rule:
+
+> **Statics first → prologues while travelling up → instance initialization and constructor bodies back down.**
+
+Or more simply:
+
+```text
+STATICS
+   ↓
+PROLOGUES UP
+   ↓
+INITIALIZATION + CONSTRUCTORS DOWN
+```
+
+For subsequent:
+
+```java
+new Dog();
+```
+
+the classes are already initialized, so the statics do not repeat:
+
+```text
+Dog prologue
+    ↓
+Mammal prologue
+    ↓
+Animal instance init + constructor
+    ↓
+Mammal instance init + constructor
+    ↓
+Dog instance init + constructor
+```
+
+Again, there is only **one `Dog` object** being created. `Animal` and `Mammal` are not separate objects being created first.
+
+---
+
+## 12. Prologues with `this()` Chaining
+
+Prologues can also occur before `this(...)`.
+
+For example, conceptually:
+
+```text
+Child()
+   │
+   ├─ prologue
+   │
+   ↓ this(...)
+Child(int)
+   │
+   ├─ prologue
+   │
+   ↓ super(...)
+Parent()
+```
+
+The prologues execute while following that constructor chain.
+
+Once the chain reaches superclass construction, normal instance initialization and constructor execution eventually work back through the chain.
+
+So the broad mental model still works:
+
+```text
+follow constructor chain
+        ↓
+execute allowed prologue code along the way
+        ↓
+reach superclass construction
+        ↓
+instance initialization
+        ↓
+constructor bodies complete back out
+```
+
+---
+
+## 13. Overridden Methods During Construction — Dangerous Trap
 
 Although constructors cannot be overridden, constructors **can call overridden methods**.
 
@@ -523,7 +674,7 @@ Later:
 int value = 10;
 ```
 
-is executed during the Child's instance initialization.
+is executed during the `Child`'s instance initialization.
 
 This is why calling overridable methods from constructors can be dangerous.
 
@@ -531,74 +682,155 @@ This is why calling overridable methods from constructors can be dangerous.
 
 # Exam Memory Model
 
-For:
+For a hierarchy:
+
+```text
+Animal
+  ↑
+Mammal
+  ↑
+Dog
+```
+
+and the first:
 
 ```java
-new Child();
+new Dog();
 ```
 
 think:
 
 ```text
 FIRST CLASS USE
-───────────────
+═══════════════
 
-STATIC INITIALIZATION
 
-Parent static fields/blocks
+1. STATIC INITIALIZATION
+────────────────────────
+
+Animal static fields/blocks
         ↓
-Child static fields/blocks
+Mammal static fields/blocks
+        ↓
+Dog static fields/blocks
 
 
-OBJECT CREATION
-───────────────
+2. FOLLOW CONSTRUCTOR CHAIN UP
+──────────────────────────────
 
-Parent instance fields/blocks
+Dog prologue
         ↓
-Parent constructor
+Mammal prologue
         ↓
-Child instance fields/blocks
+Animal
+
+
+3. INITIALIZE / CONSTRUCT DOWN
+──────────────────────────────
+
+Animal instance fields/blocks
         ↓
-Child constructor
+Animal constructor
+        ↓
+Mammal instance fields/blocks
+        ↓
+Mammal constructor
+        ↓
+Dog instance fields/blocks
+        ↓
+Dog constructor
 ```
 
-On subsequent objects:
+Therefore the quick Java 25 memory rule is:
 
 ```text
-NO STATIC INITIALIZATION
+FIRST OBJECT
 
-Parent instance fields/blocks
-        ↓
-Parent constructor
-        ↓
-Child instance fields/blocks
-        ↓
-Child constructor
+STATICS
+   ↓
+PROLOGUES UP
+   ↓
+INIT + CONSTRUCTORS DOWN
 ```
 
-And remember:
+For subsequent objects:
+
+```text
+LATER OBJECTS
+
+PROLOGUES UP
+   ↓
+INIT + CONSTRUCTORS DOWN
+```
+
+No static initialization repeats merely because another object is created.
+
+---
+
+# Final Rules to Remember
 
 ```text
 static fields + static blocks
     → source order
     → once per class initialization
+    → superclass before subclass
+
 
 instance fields + initializer blocks
     → source order
     → once per object
+    → superclass portion before subclass portion
 
-superclass
-    → initialized/constructed before subclass
+
+constructor chain
+    → travels towards superclass construction
+    → constructor bodies complete back out
+
+
+constructor prologues
+    → Java 25 flexible constructor bodies
+    → occur before that constructor's this(...) / super(...)
+    → execute while following the constructor chain
+    → required static initialization has already happened
+    → cannot freely use the current uninitialized object
+
 
 this(...)
-    → delegates to another constructor
+    → delegates to another constructor in the SAME class
     → does NOT repeat instance initialization
+
+
+super(...)
+    → delegates to a constructor in the SUPERCLASS
+
 
 constructors
     → can be overloaded
     → cannot be overridden
+    → are not inherited
+
 
 overridden method called by constructor
     → dynamic dispatch still applies
     → subclass fields may still contain default values
 ```
+
+## Ultimate Memory Shortcut
+
+```text
+          FIRST new Child()
+                 │
+                 ▼
+              STATICS
+          Parent → Child
+                 │
+                 ▼
+           PROLOGUES UP
+          Child → Parent
+                 │
+                 ▼
+       INIT + CONSTRUCT DOWN
+          Parent → Child
+```
+
+> **Statics down the hierarchy, prologues up the constructor chain, initialization and constructor bodies back down.**
