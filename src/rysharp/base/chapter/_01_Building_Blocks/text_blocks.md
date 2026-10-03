@@ -1,4 +1,4 @@
-# Java 25 Text Blocks — Quick Reference
+# Text Blocks
 
 A text block is simply another way of creating a `String`.
 
