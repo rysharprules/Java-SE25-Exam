@@ -4,23 +4,23 @@ This page summarizes the assessment scores for the Java SE 21/25 certification s
 
 ## Assessment Results
 
-| Chapter | Score (%) | Link |
-|---------|-----------|------|
-| 00 (Pre-Assessment) | 17.86%    | [Assessment](preassessment.md) |
-| 01 | 39.13%    | [Assessment](../_01_Building_Blocks/assessment.md) |
-| 02 | 90.00%    | [Assessment](../_02_Operators/assessment.md) |
-| 03 | 36.67%    | [Assessment](../_03_Making_Decisions/assessment.md) |
-| 04 | 50.00%    | [Assessment](../_04_Core_APIs/assessment.md) |
-| 05 | 71.43%    | [Assessment](../_05_Methods/assessment.md) |
-| 06 | 48.00%    | [Assessment](../_06_Class_Design/assessment.md) |
-| 07 | 56.00%    | [Assessment](../_07_Beyond_Classes/assessment.md) |
-| 08 | 71.00%    | [Assessment](../_08_Lambdas_and_Functional_Interfaces/assessment.md) |
-| 09 | 57.00%    | [Assessment](../_09_Collections_and_Generics/assessment.md) |
-| 10 | 30.00%    | [Assessment](../_10_Streams/assessment.md) |
-| 11 | 46.00%    | [Assessment](../_11_Exceptions_and_Localisation/assessment.md) |
-| 12 | 64.00%    | [Assessment](../_12_Modules/assessment.md) |
-| 13 | 52.00%    | [Assessment](../_13_Concurrency/assessment.md) |
-| 14 | 40.00%    | [Assessment](../_14_Input_Output/assessment.md) |
+| Chapter             | Score (%) | Link                                                                 |
+|---------------------|-----------|----------------------------------------------------------------------|
+| 00 (Pre-Assessment) | 17.86%    | [Assessment](preassessment.md)                                       |
+| 01                  | 39.13%    | [Assessment](../_01_Building_Blocks/assessment.md)                   |
+| 02                  | 90.00%    | [Assessment](../_02_Operators/assessment.md)                         |
+| 03                  | 36.67%    | [Assessment](../_03_Making_Decisions/assessment.md)                  |
+| 04                  | 50.00%    | [Assessment](../_04_Core_APIs/assessment.md)                         |
+| 05                  | 71.43%    | [Assessment](../_05_Methods/assessment.md)                           |
+| 06                  | 48.00%    | [Assessment](../_06_Class_Design/assessment.md)                      |
+| 07                  | 56.00%    | [Assessment](../_07_Beyond_Classes/assessment.md)                    |
+| 08                  | 71.00%    | [Assessment](../_08_Lambdas_and_Functional_Interfaces/assessment.md) |
+| 09                  | 57.00%    | [Assessment](../_09_Collections_and_Generics/assessment.md)          |
+| 10                  | 30.00%    | [Assessment](../_10_Streams/assessment.md)                           |
+| 11                  | 46.00%    | [Assessment](../_11_Exceptions_and_Localisation/assessment.md)       |
+| 12                  | 64.00%    | [Assessment](../_12_Modules/assessment.md)                           |
+| 13                  | 52.00%    | [Assessment](../_13_Concurrency/assessment.md)                       |
+| 14                  | 40.00%    | [Assessment](../_14_Input_Output/assessment.md)                      |
 
 ## Analysis
 
