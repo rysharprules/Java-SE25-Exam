@@ -15,4 +15,5 @@ Code packages match the naming of the md.
 
 | Title | File |
 |---|---|
-| Java 25 `switch` — Quick Reference | [switch.md](switch.md) |
+| Pattern Matching | [pattern_matching.md](pattern_matching.md) |
+| Switch | [switch.md](switch.md) |

@@ -1,6 +1,23 @@
-# Primitive Casting and Numeric Promotion
+# Primitive Casting & Numeric Promotion
 
-## 1. Primitive Numeric Types
+Quick reference for primitive conversions, numeric promotion, casts, literals and compound assignment.
+
+## Contents
+
+- [Primitive Numeric Types](#primitive-numeric-types)
+- [Widening](#widening)
+- [Narrowing and Casting](#narrowing-and-casting)
+- [Numeric Promotion](#numeric-promotion)
+- [Compile-Time Constant Expressions](#compile-time-constant-expressions)
+- [Cast Placement](#cast-placement)
+- [Numeric Literals](#numeric-literals)
+- [Compound Assignment](#compound-assignment)
+- [Increment and Decrement](#increment-and-decrement)
+- [Quick Reference](#quick-reference)
+
+---
+
+## Primitive Numeric Types
 
 A useful widening order is:
 
@@ -12,9 +29,16 @@ byte → short → int → long → float → double
 
 `char` is an unsigned integral type and can widen to `int` and beyond.
 
+The important general direction is:
+
+```text
+smaller → larger   → widening
+larger → smaller   → narrowing
+```
+
 ---
 
-# 2. Widening Conversions
+## Widening
 
 A smaller numeric type can normally be converted to a larger compatible type automatically.
 
@@ -29,12 +53,6 @@ double d = f;
 
 No explicit cast is required.
 
-```text
-smaller → larger
-        ↓
-automatic widening
-```
-
 Examples:
 
 ```java
@@ -45,11 +63,13 @@ long x = 10L;
 double d = x;     // OK
 ```
 
-> **Exam rule:** Widening primitive conversions normally do not require a cast.
+Memory:
+
+> **Widening primitive conversions normally do not require a cast.**
 
 ---
 
-# 3. Narrowing Conversions
+## Narrowing and Casting
 
 Converting to a smaller numeric type normally requires an explicit cast.
 
@@ -66,26 +86,24 @@ Without the cast:
 ```java
 long l = 100;
 
-int i = l;        // DOES NOT COMPILE
+int i = l;   // DOES NOT COMPILE
 ```
 
-A cast uses the target type in parentheses:
+A cast uses the target type before the expression:
 
 ```java
 int x = (int) 5.9;
 ```
 
-The cast appears **before** the expression:
+Not:
 
 ```java
-long x = 10(long);    // DOES NOT COMPILE
+long x = 10(long);   // DOES NOT COMPILE
 ```
 
----
+### Floating-Point to Integral
 
-# 4. Floating-Point to Integral Types
-
-Converting a floating-point value to an integral type requires narrowing.
+Converting floating-point values to integral types is narrowing:
 
 ```java
 double d = 10.9;
@@ -94,30 +112,48 @@ int x = d;        // DOES NOT COMPILE
 int y = (int) d;  // 10
 ```
 
-The fractional part is **truncated**, not rounded.
+The fractional part is **truncated toward zero**, not rounded:
 
 ```java
-(int) 9.99    // 9
-(int) -9.99   // -9
+(int) 9.99     // 9
+(int) -9.99    // -9
 ```
+
+### Overflow When Narrowing
+
+An explicit cast can compile even when the value doesn't fit in the target integral type:
+
+```java
+int x = 130;
+
+byte b = (byte) x;
+```
+
+This compiles even though `130` is outside the range of `byte`.
+
+The conversion produces the value determined by the target type's range; the cast does not perform a safety check.
+
+Therefore these are separate questions:
+
+```text
+Does it compile?
+
+What value does the conversion produce?
+```
+
+Memory:
+
+> **A cast requests a conversion; it does not guarantee that the value fits safely.**
 
 ---
 
-# 5. Numeric Promotion During Arithmetic
+## Numeric Promotion
 
-Java promotes numeric operands so an arithmetic operation can be performed using a common type.
+Java promotes numeric operands to a common type when performing arithmetic.
 
-For arithmetic involving:
+### `byte`, `short` and `char`
 
-```text
-byte
-short
-char
-```
-
-the operands are normally promoted to at least `int`.
-
-For example:
+These normally promote to at least `int` during arithmetic.
 
 ```java
 short a = 10;
@@ -137,41 +173,39 @@ short + short
      int
 ```
 
-Therefore:
+To store the result in a `short`:
 
 ```java
-short result = (short) (a + b);   // OK
+short result = (short) (a + b);
 ```
 
----
+### Binary Numeric Promotion
 
-# 6. Binary Numeric Promotion
-
-For normal arithmetic, a useful exam rule is:
+For ordinary numeric arithmetic, use:
 
 ```text
-If either operand is double → result uses double
-
-Otherwise, if either is float → result uses float
-
-Otherwise, if either is long → result uses long
-
-Otherwise → operands are promoted to int
+double wins
+   ↓
+float
+   ↓
+long
+   ↓
+int
 ```
 
 Examples:
 
 ```text
-byte   + byte    → int
-short  + short   → int
-char   + char    → int
+byte  + byte    → int
+short + short   → int
+char  + char    → int
 
-int    + long    → long
-long   + float   → float
-float  + double  → double
+int   + long    → long
+long  + float   → float
+float + double  → double
 ```
 
-Example:
+For example:
 
 ```java
 int x = 5;
@@ -182,22 +216,25 @@ int b = x + y;         // DOES NOT COMPILE
 int c = (int) (x + y); // OK
 ```
 
-### Exam technique
+The expression:
 
-Work out the type of the expression **before looking at the variable receiving it**.
-
-```text
-1. Determine operand types
-2. Apply numeric promotion
-3. Determine expression type
-4. Check whether that type can be assigned to the target
+```java
+x + y
 ```
+
+has type `long`.
+
+Only after determining that should you consider whether it can be assigned to the target variable.
+
+Memory:
+
+> **Evaluate the RHS type after promotion, then check assignment compatibility.**
 
 ---
 
-# 7. Compile-Time Constant Expressions — The Important Exception
+## Compile-Time Constant Expressions
 
-There is an important exception when assigning constant integral expressions to:
+There is an important exception to the normal narrowing rules when assigning an integral compile-time constant expression to:
 
 ```text
 byte
@@ -205,73 +242,67 @@ short
 char
 ```
 
-Consider:
+### Constant Expression That Fits
 
 ```java
 byte gloves = 7 * 10;
 ```
 
-The expression:
+`7 * 10` still undergoes normal numeric promotion and has type:
 
-```java
-7 * 10
+```text
+int
 ```
 
-has type `int`.
+But it is also a **compile-time constant expression**.
 
-However, it is also a **compile-time constant expression**.
-
-The compiler calculates:
+The compiler knows:
 
 ```text
 7 * 10 = 70
 ```
 
-Since `70` fits inside a `byte`, Java allows the assignment without an explicit cast.
+Since `70` fits in a `byte`, the assignment is allowed.
 
-Therefore:
+Examples:
 
 ```java
 byte a = 1;          // OK
-byte b = 7 * 10;     // OK: constant 70 fits
-short c = 2 + 1;     // OK: constant 3 fits
-char d = 65;         // OK: constant fits
+byte b = 7 * 10;     // OK
+short c = 2 + 1;     // OK
+char d = 65;         // OK
 ```
 
-But:
+### Constant That Does Not Fit
 
 ```java
 byte x = 7 * 100;    // DOES NOT COMPILE
 ```
 
-because:
+The compiler knows:
 
 ```text
 7 * 100 = 700
 ```
 
-and `700` does not fit inside a `byte`.
+and `700` does not fit in a `byte`.
 
-### Important
+Memory:
 
-Do **not** think:
+> **A compile-time constant integral expression may narrow automatically to `byte`, `short` or `char` if its value fits.**
 
-> Literals don't undergo numeric promotion.
+Do **not** conclude that literals avoid numeric promotion.
 
-They do.
+They don't.
 
-Instead remember:
+The special rule is about **constant-expression assignment conversion**.
 
-> **A compile-time constant integral expression may be implicitly narrowed to `byte`, `short`, or `char` if its value fits.**
-
----
-
-# 8. Variables Usually Change the Situation
+### Ordinary Variables
 
 Compare:
 
 ```java
-short x = 2 + 1;     // OK
+short x = 2 + 1;   // OK
 ```
 
 with:
@@ -282,33 +313,27 @@ byte hat = 1;
 short x = 2 + hat;   // DOES NOT COMPILE
 ```
 
-`2 + 1` is a compile-time constant expression.
-
-But `hat` is an ordinary variable, so:
+`2 + hat` performs numeric promotion:
 
 ```text
-2 + hat
-    ↓
 int + byte
-      ↓
+    ↓
 int + int
     ↓
    int
 ```
 
-The resulting `int` cannot automatically be narrowed to `short`.
+`hat` is an ordinary variable, so the expression is not a compile-time constant expression that qualifies for the narrowing rule.
 
-Therefore:
+This works:
 
 ```java
-short x = (short) (2 + hat);   // OK
+short x = (short) (2 + hat);
 ```
 
----
+### `final` Constant Variables
 
-# 9. `final` Constant Variables
-
-The real distinction is not simply:
+The distinction is not simply:
 
 ```text
 literal vs variable
@@ -318,13 +343,11 @@ It is:
 
 ```text
 compile-time constant expression
-        vs
+            vs
 non-constant expression
 ```
 
-A suitable `final` primitive variable initialized with a constant expression can itself be a **constant variable**.
-
-For example:
+A suitable `final` primitive initialized with a constant expression can itself be a constant variable:
 
 ```java
 final int x = 10;
@@ -332,8 +355,6 @@ final int x = 10;
 byte a = x;       // OK
 byte b = x + 5;   // OK
 ```
-
-The compiler knows the values at compile time.
 
 Compare:
 
@@ -344,19 +365,29 @@ byte a = x;       // DOES NOT COMPILE
 byte b = x + 5;   // DOES NOT COMPILE
 ```
 
-Even though a human can see that `x` currently contains `10`, it is not a constant variable.
+Even though the current value is obviously `10`, an ordinary variable is not a constant variable.
 
-### Memory rule
+Memory:
 
-> **Known compile-time integral constant + value fits → implicit narrowing to `byte`, `short`, or `char` may be allowed.**
+```text
+compile-time integral constant
+        +
+value fits
+        ↓
+implicit narrowing to
+byte / short / char
+may be allowed
+```
 
 ---
 
-# 10. Casting Applies Only to Its Operand
+## Cast Placement
 
-Casting is a unary operation.
+A cast applies only to its operand.
 
-Consider:
+Parentheses therefore matter.
+
+### Casting the Whole Expression
 
 ```java
 short mouse = 10;
@@ -365,7 +396,7 @@ short hamster = 3;
 short result = (short) (mouse * hamster);   // OK
 ```
 
-The multiplication happens first:
+First:
 
 ```text
 mouse * hamster
@@ -374,7 +405,15 @@ short * short
      int
 ```
 
-Then the resulting `int` is cast to `short`.
+Then:
+
+```text
+int
+ ↓ cast
+short
+```
+
+### Casting Only One Operand
 
 Compare:
 
@@ -382,7 +421,7 @@ Compare:
 short result = (short) mouse * hamster;   // DOES NOT COMPILE
 ```
 
-The cast applies only to `mouse`.
+The cast applies only to `mouse`:
 
 ```text
 (short) mouse
@@ -394,27 +433,19 @@ short * short
      int
 ```
 
-The multiplication promotes the values back to `int`.
-
-Therefore:
+So these are different:
 
 ```java
-(short) (mouse * hamster)
+(short) (mouse * hamster)   // cast whole result
 ```
-
-and:
 
 ```java
-(short) mouse * hamster
+(short) mouse * hamster     // cast only mouse
 ```
 
-are **not equivalent**.
+### Later Operations Can Promote Again
 
----
-
-# 11. A Cast Does Not Protect Later Operations
-
-Consider:
+A cast does not permanently determine the type of everything that follows.
 
 ```java
 short mouse = 10;
@@ -424,7 +455,7 @@ short result =
         1 + (short) (mouse * hamster);   // DOES NOT COMPILE
 ```
 
-The inner expression is successfully narrowed:
+The inner multiplication is narrowed:
 
 ```text
 mouse * hamster
@@ -444,48 +475,48 @@ int + int
    int
 ```
 
-The final result is therefore `int`.
+The final result is `int`.
 
-### Exam rule
+Memory:
 
 > **After every arithmetic operation, reconsider numeric promotion.**
 
-A previous cast does not permanently make the rest of the expression that type.
-
 ---
 
-# 12. Integer Literal Types
+## Numeric Literals
+
+Literal type can affect whether an expression compiles.
+
+### Integer Literals
 
 An integer literal without a suffix is normally an `int`.
 
 ```java
 int x = 100;
-long y = 100;       // int literal widened to long
+long y = 100;   // int literal widened to long
 ```
 
-For a literal that cannot fit in an `int`, use `L`:
+For an integer literal too large for `int`, use `L`:
 
 ```java
 long value = 192301398193810323L;
 ```
 
-This does not compile:
+Without it:
 
 ```java
-long value = 192301398193810323;
+long value = 192301398193810323;   // DOES NOT COMPILE
 ```
 
-The literal itself is too large to be represented as an `int`.
+The literal itself is invalid as an `int`.
 
-Casting does not rescue an invalid literal:
+A cast cannot rescue an invalid literal:
 
 ```java
 long value = (long) 192301398193810323;   // DOES NOT COMPILE
 ```
 
-The literal must first be valid before the cast can be applied.
-
-Prefer uppercase `L`:
+Prefer uppercase:
 
 ```java
 100L
@@ -497,24 +528,22 @@ rather than:
 100l
 ```
 
-because lowercase `l` can look like `1`.
+because lowercase `l` resembles `1`.
 
----
+### Floating-Point Literals
 
-# 13. Floating-Point Literal Types
-
-A floating-point literal is `double` by default.
+Floating-point literals are `double` by default:
 
 ```java
-double d = 2.0;    // OK
+double d = 2.0;   // OK
 
-float f = 2.0;     // DOES NOT COMPILE
+float f = 2.0;    // DOES NOT COMPILE
 ```
 
 Use `F` or `f` for a `float` literal:
 
 ```java
-float f = 2.0F;    // OK
+float f = 2.0F;   // OK
 ```
 
 Or explicitly narrow:
@@ -523,47 +552,21 @@ Or explicitly narrow:
 float f = (float) 2.0;   // OK
 ```
 
----
-
-# 14. Casting Can Cause Overflow or Underflow
-
-An explicit primitive cast can compile even when the value does not fit in the target integral type.
-
-```java
-int x = 130;
-
-byte b = (byte) x;
-```
-
-This compiles, but `130` cannot be represented by a `byte`.
-
-The value wraps according to the target type's range.
-
-Therefore:
+Memory:
 
 ```text
-Does it compile?
+integer literal        → int by default
+L                       → long
+
+floating-point literal → double by default
+F                       → float
 ```
-
-and:
-
-```text
-What value is produced?
-```
-
-are separate exam questions.
-
-A cast means:
-
-> **Perform this conversion.**
-
-It does **not** mean:
-
-> **Check that the value fits safely.**
 
 ---
 
-# 15. Compound Assignment Performs an Implicit Conversion
+## Compound Assignment
+
+Compound assignment performs an implicit conversion back to the type of the left-hand variable.
 
 Consider:
 
@@ -574,7 +577,7 @@ int sheep = 5;
 sheep = sheep * goat;   // DOES NOT COMPILE
 ```
 
-Why?
+The multiplication produces:
 
 ```text
 int * long
@@ -582,21 +585,13 @@ int * long
    long
 ```
 
-Then:
+Assigning that `long` to `int` requires narrowing.
 
-```text
-long → int
-```
-
-is a narrowing conversion.
-
-However:
+But:
 
 ```java
 sheep *= goat;   // OK
 ```
-
-Compound assignment performs the necessary conversion back to the type of the left-hand variable.
 
 A useful conceptual model is:
 
@@ -619,25 +614,27 @@ b = b + 1;   // DOES NOT COMPILE
 b += 1;      // OK
 ```
 
-### Exam rule
+Memory:
 
-These are **not identical for type conversion purposes**:
-
-```java
-x = x + y;
+```text
+x = x + y
 ```
 
-```java
-x += y;
+and:
+
+```text
+x += y
 ```
 
-The compound assignment includes an implicit conversion back to the type of `x`.
+are **not identical for type-conversion purposes**.
+
+> **Compound assignment includes an implicit conversion back to the type of the left-hand variable.**
 
 ---
 
-# 16. Increment and Decrement
+## Increment and Decrement
 
-Increment and decrement also work directly with smaller integral variables:
+Increment and decrement work directly with smaller integral variables:
 
 ```java
 byte b = 10;
@@ -654,235 +651,158 @@ Compare:
 b = b + 1;   // DOES NOT COMPILE
 ```
 
-because ordinary arithmetic produces an `int`.
+because ordinary arithmetic promotes `b` to `int`.
+
+For prefix/postfix expression values and evaluation order, see the separate **Operator Precedence** notes.
 
 ---
 
-# Exam Decision Process
+# Quick Reference
 
-When you see:
-
-```java
-short result = ...;
-```
-
-work through the expression systematically.
-
-## Step 1 — Identify the operand types
-
-```java
-short a = 10;
-long b = 20;
-```
-
----
-
-## Step 2 — Check for compile-time constants
-
-Ask:
-
-```text
-Is this a compile-time constant integral expression?
-```
-
-If yes, assignment to `byte`, `short`, or `char` may be allowed without a cast if the value fits.
-
----
-
-## Step 3 — Apply numeric promotion
-
-For ordinary arithmetic:
-
-```text
-double wins
-   ↓
-float
-   ↓
-long
-   ↓
-int
-```
-
-`byte`, `short`, and `char` normally become `int`.
-
----
-
-## Step 4 — Determine the resulting expression type
-
-Example:
-
-```java
-short a = 10;
-long b = 20;
-
-a + b
-```
-
-becomes:
-
-```text
-short + long
-  ↓
-int + long
-  ↓
-long
-```
-
----
-
-## Step 5 — Process casts carefully
-
-Determine exactly what the cast applies to.
-
-```java
-(short) (a + b)
-```
-
-is different from:
-
-```java
-(short) a + b
-```
-
----
-
-## Step 6 — Check assignment compatibility
-
-Only after evaluating the right-hand expression should you compare its type with the left-hand variable.
-
----
-
-## Step 7 — Look for compound assignment
-
-Remember:
-
-```java
-x += y;
-```
-
-includes an implicit conversion back to the type of `x`.
-
----
-
-# Essential Exam Examples
-
-```java
-// Compile-time constant narrowing
-
-byte a = 1;                   // OK
-byte b = 7 * 10;              // OK: constant 70 fits
-byte c = 7 * 100;             // DOES NOT COMPILE
-
-
-// Numeric promotion
-
-short x = 10;
-short y = 20;
-
-short z1 = x + y;             // DOES NOT COMPILE
-int z2 = x + y;               // OK
-short z3 = (short) (x + y);   // OK
-
-
-// Cast placement
-
-short z4 = (short) x + y;     // DOES NOT COMPILE
-
-
-// Constant variable
-
-final int size = 10;
-
-byte z5 = size;               // OK
-byte z6 = size + 5;           // OK
-
-
-// Ordinary variable
-
-int size2 = 10;
-
-byte z7 = size2;              // DOES NOT COMPILE
-
-
-// Mixed types
-
-int i = 5;
-long l = 10;
-
-long z8 = i + l;              // OK
-int z9 = i + l;               // DOES NOT COMPILE
-int z10 = (int) (i + l);      // OK
-
-
-// Floating point
-
-float f1 = 2.0;               // DOES NOT COMPILE
-float f2 = 2.0F;              // OK
-int z11 = (int) 2.9;          // OK: 2
-
-
-// Compound assignment
-
-byte q = 10;
-
-q = q + 1;                    // DOES NOT COMPILE
-q += 1;                       // OK
-q++;                          // OK
-```
-
----
-
-# Final Memory Rules
+## Widening and Narrowing
 
 ```text
 WIDENING
 smaller → larger
 usually automatic
 
-
 NARROWING
 larger → smaller
 usually requires cast
-
-
-ARITHMETIC
-byte / short / char
-normally promote to int
-
-
-MIXED ARITHMETIC
-double > float > long > int
-
-
-CONSTANT EXPRESSIONS
-An integral compile-time constant may narrow automatically
-to byte / short / char if its value fits.
-
-
-CASTS
-A cast applies only to its operand.
-Use parentheses when casting an entire expression.
-
-
-COMPOUND ASSIGNMENT
-x += y includes conversion back to the type of x.
-
-
-LITERALS
-integer literal → int by default
-L → long
-floating-point literal → double by default
-F → float
 ```
 
-## Best Exam Mental Model
+Useful widening order:
 
-> **Evaluate the right-hand expression first.**
->
-> **Determine its type after promotion.**
->
-> **Then determine whether assignment conversion allows that result to be stored in the left-hand variable.**
+```text
+byte → short → int → long → float → double
+                ↑
+              char
+```
 
-And remember the important exception:
+## Numeric Promotion
 
-> **If the right-hand side is a compile-time constant integral expression, Java may narrow it automatically to `byte`, `short`, or `char` when the value fits.**
+```text
+byte / short / char
+        ↓
+normally promote to int
+```
+
+Mixed arithmetic:
+
+```text
+double
+  ↓
+float
+  ↓
+long
+  ↓
+int
+```
+
+Examples:
+
+```text
+short + short   → int
+int + long      → long
+long + float    → float
+float + double  → double
+```
+
+## Constant Expressions
+
+```java
+byte a = 7 * 10;       // OK
+byte b = 7 * 100;      // DOES NOT COMPILE
+
+final int x = 10;
+byte c = x + 5;        // OK
+
+int y = 10;
+byte d = y + 5;        // DOES NOT COMPILE
+```
+
+Rule:
+
+```text
+compile-time integral constant
++
+fits in byte / short / char
+↓
+implicit narrowing may be allowed
+```
+
+## Cast Placement
+
+```java
+(short) (a + b)   // cast result of expression
+(short) a + b     // cast only a
+```
+
+A later arithmetic operation may promote the value again.
+
+## Literals
+
+```text
+100       → int
+100L      → long
+
+2.0       → double
+2.0F      → float
+```
+
+## Compound Assignment
+
+```java
+byte b = 10;
+
+b = b + 1;   // ✗
+b += 1;      // ✓
+b++;         // ✓
+```
+
+## Reliable Method
+
+For an assignment such as:
+
+```java
+short result = ...;
+```
+
+work in this order:
+
+```text
+1. Identify operand types
+
+2. Check whether the RHS is a compile-time
+   constant integral expression
+
+3. Apply numeric promotion
+
+4. Determine the resulting expression type
+
+5. Apply any casts to exactly their operands
+
+6. Check whether the result can be assigned
+   to the target type
+
+7. Remember the special conversion performed
+   by compound assignment
+```
+
+## Final Memory Kicks
+
+> **Widening is normally automatic; narrowing normally requires a cast.**
+
+> **`byte`, `short` and `char` normally promote to `int` during arithmetic.**
+
+> **For mixed arithmetic: `double > float > long > int`.**
+
+> **A compile-time constant integral expression may narrow automatically to `byte`, `short` or `char` when its value fits.**
+
+> **A cast applies only to its operand; later arithmetic can promote the result again.**
+
+> **Integer literals are `int` by default; floating-point literals are `double` by default.**
+
+> **Compound assignment includes an implicit conversion back to the left-hand type.**
+
+> **Determine the RHS type after promotion first; then check whether it can be assigned to the LHS.**

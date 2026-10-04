@@ -1,14 +1,29 @@
-### Operator Precedence
+# Operator Precedence
+
+Quick reference for operator precedence, associativity, evaluation order and `++` / `--`.
+
+## Contents
+
+- [Precedence](#precedence)
+- [Precedence Order](#precedence-order)
+- [Increment and Decrement](#increment-and-decrement)
+- [Evaluation Order](#evaluation-order)
+- [Associativity](#associativity)
+- [Short-Circuit Operators](#short-circuit-operators)
+- [Expression Tracing](#expression-tracing)
+- [Quick Reference](#quick-reference)
+
+---
+
+## Precedence
 
 Operator **precedence** determines how an expression is grouped.
-
-For example:
 
 ```java
 int x = 2 + 3 * 4;
 ```
 
-`*` has higher precedence:
+`*` has higher precedence than `+`, so this groups as:
 
 ```java
 2 + (3 * 4)
@@ -23,52 +38,61 @@ Result:
 Parentheses override normal precedence:
 
 ```java
-int x = (2 + 3) * 4; // 20
+int x = (2 + 3) * 4;   // 20
 ```
+
+Memory:
+
+> **Precedence determines grouping.**
 
 ---
 
-## Useful Precedence Order
+## Precedence Order
 
 From **highest to lowest**:
 
-| Priority | Operators                         | Meaning                     |
-| -------- | --------------------------------- | --------------------------- |
-| Highest  | `expr++` `expr--`                 | postfix increment/decrement |
-|          | `++expr` `--expr` `+` `-` `!` `~` | prefix/unary                |
-|          | `*` `/` `%`                       | multiplication              |
-|          | `+` `-`                           | addition                    |
-|          | `<<` `>>` `>>>`                   | shifts                      |
-|          | `<` `<=` `>` `>=` `instanceof`    | relational                  |
-|          | `==` `!=`                         | equality                    |
-|          | `&`                               | AND                         |
-|          | `^`                               | XOR                         |
-|          | `\|`                              | OR                          |
-|          | `&&`                              | short-circuit AND           |
-|          | `\|\|`                            | short-circuit OR            |
-|          | `?:`                              | ternary                     |
-| Lowest   | `=` `+=` `-=` `*=` `/=` etc.      | assignment                  |
+| Priority | Operators | Meaning |
+|---|---|---|
+| Highest | `expr++` `expr--` | Postfix |
+| | `++expr` `--expr` `+` `-` `!` `~` | Prefix / unary |
+| | `*` `/` `%` | Multiplicative |
+| | `+` `-` | Additive |
+| | `<<` `>>` `>>>` | Shift |
+| | `<` `<=` `>` `>=` `instanceof` | Relational |
+| | `==` `!=` | Equality |
+| | `&` | AND |
+| | `^` | XOR |
+| | `\|` | OR |
+| | `&&` | Short-circuit AND |
+| | `\|\|` | Short-circuit OR |
+| | `?:` | Ternary |
+| Lowest | `=` `+=` `-=` `*=` `/=` etc. | Assignment |
 
-For most exam questions, remember roughly:
+Useful condensed order:
 
 ```text
-postfix ++/--
+postfix ++ --
       ↓
-prefix ++/--
+prefix ++ -- + - ! ~
       ↓
 * / %
       ↓
 + -
       ↓
-comparisons
+<< >> >>>
+      ↓
+< <= > >= instanceof
       ↓
 == !=
       ↓
 &
+↓
 ^
+↓
 |
       ↓
 &&
+↓
 ||
       ↓
 ?:
@@ -78,18 +102,18 @@ assignment
 
 ---
 
-# `++` and `--`
+## Increment and Decrement
 
-This is where precedence questions become more interesting.
+The important distinction is the **value produced by the expression**.
 
-## Prefix
+### Prefix
 
 ```java
 ++x
 --x
 ```
 
-The variable changes **first**, and the expression produces the new value.
+The variable changes first and the expression produces the **new value**.
 
 ```java
 int x = 5;
@@ -99,9 +123,9 @@ int y = ++x;
 Think:
 
 ```text
-x becomes 6
-expression produces 6
-y becomes 6
+x → 6
+expression → 6
+y → 6
 ```
 
 Final:
@@ -111,16 +135,14 @@ x = 6
 y = 6
 ```
 
----
-
-## Postfix
+### Postfix
 
 ```java
 x++
 x--
 ```
 
-The expression produces the **old value**, while the variable is still incremented/decremented as part of evaluating that expression.
+The expression produces the **old value**, while the variable is still changed as part of evaluating the expression.
 
 ```java
 int x = 5;
@@ -130,9 +152,9 @@ int y = x++;
 Think:
 
 ```text
-expression produces 5
-x becomes 6
-y receives 5
+expression → 5
+x → 6
+y → 5
 ```
 
 Final:
@@ -142,21 +164,23 @@ x = 6
 y = 5
 ```
 
-Memory rule:
+Memory:
 
 ```text
-++x → CHANGE, then USE
+++x → CHANGE, then USE new value
 
 x++ → USE old value, then CHANGE
 ```
 
+The same principle applies to `--`.
+
 ---
 
-# Precedence vs Evaluation Order
+## Evaluation Order
 
-Java evaluates operands **left to right**.
+Precedence and evaluation order are different concepts.
 
-This is separate from operator precedence.
+Java evaluates operands **left-to-right**.
 
 Consider:
 
@@ -166,15 +190,15 @@ int x = 2;
 int y = x++ + ++x * 2;
 ```
 
-First use precedence to understand the grouping:
+### Group by Precedence
+
+Multiplication has higher precedence:
 
 ```java
 x++ + (++x * 2)
 ```
 
-because multiplication has higher precedence than addition.
-
-But Java still evaluates the operands **left to right**.
+### Evaluate Left-to-Right
 
 Start:
 
@@ -182,95 +206,47 @@ Start:
 x = 2
 ```
 
-### 1. Evaluate `x++`
+Evaluate:
 
-Postfix means use `2`, then increment:
-
-```text
-expression value = 2
-x = 3
+```java
+x++
 ```
 
-### 2. Evaluate `++x`
-
-Prefix means increment first:
+Postfix:
 
 ```text
-x = 4
-expression value = 4
+expression produces 2
+x → 3
 ```
 
-### 3. Multiplication
+Next:
+
+```java
+++x
+```
+
+Prefix:
+
+```text
+x → 4
+expression produces 4
+```
+
+Then:
 
 ```text
 4 * 2 = 8
-```
-
-### 4. Addition
-
-```text
 2 + 8 = 10
 ```
 
-Therefore:
+Final:
 
 ```text
 x = 4
 y = 10
 ```
 
----
-
-# Another Example
-
-```java
-int x = 5;
-
-int y = x++ + ++x;
-```
-
-Start:
-
-```text
-x = 5
-```
-
-Left operand:
-
-```text
-x++
-
-use 5
-x becomes 6
-```
-
-Right operand:
-
-```text
-++x
-
-x becomes 7
-use 7
-```
-
-Then:
-
-```text
-5 + 7 = 12
-```
-
-Final:
-
-```text
-x = 7
-y = 12
-```
-
----
-
-# Don't Apply Precedence as "Execution Order"
-
-This is an important distinction.
+### Precedence Is Not Execution Order
 
 Given:
 
@@ -280,11 +256,11 @@ a() + b() * c()
 
 precedence groups it as:
 
-```text
+```java
 a() + (b() * c())
 ```
 
-but Java evaluates the operands left-to-right:
+But operand evaluation occurs left-to-right:
 
 ```text
 a()
@@ -292,21 +268,29 @@ b()
 c()
 ```
 
-Then the multiplication/addition produce their results according to the grouping.
+The returned values are then combined according to the grouping.
 
-So:
+Memory:
 
-> **Higher precedence does NOT mean "this method/operand is evaluated first."**
+> **Higher precedence does not mean that operand is evaluated first.**
 
-Precedence tells you **how values are combined**, not generally which operand's side effects happen first.
+Think:
+
+```text
+PRECEDENCE       → how are values grouped?
+
+EVALUATION ORDER → in what order are operands evaluated?
+```
 
 ---
 
-# Associativity
+## Associativity
 
-When operators have the same precedence, **associativity** determines grouping.
+When operators have the **same precedence**, associativity determines their grouping.
 
-Most arithmetic operators associate left-to-right:
+### Left-to-Right
+
+Most binary arithmetic operators associate left-to-right.
 
 ```java
 20 / 5 * 2
@@ -318,19 +302,13 @@ groups as:
 (20 / 5) * 2
 ```
 
-Therefore:
+Result:
 
 ```text
-4 * 2 = 8
+8
 ```
 
-Not:
-
-```text
-20 / (5 * 2) = 2
-```
-
-Similarly:
+Likewise:
 
 ```java
 10 - 3 - 2
@@ -348,11 +326,9 @@ Result:
 5
 ```
 
----
+### Assignment Is Right-to-Left
 
-## Assignment Associates Right-to-Left
-
-Assignment is different:
+Assignment operators associate right-to-left:
 
 ```java
 a = b = c = 10;
@@ -364,13 +340,22 @@ groups as:
 a = (b = (c = 10));
 ```
 
-All three become `10`.
+All three variables become `10`.
+
+Memory:
+
+```text
+precedence    → operators of DIFFERENT priority
+associativity → operators of the SAME priority
+```
 
 ---
 
-# Short-Circuit Operators
+## Short-Circuit Operators
 
-Evaluation is still left-to-right, but `&&` and `||` may prevent the right side from being evaluated.
+`&&` and `||` evaluate left-to-right but may skip the right operand.
+
+### `&&`
 
 ```java
 int x = 5;
@@ -378,34 +363,77 @@ int x = 5;
 boolean result = false && ++x > 5;
 ```
 
-The right side isn't evaluated:
+The left operand is already `false`, so the right side is not evaluated:
 
 ```text
 x = 5
 ```
 
-Likewise:
+### `||`
 
 ```java
+int x = 5;
+
 boolean result = true || ++x > 5;
 ```
 
-Again, `++x` isn't evaluated.
+The left operand is already `true`, so again:
 
-This matters greatly when `++` or `--` appears on the right side.
+```text
+x = 5
+```
 
-Contrast with:
+### `&` and `|`
+
+With boolean operands:
 
 ```java
 &
 |
 ```
 
-which do **not** short-circuit when used with booleans.
+evaluate **both operands**.
+
+For example:
+
+```java
+int x = 5;
+
+boolean result = false & ++x > 5;
+```
+
+The right side is still evaluated:
+
+```text
+x = 6
+```
+
+Remember:
+
+```text
+&&  → short-circuit AND
+||  → short-circuit OR
+
+&   → both boolean operands evaluated
+|   → both boolean operands evaluated
+```
+
+`^` with boolean operands is XOR:
+
+```text
+true  ^ false → true
+false ^ true  → true
+true  ^ true  → false
+false ^ false → false
+```
 
 ---
 
-# Common Exam Example
+## Expression Tracing
+
+For complicated expressions, separate **grouping** from **evaluation**.
+
+Consider:
 
 ```java
 int x = 3;
@@ -413,13 +441,13 @@ int x = 3;
 int result = ++x * 2 + x--;
 ```
 
-### Group by precedence
+### Determine Grouping
 
-```text
+```java
 (++x * 2) + x--
 ```
 
-### Evaluate left-to-right
+### Track Side Effects
 
 Start:
 
@@ -430,8 +458,8 @@ x = 3
 `++x`:
 
 ```text
-x = 4
-use 4
+x → 4
+expression value → 4
 ```
 
 Multiply:
@@ -440,11 +468,11 @@ Multiply:
 4 * 2 = 8
 ```
 
-Then `x--`:
+`x--`:
 
 ```text
-use 4
-x becomes 3
+expression value → 4
+x → 3
 ```
 
 Addition:
@@ -460,33 +488,20 @@ result = 12
 x = 3
 ```
 
----
+### Reliable Method
 
-# Exam Method
-
-For complicated expressions, don't try to do everything mentally.
-
-### Step 1 — Determine grouping from precedence
-
-```java
-x++ + ++x * 2
-```
-
-becomes conceptually:
+For a complicated expression:
 
 ```text
-x++ + (++x * 2)
-```
+1. GROUP using precedence
 
-### Step 2 — Evaluate operands left-to-right
+2. EVALUATE operands left-to-right
 
-Keep a running value for each variable.
+3. For each ++ / -- track:
+      expression value
+      variable value
 
-### Step 3 — For every `++` / `--`, write two things
-
-```text
-expression value
-new variable value
+4. APPLY operators according to the grouping
 ```
 
 For example:
@@ -495,47 +510,107 @@ For example:
 x = 4
 
 x++:
-    produces 4
+    expression → 4
     x → 5
 
 ++x:
     x → 6
-    produces 6
+    expression → 6
 ```
 
-### Step 4 — Apply the operators according to their grouping
-
-This prevents precedence and side effects from getting mixed together.
+Keeping the **expression value** separate from the **variable's new value** prevents most increment/decrement mistakes.
 
 ---
 
-## Memory Rules
+# Quick Reference
+
+## Three Different Concepts
 
 ```text
 PRECEDENCE
-    → how is the expression GROUPED?
+→ how is the expression grouped?
 
 EVALUATION ORDER
-    → Java evaluates operands LEFT TO RIGHT
+→ operands are evaluated left-to-right
 
 ASSOCIATIVITY
-    → how operators at the SAME precedence level GROUP
-
-++x
-    → increment first
-    → expression sees NEW value
-
-x++
-    → expression sees OLD value
-    → variable is incremented
-
-&& / ||
-    → right operand might NEVER be evaluated
-
-& / |
-    → both boolean operands are evaluated
+→ how do operators at the same precedence group?
 ```
 
-Most importantly:
+## Increment / Decrement
+
+```text
+++x
+→ change first
+→ expression sees NEW value
+
+x++
+→ expression sees OLD value
+→ variable still changes
+```
+
+Same principle:
+
+```text
+--x
+x--
+```
+
+## Short Circuiting
+
+```text
+A && B
+→ B evaluated only if A is true
+
+A || B
+→ B evaluated only if A is false
+
+A & B
+→ both evaluated
+
+A | B
+→ both evaluated
+```
+
+## Useful Precedence
+
+```text
+postfix ++ --
+      ↓
+prefix ++ -- + - ! ~
+      ↓
+* / %
+      ↓
++ -
+      ↓
+shifts
+      ↓
+relational / instanceof
+      ↓
+== !=
+      ↓
+&
+^
+|
+      ↓
+&&
+||
+      ↓
+?:
+      ↓
+assignment
+```
+
+## Final Memory Kicks
 
 > **Precedence determines grouping; it does not override Java's left-to-right operand evaluation.**
+
+> **Prefix changes the variable first; postfix produces the old value first.**
+
+> **Associativity determines grouping between operators at the same precedence level.**
+
+> **Most arithmetic associates left-to-right; assignment associates right-to-left.**
+
+> **`&&` and `||` may skip the right operand; boolean `&` and `|` evaluate both.**
+
+> **With `++` / `--`, track the expression value and variable value separately.**

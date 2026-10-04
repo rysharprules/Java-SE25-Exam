@@ -1,6 +1,22 @@
 # Text Blocks
 
-A text block is simply another way of creating a `String`.
+Quick reference for Java text blocks, whitespace, line endings and escape sequences.
+
+## Contents
+
+- [Creating a Text Block](#creating-a-text-block)
+- [Opening and Closing Delimiters](#opening-and-closing-delimiters)
+- [Indentation and Whitespace](#indentation-and-whitespace)
+- [Escape Sequences](#escape-sequences)
+- [Quotes](#quotes)
+- [Processing Order](#processing-order)
+- [Quick Reference](#quick-reference)
+
+---
+
+## Creating a Text Block
+
+A text block is another way of creating a `String`.
 
 ```java
 String text = """
@@ -9,32 +25,57 @@ String text = """
         """;
 ```
 
+There is no special text-block runtime type.
+
+```java
+text.length();
+text.substring(...);
+text.contains(...);
+text.formatted(...);
+```
+
+A text block can be used anywhere a `String` is expected.
+
 ---
 
-## 1. Opening `"""` Must Be Followed by a New Line
+## Opening and Closing Delimiters
 
-This is valid:
+Text blocks use:
+
+```text
+"""
+```
+
+but the placement of the delimiters matters.
+
+### Opening Delimiter
+
+The opening `"""` must be followed by a line terminator.
+
+Valid:
 
 ```java
 String text = """
         hello""";
 ```
 
-This is NOT:
+Invalid:
 
 ```java
-String text = """hello"""; // DOES NOT COMPILE
+String text = """hello""";   // DOES NOT COMPILE
 ```
 
-The opening delimiter must be followed by a line terminator.
+Whitespace is allowed between the opening delimiter and the line terminator, but other content is not.
 
-Whitespace is allowed between the opening `"""` and that line terminator, but no other content.
+Memory:
 
----
+> **Opening `"""` → newline required.**
 
-## 2. Closing `"""` Controls the Final Newline
+### Closing Delimiter
 
-Closing delimiter on the **same line**:
+The position of the closing `"""` determines whether the preceding physical newline becomes part of the string.
+
+Closing delimiter on the same line:
 
 ```java
 String text = """
@@ -47,9 +88,9 @@ produces:
 hello
 ```
 
-No newline after `hello`.
+with no final newline.
 
-Closing delimiter on the **next line**:
+Closing delimiter on the next line:
 
 ```java
 String text = """
@@ -63,24 +104,28 @@ produces conceptually:
 hello\n
 ```
 
-### Memory rule
+Memory:
 
 ```text
 hello"""
-    → no final newline
+→ no final newline
 
 hello
 """
-    → final newline
+→ final newline
 ```
 
-This is a common exam trap.
+The position of the closing delimiter can also affect incidental indentation.
 
 ---
 
-# 3. Incidental vs Essential Whitespace
+## Indentation and Whitespace
 
-Java removes **incidental indentation** used merely to make the source code readable.
+Java removes **incidental whitespace** used to indent the text block in source code.
+
+Whitespace beyond that common indentation can remain as **essential whitespace**.
+
+### Incidental Indentation
 
 ```java
 String text = """
@@ -96,56 +141,30 @@ Java
   Rocks
 ```
 
-The common indentation is removed.
+The common indentation is removed, while the additional indentation before `Rocks` remains.
 
-The extra two spaces before `Rocks` remain because they are **essential whitespace**.
-
-### Mental model
-
-Think of Java finding the common left margin:
-
-```text
-        Java
-          Rocks
-        """
-        ↑
-        incidental
-
-Java
-  Rocks
-↑
-actual resulting content
-```
+Memory:
 
 > **Common indentation disappears; indentation beyond the common margin remains.**
 
-The position of the closing `"""` can therefore affect how much indentation is removed.
+### Closing Delimiter and Indentation
 
----
+The closing delimiter participates in determining the incidental indentation when it appears on its own line.
 
-# 4. Leading vs Trailing Whitespace
+Its position can therefore affect how much leading whitespace is removed.
 
-Essential **leading** whitespace can remain:
+For exam questions involving spaces, pay attention to both:
 
-```java
-String text = """
-          Java
-        """;
+```text
+content indentation
+closing delimiter position
 ```
 
-Depending on the position of the closing delimiter, extra indentation can become part of the resulting `String`.
+### Trailing Whitespace
 
-Ordinary **trailing spaces**, however, are stripped from text-block lines.
+Ordinary trailing spaces on text-block lines are stripped.
 
-If trailing spaces actually matter, use `\s`.
-
----
-
-# 5. `\s` Preserves a Space
-
-`\s` represents a single space.
-
-It is particularly useful at the **end of a line**, where ordinary trailing spaces would otherwise be removed.
+If a trailing space needs to be preserved, use `\s`.
 
 ```java
 String text = """
@@ -154,23 +173,56 @@ String text = """
         """;
 ```
 
-The first line contains a space immediately before its newline.
+The first line contains a real space immediately before its newline.
 
-### Memory rule
+Memory:
 
 ```text
-ordinary trailing spaces
-    → stripped
-
-\s
-    → real preserved space
+ordinary trailing spaces → stripped
+\s                       → preserved space
 ```
 
 ---
 
-# 6. `\` Suppresses a Newline
+## Escape Sequences
 
-A backslash immediately before the source line terminator prevents that newline from becoming part of the `String`.
+Normal Java escape sequences still work inside text blocks.
+
+Common examples:
+
+```text
+\n    newline
+\t    tab
+\r    carriage return
+\b    backspace
+\f    form feed
+\"    double quote
+\\    backslash
+\s    space
+```
+
+Two escapes are particularly important for text blocks.
+
+### `\s` — Preserve a Space
+
+`\s` represents a space.
+
+It is especially useful at the end of a line because ordinary trailing whitespace would otherwise be stripped.
+
+```java
+String text = """
+        hello\s
+        world
+        """;
+```
+
+Memory:
+
+> **`\s` creates a real space after whitespace stripping has occurred.**
+
+### `\` — Suppress a Newline
+
+A backslash immediately before a source line terminator prevents that newline from becoming part of the resulting string.
 
 ```java
 String text = """
@@ -191,48 +243,45 @@ doe
 deer
 ```
 
-### Memory rule
+Memory:
 
-```text
-\ at end of source line
-    → join this line with the next
+> **`\` at the end of a source line joins that line with the next.**
+
+### Physical vs Explicit Newlines
+
+A physical line break in the text block normally contributes a newline.
+
+```java
+String text = """
+        hello
+        world""";
 ```
 
----
+contains a newline between `hello` and `world`.
 
-# 7. Normal Escape Sequences Still Work
-
-Text blocks still support normal Java escapes:
-
-```text
-\n    newline
-\t    tab
-\r    carriage return
-\b    backspace
-\f    form feed
-\"    double quote
-\\    backslash
-\s    space
-```
-
-For example:
+An explicit `\n` also adds a newline:
 
 ```java
 String text = """
         hello\n
-        world
-        """;
+        world""";
 ```
 
-The explicit `\n` adds a newline **in addition to** the physical newline already present in the text block.
+Here there is:
 
-Therefore be careful when counting lines.
+```text
+explicit \n
++
+physical text-block newline
+```
+
+So be careful when counting resulting characters or lines.
 
 ---
 
-# 8. Quotes Usually Don't Need Escaping
+## Quotes
 
-One major benefit of text blocks is that ordinary quotes can appear directly:
+Ordinary double quotes normally do not need escaping inside a text block:
 
 ```java
 String text = """
@@ -241,9 +290,13 @@ String text = """
         """;
 ```
 
-No `\"` required.
+This is one of the main conveniences of text blocks.
 
-However, three consecutive quotes can look like the closing delimiter, so at least one quote must be escaped when necessary.
+### Three Consecutive Quotes
+
+Three consecutive quotes can be interpreted as the closing delimiter.
+
+When literal quote characters would otherwise form `"""`, escape at least one as necessary.
 
 For example:
 
@@ -253,43 +306,13 @@ String text = """
         """;
 ```
 
-Escaping prevents the quotes from being interpreted as the text-block closing delimiter.
+The escape prevents the quote sequence from being interpreted as the closing delimiter.
 
 ---
 
-# 9. Text Blocks Are Still `String`
+## Processing Order
 
-There is no special text-block runtime type.
-
-```java
-String text = """
-        Hello
-        World
-        """;
-```
-
-`text` is simply a:
-
-```text
-String
-```
-
-Therefore normal `String` methods work:
-
-```java
-text.length();
-text.substring(...);
-text.contains(...);
-text.formatted(...);
-```
-
-And a text block can be passed anywhere a `String` is expected.
-
----
-
-# 10. Compiler Processing Order
-
-A useful way to understand the tricky whitespace rules is that Java effectively processes text blocks in this order:
+A useful mental model for text-block processing is:
 
 ```text
 1. Normalize line endings
@@ -299,7 +322,9 @@ A useful way to understand the tricky whitespace rules is that Java effectively 
 3. Interpret escape sequences
 ```
 
-The fact that **escapes are interpreted last** explains why `\s` can preserve trailing whitespace.
+This explains several otherwise awkward rules.
+
+For example:
 
 ```java
 String text = """
@@ -307,157 +332,117 @@ String text = """
         """;
 ```
 
-Java does not turn `\s` into a space until **after** incidental/trailing whitespace processing.
+`\s` is interpreted **after** whitespace processing.
+
+Therefore the space introduced by `\s` survives.
+
+Likewise, the line-continuation escape can suppress a line terminator during escape processing.
+
+Memory:
+
+> **Whitespace processing happens before escape sequences are interpreted.**
 
 ---
 
-# Exam Traps
+# Quick Reference
 
-### Opening delimiter
-
-```java
-String a = """hello""";  // ❌
-```
-
-```java
-String a = """
-        hello""";        // ✅
-```
-
----
-
-### Closing delimiter
-
-```java
-String a = """
-        hello""";
-```
-
-No final newline.
-
-```java
-String a = """
-        hello
-        """;
-```
-
-Has a final newline.
-
----
-
-### Physical newline
-
-```java
-String a = """
-        hello
-        world""";
-```
-
-contains a newline between `hello` and `world`.
-
----
-
-### Suppressed newline
-
-```java
-String a = """
-        hello \
-        world""";
-```
-
-produces:
-
-```text
-hello world
-```
-
----
-
-### Explicit newline
-
-```java
-String a = """
-        hello\n
-        world""";
-```
-
-contains the explicit `\n` **plus the physical text-block newline** after it.
-
----
-
-### Trailing whitespace
-
-```text
-ordinary spaces → stripped
-\s              → preserved
-```
-
----
-
-# Quick Memory Rules
-
-```text
-"""
-must be followed by a line terminator
-
-
-Text block
-    → still a String
-
-
-COMMON LEADING INDENT
-    → incidental
-    → stripped
-
-
-EXTRA LEADING INDENT
-    → essential
-    → preserved
-
-
-ORDINARY TRAILING SPACES
-    → stripped
-
-
-\s
-    → preserved space
-
-
-\ at end of source line
-    → suppress newline
-
-
-closing """ on content line
-    → no final newline
-
-
-closing """ on next line
-    → final newline
-
-
-ordinary "
-    → usually no escaping needed
-
-
-three consecutive "
-    → may need one escaped
-```
-
-## Ultimate Shortcut
+## Delimiters
 
 ```text
 OPENING """
-    → newline required
 
-INDENTATION
-    → common margin stripped
+"""hello"""
+→ ✗ opening delimiter must be followed by newline
+
+"""
+hello"""
+→ ✓
+```
+
+Closing delimiter:
+
+```text
+hello"""
+→ no final newline
+
+hello
+"""
+→ final newline
+```
+
+## Whitespace
+
+```text
+common leading indentation
+→ stripped
+
+additional leading indentation
+→ preserved
+
+ordinary trailing spaces
+→ stripped
 
 \s
-    → preserve space
-
-\
-    → suppress newline
-
-CLOSING """
-    → position determines final newline
+→ preserved space
 ```
+
+## Newlines
+
+```text
+physical source newline
+→ normally becomes newline in String
+
+\n
+→ explicit newline
+
+\ at end of source line
+→ suppresses physical newline
+```
+
+## Quotes
+
+```text
+ordinary "
+→ normally write directly
+
+"""
+→ can conflict with closing delimiter
+→ escape a quote when necessary
+```
+
+## Type
+
+```text
+text block
+→ String
+```
+
+All normal `String` operations still apply.
+
+## Processing
+
+```text
+normalize line endings
+        ↓
+remove incidental whitespace
+        ↓
+interpret escapes
+```
+
+## Final Memory Kicks
+
+> **A text block is still just a `String`.**
+
+> **Opening `"""` must be followed by a line terminator.**
+
+> **Closing `"""` on the content line means no final newline; placing it on the next line includes the preceding newline.**
+
+> **Common indentation is stripped; additional indentation is preserved.**
+
+> **Ordinary trailing spaces are stripped; `\s` preserves a space.**
+
+> **`\` at the end of a source line suppresses that newline.**
+
+> **Physical newlines and explicit `\n` are separate — both can contribute newlines.**
+
+> **Whitespace processing occurs before escape sequences are interpreted.**
