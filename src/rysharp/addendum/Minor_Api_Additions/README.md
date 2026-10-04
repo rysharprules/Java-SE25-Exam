@@ -1,12 +1,24 @@
-# Java 21 → 25 Minor API Additions
+# Minor API Additions
 
-A concise review of smaller Java additions and behavioural changes introduced after JDK 21 that may be useful for the Java 25 certification exam.
+Quick reference for smaller API additions and behavioural changes introduced after JDK 21 that may be relevant to Java 25.
 
-Major features such as module imports, compact source files, instance `main` methods, flexible constructor bodies, Scoped Values, Stream Gatherers, and unnamed variables/patterns are covered in separate guides.
+Major features such as **Module Import Declarations**, **Compact Source Files and Instance Main Methods**, **Flexible Constructor Bodies**, **Scoped Values**, **Stream Gatherers**, and **Unnamed Variables and Patterns** are covered in separate guides.
+
+## Contents
+
+- [`Instant.until(Instant)`](#instantuntilinstant)
+- [`Console` Locale Formatting](#console-locale-formatting)
+- [`Reader.of(CharSequence)`](#readerofcharsequence)
+- [`CharSequence.getChars()`](#charsequencegetchars)
+- [`CharBuffer.getChars()`](#charbuffergetchars)
+- [`ForkJoinPool` Scheduling and Timeouts](#forkjoinpool-scheduling-and-timeouts)
+- [`CompletableFuture` Common-Pool Change](#completablefuture-common-pool-change)
+- [Virtual Threads and `synchronized`](#virtual-threads-and-synchronized)
+- [Quick Reference](#quick-reference)
 
 ---
 
-## 1. `Instant.until(Instant)`
+## `Instant.until(Instant)`
 
 Java 23 adds:
 
@@ -25,7 +37,7 @@ Duration duration = start.until(end);
 
 This returns the directed `Duration` from `start` to `end`.
 
-### Existing `until()` overload
+### Existing `until()` Overload
 
 Do not confuse the new overload with the older:
 
@@ -41,11 +53,14 @@ start.until(end, ChronoUnit.MINUTES); // 105
 end.until(start, ChronoUnit.MINUTES); // -105
 ```
 
-Important points:
+The older overload:
 
-* The result is directional, so it can be negative.
-* Only complete units are counted; the result is a `long`.
-* Incomplete units are truncated rather than rounded.
+```text
+returns long
+counts complete units
+can return a negative value
+truncates incomplete units
+```
 
 For a difference of 1 hour, 45 minutes and 30 seconds:
 
@@ -53,9 +68,25 @@ For a difference of 1 hour, 45 minutes and 30 seconds:
 start.until(end, ChronoUnit.HOURS); // 1
 ```
 
-not `1.75`, `1.758...`, or `2`.
+not:
 
-### Unsupported units
+```text
+1.75
+1.758...
+2
+```
+
+Memory:
+
+```text
+start.until(end)
+→ Duration
+
+start.until(end, unit)
+→ long
+```
+
+### Unsupported Units
 
 This compiles:
 
@@ -63,34 +94,47 @@ This compiles:
 start.until(end, ChronoUnit.MONTHS);
 ```
 
-because `MONTHS` is a valid `TemporalUnit`.
+but fails at runtime with:
 
-It fails at runtime with `UnsupportedTemporalTypeException` because `Instant` does not support calendar-based months.
+```text
+UnsupportedTemporalTypeException
+```
 
-Mental model:
+`MONTHS` is a valid `TemporalUnit`, but `Instant` does not support calendar-based months.
 
-> `Instant` represents points on the timeline, not calendar arithmetic.
+Memory:
+
+> **`Instant` represents points on the timeline, not calendar arithmetic.**
 
 ### `Duration` vs `Period`
 
 ```text
-Duration → time-based amounts: hours/minutes/seconds
-Period   → date-based amounts: years/months/days
+Duration → time-based amounts
+           hours / minutes / seconds
+
+Period   → date-based amounts
+           years / months / days
 ```
 
-A useful edge case:
+For example:
 
 ```java
 Duration.ofDays(1)
 ```
 
-means exactly 24 hours.
+means exactly:
+
+```text
+24 hours
+```
 
 A `Period` of one calendar day is not necessarily 24 elapsed hours around daylight-saving changes.
 
+For the wider date/time API, see **Date & Time API**.
+
 ---
 
-## 2. `Console` Locale Formatting
+## `Console` Locale Formatting
 
 Java 23 adds locale-aware overloads including:
 
@@ -101,7 +145,7 @@ readLine(Locale, String, Object...)
 readPassword(Locale, String, Object...)
 ```
 
-Example:
+For example:
 
 ```java
 console.printf(
@@ -132,7 +176,11 @@ It does **not** translate literal text:
 "Value"
 ```
 
-remains `"Value"`.
+remains:
+
+```text
+"Value"
+```
 
 ### Locale with `readLine()`
 
@@ -144,13 +192,13 @@ String input = console.readLine(
 );
 ```
 
-The locale affects the **formatted prompt**:
+The locale affects the formatted prompt:
 
 ```text
 Enter value 1.234,50:
 ```
 
-It does **not** parse or reinterpret what the user subsequently types.
+It does **not** parse or reinterpret the user's input.
 
 If the user enters:
 
@@ -158,7 +206,11 @@ If the user enters:
 1234.50
 ```
 
-`readLine()` returns `"1234.50"`.
+the result is:
+
+```java
+"1234.50"
+```
 
 If they enter:
 
@@ -166,13 +218,17 @@ If they enter:
 1234,50
 ```
 
-it returns `"1234,50"`.
+the result is:
 
-Mental model:
+```java
+"1234,50"
+```
 
-> `Locale` formats the prompt; it does not parse the input.
+Memory:
 
-### Existing `Console` trap
+> **`Locale` formats the prompt; it does not parse the input.**
+
+### `System.console()` Can Be `null`
 
 Remember:
 
@@ -188,11 +244,15 @@ Therefore:
 System.console().printf("Hello");
 ```
 
-can result in a `NullPointerException`.
+can result in:
+
+```text
+NullPointerException
+```
 
 ---
 
-## 3. `Reader.of(CharSequence)`
+## `Reader.of(CharSequence)`
 
 Java 24 adds:
 
@@ -211,23 +271,30 @@ System.out.println((char) reader.read()); // C
 System.out.println(reader.read());        // -1
 ```
 
-Normal `Reader` behaviour still applies: `read()` returns an `int`, and `-1` indicates the end of the input.
+Normal `Reader` behaviour still applies:
 
-### Relation to existing I/O
+```text
+read() → int
+-1     → end of input
+```
+
+### Relationship to Existing I/O
 
 Think:
 
 ```text
-InputStreamReader
-    bytes → characters
-
 Reader.of(...)
-    characters already in memory → Reader
+→ characters already in memory
+→ Reader
+
+InputStreamReader
+→ bytes
+→ characters
 ```
 
 `Reader.of()` accepts a `CharSequence`, not specifically a `String`.
 
-Therefore this is valid:
+Therefore:
 
 ```java
 StringBuilder sb = new StringBuilder("Hello");
@@ -235,9 +302,9 @@ StringBuilder sb = new StringBuilder("Hello");
 Reader reader = Reader.of(sb);
 ```
 
-Other `CharSequence` implementations can also be supplied.
+is valid.
 
-### `mark()` / `reset()`
+### `mark()` and `reset()`
 
 The returned reader supports marking:
 
@@ -260,9 +327,11 @@ r.markSupported(); // true
 
 ### Mutable `CharSequence`
 
-`Reader.of()` does not promise to snapshot/copy the supplied sequence.
+`Reader.of()` does not promise to snapshot or copy the supplied sequence.
 
-For example, mutations to a `StringBuilder` can be observable by subsequent reads. Modifying a mutable sequence while its reader is open should not be relied upon; behaviour can be undefined.
+Mutations to something such as a `StringBuilder` can therefore be observable by subsequent reads.
+
+Do not rely on modifying a mutable sequence while its reader is open.
 
 ### `null`
 
@@ -272,11 +341,17 @@ This compiles:
 Reader.of(null);
 ```
 
-but throws `NullPointerException` at runtime.
+but throws:
 
-### Not a general `Reader` factory
+```text
+NullPointerException
+```
 
-`Reader.of()` does not create arbitrary `Reader` subclasses.
+at runtime.
+
+### Return Type
+
+The return type is `Reader`.
 
 This does not compile:
 
@@ -284,28 +359,29 @@ This does not compile:
 BufferedReader br = Reader.of("Hello");
 ```
 
-because the return type is `Reader`.
-
-Wrapping still works normally:
+Wrapping it is fine:
 
 ```java
 BufferedReader br =
-    new BufferedReader(Reader.of("Hello"));
+        new BufferedReader(Reader.of("Hello"));
 ```
 
-Likewise, `InputStreamReader`, `FileReader`, etc. are still constructed normally.
-
-Mental model:
+Memory:
 
 ```text
-Reader.of(CharSequence) → characters → Reader
-InputStreamReader       → bytes → characters
-BufferedReader          → Reader → buffered Reader
+Reader.of(CharSequence)
+→ characters
+→ Reader
+
+NOT automatically:
+→ BufferedReader
+→ FileReader
+→ InputStreamReader
 ```
 
 ---
 
-## 4. `CharSequence.getChars()`
+## `CharSequence.getChars()`
 
 Java 25 adds the default method:
 
@@ -324,29 +400,29 @@ It copies characters from:
 [srcBegin, srcEnd)
 ```
 
-into an **existing** destination array starting at `dstBegin`.
+into an **existing** destination array beginning at `dstBegin`.
 
-Example:
+### Example
 
 ```java
 CharSequence cs = "ORACLE";
 
 char[] result =
-    {'A', 'B', 'C', 'D', 'E', 'F'};
+        {'A', 'B', 'C', 'D', 'E', 'F'};
 
 cs.getChars(1, 4, result, 2);
 ```
 
-Trace the source:
+Source:
 
 ```text
 ORACLE
 012345
 
-1 → 4 exclusive = R A C
+[1, 4) → R A C
 ```
 
-Then the destination:
+Destination:
 
 ```text
 index:   0 1 2 3 4 5
@@ -357,7 +433,7 @@ source:      R A C
 after:   A B R A C F
 ```
 
-So:
+Therefore:
 
 ```java
 Arrays.toString(result);
@@ -369,14 +445,16 @@ produces:
 [A, B, R, A, C, F]
 ```
 
-### Important behaviour
+### Behaviour
 
 `getChars()`:
 
-* overwrites existing destination elements
-* does not insert elements
-* does not resize the array
-* returns `void`
+```text
+overwrites existing elements
+does not insert
+does not resize the array
+returns void
+```
 
 Therefore:
 
@@ -384,13 +462,13 @@ Therefore:
 char[] result = cs.getChars(...); // DOES NOT COMPILE
 ```
 
-### Why the Java 25 change matters
+### Why the Java 25 Addition Matters
 
-`String` already had a `getChars()` method.
+`String` already had `getChars()`.
 
-Java 25 adds it to the **`CharSequence` interface** itself as a default method.
+Java 25 adds it to the `CharSequence` interface as a default method.
 
-Therefore:
+Therefore this now works directly through a `CharSequence` reference:
 
 ```java
 CharSequence cs = "Java";
@@ -398,11 +476,9 @@ CharSequence cs = "Java";
 cs.getChars(0, 2, new char[2], 0);
 ```
 
-now works directly through a `CharSequence` reference.
+### Range Shortcut
 
-### Range shortcut
-
-For Java's common half-open ranges:
+For a half-open range:
 
 ```text
 [start, end)
@@ -414,39 +490,37 @@ the number of elements is:
 end - start
 ```
 
-Example:
+For example:
 
 ```text
-[1, 4) → 4 - 1 = 3 elements
+[1, 4)
+→ 4 - 1
+→ 3 elements
 ```
 
-Contrast this with an explicitly closed range:
-
-```java
-IntStream.rangeClosed(1, 4);
-```
-
-which contains:
+Compare a closed range:
 
 ```text
-1, 2, 3, 4
+[start, end]
 ```
 
-and therefore:
+where the count is:
 
 ```text
 end - start + 1
 ```
 
-elements.
+Memory:
+
+> **Half-open `[start,end)` → count = `end - start`.**
 
 ---
 
-## 5. `CharBuffer.getChars()`
+## `CharBuffer.getChars()`
 
-`CharBuffer` implements `CharSequence`, so Java 25 provides the new `getChars()` operation.
+`CharBuffer` implements `CharSequence`, so it gains the Java 25 `getChars()` operation.
 
-The important complication is that a `CharBuffer` has:
+The complication is that a `CharBuffer` has:
 
 ```text
 position
@@ -454,13 +528,13 @@ limit
 capacity
 ```
 
-The `getChars()` indexes are relative to the buffer's **current position**.
+For `CharBuffer`, the `getChars()` indexes are relative to the buffer's **current position**.
 
-Example:
+### Relative Indexes
 
 ```java
 CharBuffer buffer =
-    CharBuffer.wrap("JAVA25");
+        CharBuffer.wrap("JAVA25");
 
 buffer.position(2);
 ```
@@ -487,7 +561,7 @@ Now:
 
 ```java
 char[] result =
-    {'A', 'B', 'C', 'D', 'E'};
+        {'A', 'B', 'C', 'D', 'E'};
 
 buffer.getChars(0, 3, result, 1);
 ```
@@ -498,7 +572,7 @@ copies:
 V A 2
 ```
 
-into the destination beginning at index `1`:
+giving:
 
 ```text
 before: A B C D E
@@ -508,41 +582,41 @@ source:   V A 2
 after:  A V A 2 E
 ```
 
-### Important edge case: position
+### Position Does Not Advance
 
-`getChars()` does **not** advance the `CharBuffer` position.
-
-Therefore:
+This is the important edge case:
 
 ```java
+buffer.getChars(0, 3, result, 1);
+
 buffer.position(); // still 2
 ```
 
-Do not confuse this with a relative bulk `get()`:
+Do not confuse this with relative bulk `get()`:
 
 ```java
 buffer.get(result, 1, 3);
 ```
 
-which reads from the current position **and advances the position**.
+which reads from the current position **and advances it**.
 
-Mental model:
+Memory:
 
 ```text
-getChars(...) → indexed copy relative to current position
-                position unchanged
+getChars(...)
+→ indexes relative to current position
+→ position unchanged
 
-get(...)      → consumes characters
-                position advances
+get(...)
+→ consumes characters
+→ position advances
 ```
 
-### Exam technique
-
-This is the sort of API where it is safer to write out the indexes than attempt to visualise everything mentally.
+For this API, writing out the indexes is safer than trying to visualize them mentally.
 
 ---
 
-## 6. `ForkJoinPool` Scheduling and Timeouts
+## `ForkJoinPool` Scheduling and Timeouts
 
 Java 25 makes:
 
@@ -556,18 +630,20 @@ implement:
 ScheduledExecutorService
 ```
 
-Therefore the normal **is-a** relationship applies:
+Therefore:
 
 ```java
 ScheduledExecutorService service =
-    new ForkJoinPool();
+        new ForkJoinPool();
 ```
 
-This compiles in Java 25.
+compiles in Java 25.
 
-If already familiar with `ScheduledExecutorService`, there is little new behaviour to learn.
+If you already understand `ScheduledExecutorService`, there is little new behaviour to learn.
 
-`ForkJoinPool` can now use scheduling operations such as:
+### Scheduling
+
+`ForkJoinPool` can now use operations such as:
 
 ```java
 schedule(...)
@@ -575,7 +651,7 @@ scheduleAtFixedRate(...)
 scheduleWithFixedDelay(...)
 ```
 
-### Delayed scheduling
+For example:
 
 ```java
 pool.schedule(
@@ -585,9 +661,9 @@ pool.schedule(
 );
 ```
 
-does **not** guarantee execution exactly ten seconds later.
+This does not guarantee execution **exactly** ten seconds later.
 
-Instead:
+Think:
 
 ```text
 wait at least 10 seconds
@@ -605,44 +681,44 @@ Java 25 also adds:
 submitWithTimeout(...)
 ```
 
-which associates a timeout with the submitted task.
-
 Do not confuse this with:
 
 ```java
 future.get(2, TimeUnit.SECONDS);
 ```
 
-The distinction is important.
+The distinction is:
 
-`Future.get(timeout)`:
+```text
+Future.get(timeout)
+→ timeout belongs to the CALLER'S WAIT
 
-> The **caller** waits at most that long for the result.
+submitWithTimeout(...)
+→ timeout belongs to the TASK
+```
 
-If the timeout expires, `get()` throws `TimeoutException`. That does not inherently cancel the underlying task.
+With `Future.get(timeout)`, expiration causes `get()` to throw `TimeoutException`; that does not inherently cancel the underlying task.
 
-`submitWithTimeout()`:
+With `submitWithTimeout()`, the task itself has an associated timeout and can be cancelled with the supplied timeout action invoked if it does not finish in time.
 
-> The **task itself** has an associated timeout.
-
-If it does not finish in time, it can be cancelled and the supplied timeout handler invoked.
-
-Also recognise, but do not overlearn:
+Also recognise:
 
 ```text
 getDelayedTaskCount()
 cancelDelayedTasksOnShutdown()
 ```
 
+but these are lower priority.
+
 ---
 
-## 7. `CompletableFuture` Common-Pool Change
+## `CompletableFuture` Common-Pool Change
 
 **Low priority / recognition knowledge.**
 
 Java 25 changes an edge case in the default executor behaviour of asynchronous `CompletableFuture` operations.
 
-For relevant async operations with **no explicit executor**:
+For relevant asynchronous operations with **no explicit executor**:
 
 ```java
 CompletableFuture.supplyAsync(
@@ -658,7 +734,7 @@ ForkJoinPool.commonPool()
 
 Java 25 makes this consistent even when the common pool has very low parallelism.
 
-If an executor is supplied:
+If an executor is explicitly supplied:
 
 ```java
 CompletableFuture.supplyAsync(
@@ -667,9 +743,9 @@ CompletableFuture.supplyAsync(
 );
 ```
 
-the explicitly supplied executor is used.
+that executor is used.
 
-### Quick method recognition
+### Method Recognition
 
 ```java
 supplyAsync(() -> "java")
@@ -677,9 +753,12 @@ supplyAsync(() -> "java")
 
 means approximately:
 
-> Start asynchronous work that eventually supplies a value.
+```text
+start asynchronous work
+that eventually supplies a value
+```
 
-This is conceptually similar to submitting a `Callable` and obtaining a future result.
+And:
 
 ```java
 thenApplyAsync(String::toUpperCase)
@@ -687,14 +766,17 @@ thenApplyAsync(String::toUpperCase)
 
 means approximately:
 
-> When the previous stage completes, asynchronously transform its result.
+```text
+when the previous stage completes,
+asynchronously transform its result
+```
 
-So:
+For example:
 
 ```java
 CompletableFuture
-    .supplyAsync(() -> "java")
-    .thenApplyAsync(String::toUpperCase);
+        .supplyAsync(() -> "java")
+        .thenApplyAsync(String::toUpperCase);
 ```
 
 eventually produces:
@@ -715,21 +797,21 @@ with:
 thenApplyAsync(...)
 ```
 
-For this guide, the important Java 25 rule is simply:
+For this Java 25 change, the important memory rule is:
 
-> **Async operation + no supplied Executor → common ForkJoinPool.**
+> **Async operation + no supplied `Executor` → common `ForkJoinPool`.**
 
 ---
 
-## 8. Virtual Threads and `synchronized`
+## Virtual Threads and `synchronized`
 
 **Low priority / recognition knowledge.**
 
 Java 24 improves how virtual threads interact with `synchronized`.
 
-### Platform vs virtual threads
+### Platform vs Virtual Threads
 
-Platform threads are traditional Java threads that closely correspond to OS threads and are comparatively expensive resources.
+Platform threads are traditional Java threads that closely correspond to OS threads.
 
 Virtual threads are lightweight Java threads scheduled by the JVM onto platform threads known as **carrier threads**.
 
@@ -747,17 +829,15 @@ When a virtual thread blocks, the JVM can normally unmount it from its carrier:
 
 ```text
 Virtual A blocks
-      ↓
+       ↓
 Virtual A unmounted
-      ↓
+       ↓
 carrier runs Virtual B
 ```
 
-This is one reason very large numbers of virtual threads are practical.
+### `synchronized` Pinning Improvement
 
-### The old pinning problem
-
-Before Java 24:
+Previously:
 
 ```java
 synchronized (lock) {
@@ -767,23 +847,19 @@ synchronized (lock) {
 
 could cause a blocked virtual thread to remain **pinned** to its carrier.
 
-That meant both were effectively waiting:
+Conceptually:
 
 ```text
-Virtual A waiting
-       +
+virtual thread waiting
+        +
 carrier waiting
 ```
 
-reducing the scalability advantage of virtual threads.
-
 Java 24 removes this pinning problem for normal `synchronized` usage.
 
-### What did NOT change?
+### Synchronization Semantics Did Not Change
 
-Synchronization semantics remain the same.
-
-If many virtual threads execute:
+This does **not** change lock ownership or mutual exclusion.
 
 ```java
 synchronized (lock) {
@@ -791,32 +867,131 @@ synchronized (lock) {
 }
 ```
 
-only one thread can own `lock` at a time.
+still allows only one thread to own `lock` at a time.
 
 Think:
 
 ```text
-lock ownership     → unchanged
-mutual exclusion   → unchanged
+lock ownership      → unchanged
+mutual exclusion    → unchanged
 carrier utilisation → improved
 ```
 
-This is principally a performance/implementation improvement rather than a change to how correctly written synchronized code behaves.
+This is principally a performance/implementation improvement rather than a change to normal synchronization semantics.
 
 ---
 
-# Quick Revision Table
+# Quick Reference
 
-| Addition                                    | Version | Key thing to remember                                        |
-| ------------------------------------------- | ------: | ------------------------------------------------------------ |
-| `Instant.until(Instant)`                    |      23 | Returns directed `Duration`                                  |
-| `Console` Locale overloads                  |      23 | Locale formats output/prompts, not user input                |
-| `Reader.of(CharSequence)`                   |      24 | Creates `Reader` over in-memory characters                   |
-| Virtual-thread `synchronized` improvement   |      24 | Blocking no longer pins carriers in normal synchronized code |
-| `CharSequence.getChars()`                   |      25 | `[begin,end)` copied into existing `char[]`                  |
-| `CharBuffer.getChars()`                     |      25 | Indexes relative to position; **doesn't advance position**   |
-| `ForkJoinPool` scheduling                   |      25 | Now a `ScheduledExecutorService`                             |
-| `ForkJoinPool.submitWithTimeout()`          |      25 | Timeout belongs to task, unlike `Future.get(timeout)`        |
-| `CompletableFuture` default executor change |      25 | Async + no explicit executor → common pool                   |
+| Addition | Version | Key Thing to Remember |
+|---|---:|---|
+| `Instant.until(Instant)` | 23 | Returns directed `Duration` |
+| `Console` Locale overloads | 23 | Locale formats output/prompts, not input |
+| `Reader.of(CharSequence)` | 24 | Creates `Reader` over in-memory characters |
+| Virtual thread + `synchronized` | 24 | Normal blocking no longer pins carrier |
+| `CharSequence.getChars()` | 25 | `[begin,end)` copied into existing `char[]` |
+| `CharBuffer.getChars()` | 25 | Relative to position; position does **not** advance |
+| `ForkJoinPool` scheduling | 25 | Now a `ScheduledExecutorService` |
+| `ForkJoinPool.submitWithTimeout()` | 25 | Timeout belongs to task |
+| `CompletableFuture` change | 25 | Async + no explicit executor → common pool |
 
----
+## API Recognition
+
+```text
+Instant.until(Instant)
+→ Duration
+
+Instant.until(Temporal, TemporalUnit)
+→ long
+
+
+Console + Locale
+→ formatting
+→ NOT input parsing
+
+
+Reader.of(CharSequence)
+→ in-memory characters
+→ Reader
+
+
+CharSequence.getChars(...)
+→ copy [begin,end)
+→ existing char[]
+→ void
+
+
+CharBuffer.getChars(...)
+→ relative to current position
+→ position unchanged
+
+
+ForkJoinPool
+→ ScheduledExecutorService
+
+
+Future.get(timeout)
+→ caller wait timeout
+
+submitWithTimeout(...)
+→ task timeout
+
+
+CompletableFuture async
++ no Executor
+→ ForkJoinPool.commonPool()
+
+
+virtual thread + synchronized
+→ mutual exclusion unchanged
+→ carrier pinning improved
+```
+
+## Range Reminder
+
+```text
+[start, end)
+→ end - start elements
+
+[start, end]
+→ end - start + 1 elements
+```
+
+## Priority
+
+```text
+KNOW WELL
+─────────
+Instant.until(Instant)
+Console Locale overloads
+Reader.of(CharSequence)
+CharSequence.getChars()
+CharBuffer.getChars()
+ForkJoinPool scheduling / timeout
+
+
+RECOGNITION
+───────────
+CompletableFuture common-pool change
+virtual-thread synchronized improvement
+```
+
+## Final Memory Kicks
+
+> **`Instant.until(Instant)` returns a directed `Duration`; the older unit-based overload returns a `long`.**
+
+> **A `Console` locale formats output and prompts — it does not parse what the user types.**
+
+> **`Reader.of(CharSequence)` creates a `Reader` over characters already held in memory.**
+
+> **`CharSequence.getChars()` copies `[begin,end)` into an existing `char[]` and returns `void`.**
+
+> **`CharBuffer.getChars()` uses indexes relative to the current position but does not advance that position.**
+
+> **Java 25 `ForkJoinPool` is a `ScheduledExecutorService`.**
+
+> **`Future.get(timeout)` limits how long the caller waits; `submitWithTimeout()` associates the timeout with the task.**
+
+> **Async `CompletableFuture` operation + no supplied executor → common `ForkJoinPool`.**
+
+> **Java 24 improved virtual-thread behaviour inside `synchronized`; mutual-exclusion semantics did not change.**

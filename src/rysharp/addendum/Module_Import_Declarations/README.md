@@ -1,6 +1,22 @@
-# Module Import Declarations
+# Module Import Declarations (JEP 511)
 
-Java 25 introduces **module import declarations**, allowing a source file to import the accessible types exported by an entire module rather than importing packages individually.
+Quick reference for Java 25 module imports, exported packages and their relationship with traditional imports.
+
+## Contents
+
+- [Module Imports](#module-imports)
+- [`java.base`](#javabase)
+- [Package Imports vs Module Imports](#package-imports-vs-module-imports)
+- [Exported Packages and Accessibility](#exported-packages-and-accessibility)
+- [Import Conflicts](#import-conflicts)
+- [Compact Source Files](#compact-source-files)
+- [Quick Reference](#quick-reference)
+
+---
+
+## Module Imports
+
+Java 25 introduces **module import declarations**.
 
 The syntax is:
 
@@ -8,13 +24,7 @@ The syntax is:
 import module java.base;
 ```
 
-This is particularly useful with `java.base`, which contains many of the packages commonly used by Java programs.
-
----
-
-## 1. The basic idea
-
-Traditionally, imports look like:
+Traditionally, you might write:
 
 ```java
 import java.util.List;
@@ -29,56 +39,100 @@ import java.util.*;
 import java.time.*;
 ```
 
-Java 25 allows:
+A module import operates at a broader level:
 
 ```java
 import module java.base;
 ```
 
-This can make types exported by `java.base` available by their simple names:
+This makes accessible types from packages exported by `java.base` available for simple-name use.
+
+For example:
 
 ```java
 import module java.base;
 
 class Example {
+
     List<String> names = new ArrayList<>();
+
     LocalDate date = LocalDate.now();
 }
 ```
 
-So the mental model is:
+Memory:
 
-> **`import module X` → make the accessible exported types of module X available for simple-name use.**
+> **`import module X` → accessible types from packages exported by module X.**
 
 It does **not** mean:
 
-> "Import absolutely everything contained inside the module."
-
-Only accessible types from **exported packages** are considered.
+```text
+import absolutely everything
+physically contained in module X
+```
 
 ---
 
-# 2. `java.base` is much bigger than `java.lang`
+## `java.base`
 
-One easy exam trap is assuming that because `String` works without an import, `java.base` is effectively just `java.lang`.
+`java.base` is much larger than `java.lang`.
 
-It isn't.
+### `java.lang`
 
-`java.lang` is **automatically imported** by every Java source file.
+Every Java source file automatically imports:
 
-For example:
+```text
+java.lang
+```
+
+Therefore these require no explicit import:
 
 ```java
 String name = "Ryan";
 Integer number = 10;
+
 System.out.println(name);
 ```
 
-requires no explicit imports because these types are in `java.lang`.
-
-But `java.base` contains many other packages, including:
+because types such as:
 
 ```text
+String
+Integer
+System
+Object
+Math
+Exception
+```
+
+belong to `java.lang`.
+
+### Other `java.base` Packages
+
+`java.base` contains and exports many other important packages.
+
+Useful ones to recognise include:
+
+| Package | Common Types |
+|---|---|
+| `java.lang` | `String`, `Object`, `System`, `Math`, `Integer` |
+| `java.util` | `List`, `Set`, `Map`, `ArrayList`, `Arrays`, `Optional` |
+| `java.util.function` | `Function`, `Predicate`, `Consumer`, `Supplier` |
+| `java.util.stream` | `Stream`, `IntStream`, `Collectors` |
+| `java.io` | `File`, `InputStream`, `Reader`, `Writer` |
+| `java.nio.file` | `Path`, `Files` |
+| `java.time` | `LocalDate`, `LocalTime`, `Duration`, `Period` |
+| `java.util.concurrent` | `ExecutorService`, `Future`, `ConcurrentHashMap` |
+| `java.util.regex` | `Pattern`, `Matcher` |
+
+You do not need to memorise every package in `java.base`.
+
+A useful recognition cluster is:
+
+```text
+java.base
+
+java.lang
 java.util
 java.util.function
 java.util.stream
@@ -86,61 +140,50 @@ java.io
 java.nio.file
 java.time
 java.util.concurrent
-java.util.regex
-...
 ```
 
-So:
+### `java.base` Is Not All of Java
 
-```java
-List<String> list = new ArrayList<>();
-```
-
-normally requires imports from `java.util`.
-
-With:
+This:
 
 ```java
 import module java.base;
 ```
 
-those exported types can be used without individual imports.
+does not make types from every Java SE module available.
+
+For example, other modules include:
+
+```text
+java.sql
+java.desktop
+java.net.http
+```
+
+So remember:
+
+```text
+java.base
+≠ entire JDK
+```
 
 ---
 
-# 3. The common `java.base` packages worth knowing
+## Package Imports vs Module Imports
 
-You do not need to memorise every package in `java.base` for the exam.
+Package and module imports operate at different levels.
 
-These are the ones most useful to recognise:
+### Package Import
 
-| Package                | Think of it as          | Common examples                                                    |
-| ---------------------- | ----------------------- | ------------------------------------------------------------------ |
-| `java.lang`            | Core Java               | `String`, `Object`, `System`, `Math`, `Integer`, `Exception`       |
-| `java.util`            | Collections & utilities | `List`, `Set`, `Map`, `ArrayList`, `HashMap`, `Arrays`, `Optional` |
-| `java.util.function`   | Functional interfaces   | `Function`, `Predicate`, `Consumer`, `Supplier`                    |
-| `java.util.stream`     | Streams                 | `Stream`, `IntStream`, `Collectors`                                |
-| `java.io`              | Traditional I/O         | `File`, `InputStream`, `OutputStream`, `Reader`, `Writer`          |
-| `java.nio.file`        | Modern file API         | `Path`, `Paths`, `Files`                                           |
-| `java.time`            | Date/time               | `LocalDate`, `LocalTime`, `LocalDateTime`, `Duration`, `Period`    |
-| `java.util.concurrent` | Concurrency             | `ExecutorService`, `Executors`, `Future`, `ConcurrentHashMap`      |
-| `java.util.regex`      | Regular expressions     | `Pattern`, `Matcher`                                               |
-| `java.lang.annotation` | Annotations             | `Annotation`                                                       |
-| `java.lang.reflect`    | Reflection              | `Method`, `Field`, `Constructor`                                   |
+```java
+import java.util.*;
+```
 
-A useful exam-memory cluster is:
+means:
 
-> **`java.base` → `java.lang` + `java.util` + `java.util.function` + `java.util.stream` + `java.io` + `java.nio.file` + `java.time`**
+> Make accessible types directly in `java.util` available by simple name.
 
-You don't need to treat this as an exhaustive list.
-
----
-
-# 4. Packages are not automatically recursive
-
-A very important general Java rule still applies:
-
-> **A package does not automatically include its subpackages.**
+It does **not** recursively import subpackages.
 
 For example:
 
@@ -152,508 +195,79 @@ java.util.stream
 
 are three separate packages.
 
-This:
+Therefore:
 
 ```java
 import java.util.*;
 ```
 
-allows:
+can make these available:
 
-```java
+```text
 List
 Map
 ArrayList
 Optional
 ```
 
-but does **not** allow:
+but not merely because of that import:
 
-```java
+```text
 Function
 Predicate
 Stream
 Collectors
 ```
 
-because those belong to:
+Those belong to:
 
 ```text
 java.util.function
 java.util.stream
 ```
 
-respectively.
+and traditionally require their own imports.
 
-You would traditionally need:
+Memory:
 
-```java
-import java.util.*;
-import java.util.function.*;
-import java.util.stream.*;
-```
+> **Package wildcard imports are not recursive.**
 
-A module import can replace those separate package imports:
+### Module Import
+
+A module import operates above the package level:
 
 ```java
 import module java.base;
 ```
-
-because all three packages are exported by `java.base`.
-
----
-
-# 5. Module import vs wildcard package import
-
-These look similar but operate at different levels.
-
-### Package wildcard
-
-```java
-import java.util.*;
-```
-
-means:
-
-> Import accessible types from `java.util`.
-
-It does **not** include subpackages.
-
-### Module import
-
-```java
-import module java.base;
-```
-
-means:
-
-> Import accessible types from the packages exported by `java.base`.
-
-So conceptually:
-
-```text
-package import:
-
-java.util.*
-     ↓
-java.util only
-
-
-module import:
-
-java.base
-     ↓
-exported packages
-     ↓
-types from those packages
-```
-
-This is why a module import can bring in types from several different packages.
-
----
-
-# 6. Exported packages matter
-
-A module can contain packages that it does not export.
-
-For example, conceptually:
-
-```text
-module X
- ├── exported package A
- ├── exported package B
- └── internal package C
-```
-
-An import of the module gives access to types from:
-
-```text
-A
-B
-```
-
-but not arbitrary types from:
-
-```text
-C
-```
-
-So remember:
-
-> **Module import works with exported packages, not every package physically contained in the module.**
-
-This is one of the main reasons that:
-
-```java
-import module java.base;
-```
-
-should not be mentally interpreted as:
-
-```text
-"import everything in java.base"
-```
-
----
-
-# 7. Explicit imports can still be used
-
-A module import doesn't prevent you from also having traditional imports.
-
-For example:
-
-```java
-import module java.base;
-import java.util.List;
-```
-
-is legal.
-
-However, the explicit `List` import is redundant because `List` is already available through the module import.
-
-You therefore wouldn't normally write both unless there were some other reason to do so.
-
----
-
-# 8. Module imports can cause ambiguity
-
-This is one of the more interesting exam traps.
-
-Suppose two imported modules both export a type with the same simple name.
 
 Conceptually:
 
 ```text
-module A
-    └── package.one.Widget
-
-module B
-    └── package.two.Widget
+MODULE
+  ↓
+exported packages
+  ↓
+accessible types
 ```
 
-If both modules are imported:
-
-```java
-import module A;
-import module B;
-```
-
-then:
-
-```java
-Widget w;
-```
-
-could be ambiguous.
-
-Java cannot simply guess which `Widget` you mean.
-
-You may need to use a qualified name:
-
-```java
-package.one.Widget w;
-```
-
-The important point is:
-
-> **Module imports can introduce simple-name conflicts just like other forms of import.**
-
-So don't assume that importing a module makes every simple name unambiguous.
-
----
-
-# 9. `java.lang` remains automatic
-
-This distinction is worth memorising.
-
-You do **not** need:
-
-```java
-import java.lang.String;
-```
-
-because `java.lang` is automatically imported.
-
-Likewise, you don't need:
-
-```java
-import java.lang.System;
-```
-
-But this:
-
-```java
-List<String> list = new ArrayList<>();
-```
-
-normally requires an import because `java.util` isn't automatically imported.
-
-You can solve that with:
-
-```java
-import java.util.List;
-import java.util.ArrayList;
-```
-
-or:
-
-```java
-import java.util.*;
-```
-
-or, in Java 25:
+So:
 
 ```java
 import module java.base;
 ```
 
----
-
-# 10. Module imports and compact source files
-
-This becomes particularly interesting with **compact source files**, another Java 25 feature.
-
-A compact source file can look like:
-
-```java
-void main() {
-    System.out.println("Hello");
-}
-```
-
-There is no explicit class declaration.
-
-Compact source files have an implicit module import for `java.base`.
-
-Conceptually, you can therefore use common `java.base` types without writing explicit imports.
-
-For example:
-
-```java
-void main() {
-    var date = LocalDate.now();
-    System.out.println(date);
-}
-```
-
-You don't need to add:
-
-```java
-import java.time.LocalDate;
-```
-
-because the compact source file gets the equivalent of a module import for `java.base`.
-
-This connects two Java 25 features:
+can make types available from several different exported packages:
 
 ```text
-Compact source file
-        ↓
-implicit java.base module import
-        ↓
-types exported by java.base
+List       → java.util
+LocalDate  → java.time
+Predicate  → java.util.function
+Stream     → java.util.stream
 ```
 
----
+### The Three Levels
 
-# 11. A useful example
-
-Consider:
-
-```java
-import module java.base;
-
-class Example {
-
-    List<String> names = new ArrayList<>();
-
-    LocalDate today = LocalDate.now();
-
-    Predicate<String> valid =
-        s -> !s.isBlank();
-
-    Stream<String> stream =
-        names.stream();
-}
-```
-
-All of these are available because their packages are exported by `java.base`:
-
-```text
-List          → java.util
-ArrayList     → java.util
-LocalDate     → java.time
-Predicate     → java.util.function
-Stream        → java.util.stream
-```
-
-This is why `import module java.base;` is considerably more powerful than:
-
-```java
-import java.lang.*;
-```
-
----
-
-# 12. What `import module java.base` does NOT mean
-
-It does not mean:
-
-### "Everything in Java"
-
-```text
-❌ java.sql
-❌ java.desktop
-❌ java.net.http
-```
-
-Those belong to other modules.
-
-For example, `java.net.http` is associated with the `java.net.http` module, not `java.base`.
-
-### "Every package in java.base"
-
-Only accessible types from exported packages are made available.
-
-### "All subpackages of a package"
-
-Normal package hierarchy rules still apply.
-
-### "The same thing as `import java.base.*`"
-
-There is no such syntax.
-
-A module and a package are different levels of the Java module/package system.
-
----
-
-# 13. Exam mental model
-
-When you see:
-
-```java
-import module java.base;
-```
-
-think:
-
-```text
-                 java.base
-                    │
-           ┌────────┴────────┐
-           ↓                 ↓
-     exported packages   non-exported
-           │              packages
-           ↓                 ↓
-    accessible types       ❌
-           │
-           ↓
-    available by
-    simple name
-```
-
-Then ask:
-
-1. **Is the type in `java.base`?**
-2. **Is its package exported?**
-3. **Is the type accessible?**
-4. **Is there a name conflict with another imported type?**
-
-If yes to the first three and no problematic conflict exists, the simple name can be used.
-
----
-
-# 14. Exam-ready examples
-
-### Example 1
-
-```java
-import module java.base;
-
-class Test {
-    List<String> names = new ArrayList<>();
-}
-```
-
-✅ Compiles.
-
-`List` and `ArrayList` are in exported `java.util`.
-
----
-
-### Example 2
-
-```java
-import module java.base;
-
-class Test {
-    LocalDate date = LocalDate.now();
-}
-```
-
-✅ Compiles.
-
-`LocalDate` is in `java.time`, which is part of `java.base`.
-
----
-
-### Example 3
-
-```java
-import module java.base;
-
-class Test {
-    Function<String, Integer> f = String::length;
-}
-```
-
-✅ Compiles.
-
-`Function` is in `java.util.function`, which is exported by `java.base`.
-
----
-
-### Example 4
-
-```java
-import java.util.*;
-
-class Test {
-    Stream<String> stream;
-}
-```
-
-❌ Does not compile just because `Stream` is related to `java.util`.
-
-`Stream` is in:
-
-```text
-java.util.stream
-```
-
-not `java.util`.
-
----
-
-### Example 5
-
-```java
-import module java.base;
-
-class Test {
-    String value = "Hello";
-}
-```
-
-✅ Compiles.
-
-But remember that `String` would work **even without the module import**, because `java.lang` is automatically imported.
-
----
-
-# 15. The core distinction to remember
-
-There are three levels worth keeping separate:
+Keep these separate:
 
 ```text
 MODULE
@@ -669,15 +283,7 @@ TYPE
 class / interface / enum / record
 ```
 
-Traditional wildcard import:
-
-```java
-import java.util.*;
-```
-
-operates at the **package** level.
-
-Module import:
+For example:
 
 ```java
 import module java.base;
@@ -685,23 +291,389 @@ import module java.base;
 
 operates at the **module** level.
 
-And:
+```java
+import java.util.*;
+```
+
+operates at the **package** level.
 
 ```java
 java.lang.String
 ```
 
-refers to a specific **type**.
+identifies a specific **type**.
+
+Memory:
+
+```text
+module import
+→ exported packages
+→ accessible types
+
+package wildcard
+→ one package only
+→ NOT its subpackages
+```
 
 ---
 
-# 16. Runnable Example
+## Exported Packages and Accessibility
 
-You can find a runnable example here:
-`src\rysharp\addendum\Module_Import_Declarations\code\ModuleImportExample.java`
+A module can contain packages that it does not export.
+
+Conceptually:
+
+```text
+module X
+ │
+ ├── exported package A
+ │
+ ├── exported package B
+ │
+ └── internal package C
+```
+
+Then:
+
+```java
+import module X;
+```
+
+can make accessible types from:
+
+```text
+package A
+package B
+```
+
+available by simple name.
+
+It does not simply expose arbitrary types from:
+
+```text
+internal package C
+```
+
+Think:
+
+```text
+                 module X
+                    │
+           ┌────────┴────────┐
+           ↓                 ↓
+    exported packages    non-exported
+           │              packages
+           ↓                 ↓
+    accessible types         ✗
+           │
+           ↓
+   available by
+     simple name
+```
+
+Memory:
+
+> **Contained in module ≠ imported by module import. The package must be exported and the type accessible.**
+
+### Traditional Imports Can Still Be Used
+
+A module import does not prevent traditional imports.
+
+This is legal:
+
+```java
+import module java.base;
+import java.util.List;
+```
+
+The explicit `List` import is redundant in this example because `List` is already available through the module import.
 
 ---
 
-## One-line memory aid
+## Import Conflicts
 
-> **`import module X` gives you accessible types from the packages exported by module X; it does not import everything in the module, and `java.lang` is already automatic.**
+Module imports can introduce simple-name conflicts.
+
+Suppose:
+
+```text
+module A
+  ↓
+package.one.Widget
+
+module B
+  ↓
+package.two.Widget
+```
+
+and both modules are imported:
+
+```java
+import module A;
+import module B;
+```
+
+Then:
+
+```java
+Widget w;
+```
+
+may be ambiguous.
+
+Java cannot guess which `Widget` is intended.
+
+A qualified name can resolve the distinction:
+
+```java
+package.one.Widget w;
+```
+
+Memory:
+
+> **A module import can introduce ambiguity just like other imports.**
+
+Do not assume:
+
+```text
+module import
+→ every simple name automatically unambiguous
+```
+
+---
+
+## Compact Source Files
+
+Module imports connect directly with another Java 25 feature: **compact source files**.
+
+A compact source file might contain:
+
+```java
+void main() {
+    var date = LocalDate.now();
+
+    System.out.println(date);
+}
+```
+
+Compact source files have the equivalent of an implicit module import of:
+
+```java
+java.base
+```
+
+Therefore an explicit:
+
+```java
+import java.time.LocalDate;
+```
+
+is not required here.
+
+Think:
+
+```text
+COMPACT SOURCE FILE
+        ↓
+implicit java.base module import
+        ↓
+exported java.base packages
+        ↓
+accessible types
+```
+
+For the other compact-source rules, see **Compact Source Files & Instance Main Methods**.
+
+---
+
+# Quick Reference
+
+## Module Import
+
+```java
+import module java.base;
+```
+
+Think:
+
+```text
+module
+  ↓
+exported packages
+  ↓
+accessible types
+  ↓
+simple-name use
+```
+
+Not:
+
+```text
+module
+  ↓
+EVERYTHING physically inside it
+```
+
+## `java.lang` vs `java.base`
+
+```text
+java.lang
+→ package
+→ automatically imported
+
+java.base
+→ module
+→ contains/exports many packages
+```
+
+Therefore:
+
+```java
+String s;
+```
+
+needs no import.
+
+But normally:
+
+```java
+List<String> list;
+```
+
+does.
+
+Java 25 can make `List` available through:
+
+```java
+import module java.base;
+```
+
+## Package Wildcard
+
+```java
+import java.util.*;
+```
+
+includes accessible types directly in:
+
+```text
+java.util
+```
+
+but not automatically:
+
+```text
+java.util.function
+java.util.stream
+```
+
+Memory:
+
+```text
+package wildcard
+≠ recursive
+```
+
+## Module vs Package
+
+```text
+import java.util.*;
+        ↑
+      PACKAGE
+
+
+import module java.base;
+              ↑
+            MODULE
+```
+
+## `java.base` Recognition
+
+Common exported packages include:
+
+```text
+java.lang
+java.util
+java.util.function
+java.util.stream
+java.io
+java.nio.file
+java.time
+java.util.concurrent
+```
+
+But:
+
+```text
+java.base
+≠ entire JDK
+```
+
+## Export Rule
+
+For a type to become available through a module import, think:
+
+```text
+Is it in the imported module?
+        ↓
+Is its package exported?
+        ↓
+Is the type accessible?
+        ↓
+Is its simple name unambiguous?
+```
+
+## Compact Source Files
+
+```text
+compact source file
+        ↓
+implicit module import of java.base
+```
+
+So common exported `java.base` types can be used without individual imports.
+
+## Reliable Check
+
+When you see:
+
+```java
+import module X;
+```
+
+check:
+
+```text
+1. Which module contains the type?
+
+2. Is the type's package exported
+   by that module?
+
+3. Is the type accessible?
+
+4. Is another imported type using
+   the same simple name?
+
+5. Don't confuse module imports
+   with recursive package imports.
+```
+
+## Final Memory Kicks
+
+> **`import module X` makes accessible types from packages exported by module X available by simple name.**
+
+> **A module import does not expose every package physically contained in the module.**
+
+> **`java.base` is a module; `java.lang` is a package.**
+
+> **`java.lang` is automatically imported even without `import module java.base`.**
+
+> **`java.base` contains far more than `java.lang`, including collections, streams, I/O and date/time APIs.**
+
+> **Package wildcard imports are not recursive: `java.util.*` does not import `java.util.stream.*`.**
+
+> **Module imports can introduce simple-name ambiguity.**
+
+> **Compact source files implicitly receive the equivalent of a `java.base` module import.**
+
+> **MODULE → PACKAGE → TYPE. Keep those three levels separate.**

@@ -1,52 +1,114 @@
-## Stream Gatherers
+# Stream Gatherers
 
-You've already seen normal stream operations:
+Quick reference for Java 25 Stream Gatherers and the built-in `windowFixed()`, `windowSliding()`, `fold()`, `scan()` and `mapConcurrent()` gatherers.
+
+## Contents
+
+- [The Basic Idea](#the-basic-idea)
+- [`windowFixed()`](#windowfixed)
+- [`windowSliding()`](#windowsliding)
+- [`fold()`](#fold)
+- [`scan()`](#scan)
+- [`mapConcurrent()`](#mapconcurrent)
+- [Quick Reference](#quick-reference)
+
+---
+
+## The Basic Idea
+
+Normal stream operations include:
 
 ```java
 var result = Stream.of(1, 2, 3, 4)
-    .map(x -> x * 2)
-    .filter(x -> x > 4)
-    .toList();
+        .map(x -> x * 2)
+        .filter(x -> x > 4)
+        .toList();
 ```
+
+Java 25 Stream Gatherers provide another kind of **intermediate stream operation**.
 
 The useful mental model is:
 
-> **A Gatherer is a custom/intermediate stream operation that can look at multiple elements and control how elements are accumulated and emitted.**
+> **A Gatherer is an intermediate stream operation that can look at multiple elements and control how elements are accumulated and emitted.**
 
-You use one with:
+A Gatherer is used with:
 
 ```java
 stream.gather(gatherer)
 ```
 
-Java provides several built-in ones through:
+Java provides several built-in gatherers through:
 
 ```java
 Gatherers
 ```
 
-### The built-in Gatherers you should know
+The important built-ins are:
 
-For the Java 25 exam, I'd know these:
+| Gatherer | Mental Model |
+|---|---|
+| `windowFixed(n)` | Non-overlapping chunks |
+| `windowSliding(n)` | Overlapping windows |
+| `fold(...)` | Final accumulated result |
+| `scan(...)` | Running accumulated results |
+| `mapConcurrent(...)` | Concurrent mapping |
 
-| Gatherer             | Simple mental model                      | Example                                |
-|----------------------|------------------------------------------|----------------------------------------|
-| `windowFixed(n)`     | Groups elements into fixed-size chunks   | `[1,2,3] [4,5,6]`                      |
-| `windowSliding(n)`   | Groups elements into overlapping windows | `[1,2] [2,3] [3,4]`                    |
-| `fold(...)`          | Many elements → one result               | `[1,2,3] → 6`                          |
-| `scan(...)`          | Running accumulation → output each step  | `[1,2,3] → [1,3,6]`                    |
-| `mapConcurrent(...)` | Map elements concurrently                | process multiple elements concurrently |
+### `gather()` Is Intermediate
+
+Do not confuse:
+
+```java
+.gather(...)
+```
+
+with:
+
+```java
+.collect(...)
+```
+
+`gather()` is an **intermediate operation**.
+
+It produces another `Stream`.
+
+For example:
+
+```java
+var result = Stream.of(1, 2, 3, 4)
+        .gather(Gatherers.windowFixed(2))
+        .toList();
+```
+
+Conceptually:
+
+```text
+Stream<Integer>
+      ↓
+   gather()
+      ↓
+Stream<List<Integer>>
+      ↓
+   toList()
+      ↓
+List<List<Integer>>
+```
+
+The Gatherer can therefore change the type of elements flowing through the remainder of the stream pipeline.
+
+Memory:
+
+> **`gather()` transforms a stream; it does not terminate the pipeline.**
 
 ---
 
 ## `windowFixed()`
 
-Suppose:
+`windowFixed(n)` groups elements into **non-overlapping windows**.
 
 ```java
 Stream.of(1, 2, 3, 4, 5, 6, 7)
-    .gather(Gatherers.windowFixed(3))
-    .toList();
+        .gather(Gatherers.windowFixed(3))
+        .toList();
 ```
 
 Think:
@@ -63,32 +125,45 @@ Result:
  [7]]
 ```
 
-The final window **can be smaller** than the requested size. Oracle explicitly specifies this behaviour. ([Oracle Docs][2])
+Each element belongs to one window.
 
-So:
+### Final Window
+
+The final window can contain fewer than `n` elements.
+
+Therefore:
 
 ```java
 windowFixed(3)
 ```
 
-doesn't mean:
+does **not** mean:
 
-> "Only produce groups containing exactly 3."
+```text
+only emit windows containing exactly 3 elements
+```
 
-It means:
+Instead think:
 
-> "Gather elements into groups of up to 3, in order."
+```text
+group elements into non-overlapping
+windows of up to 3 elements
+```
+
+Memory:
+
+> **`windowFixed()` → chunks; final chunk may be smaller.**
 
 ---
 
 ## `windowSliding()`
 
-This one is slightly more interesting.
+`windowSliding(n)` creates **overlapping windows**.
 
 ```java
 Stream.of(1, 2, 3, 4, 5)
-    .gather(Gatherers.windowSliding(3))
-    .toList();
+        .gather(Gatherers.windowSliding(3))
+        .toList();
 ```
 
 Produces:
@@ -99,9 +174,15 @@ Produces:
 [3, 4, 5]
 ```
 
-Each new window **drops the oldest element and adds the next one**.
+Each new window:
 
-So visually:
+```text
+drops the oldest element
+        +
+adds the next element
+```
+
+Visualise:
 
 ```text
 1 2 3
@@ -109,15 +190,15 @@ So visually:
     3 4 5
 ```
 
-That's the big distinction:
+### Fixed vs Sliding
 
 ```text
-windowFixed(3):
+windowFixed(3)
 
 [1 2 3] [4 5 6] [7]
 
 
-windowSliding(3):
+windowSliding(3)
 
 [1 2 3]
   [2 3 4]
@@ -125,132 +206,152 @@ windowSliding(3):
       [4 5 6]
 ```
 
-### Why would you use this?
+Think:
 
-Sliding windows are useful when you care about **neighbouring elements**.
+```text
+FIXED
+→ chunks
+→ no overlap
 
-For example, calculating a moving average:
+SLIDING
+→ neighbouring windows
+→ overlap
+```
+
+### Typical Use
+
+Sliding windows are useful when neighbouring values matter.
+
+For example:
 
 ```text
 temperatures:
-10, 12, 14, 16, 18
 
-windows of 3:
-10,12,14
-12,14,16
-14,16,18
-```
-
-You could then calculate an average for each window.
-
----
-
-## One exam trap
-
-Don't confuse:
-
-```java
-.gather(...)
+10 12 14 16 18
 ```
 
 with:
 
 ```java
-.collect(...)
+windowSliding(3)
 ```
 
-`gather()` is an **intermediate operation** — it produces another `Stream`.
-
-So this:
-
-```java
-var result = Stream.of(1, 2, 3, 4)
-    .gather(Gatherers.windowFixed(2))
-    .toList();
-```
-
-works because:
+gives:
 
 ```text
-Stream<Integer>
-      ↓
-   gather()
-      ↓
-Stream<List<Integer>>
-      ↓
-   toList()
-      ↓
-List<List<Integer>>
+10 12 14
+12 14 16
+14 16 18
 ```
 
-The output type has changed from a stream of `Integer` to a stream of `List<Integer>`.
+These windows could then be mapped to moving averages.
 
-## `fold()` vs `scan()`
+Memory:
 
-You've got the window gatherers. Now let's look at the other two that are particularly worth recognising for the exam.
+> **`windowSliding()` → drop oldest, add newest.**
 
-The easiest way to remember them is:
+---
 
-> **`fold()` → give me the final accumulated result.**
-> **`scan()` → give me every intermediate accumulated result.**
+## `fold()`
 
-### `fold()`
+`fold()` accumulates many input elements and emits the **final accumulated result**.
 
-Imagine we have:
-
-```java
-Stream.of(1, 2, 3, 4)
-```
-
-and want to add everything together.
-
-Conceptually:
+Consider:
 
 ```text
-1 → 1
-2 → 1 + 2 = 3
-3 → 1 + 2 + 3 = 6
-4 → 1 + 2 + 3 + 4 = 10
+1 2 3 4
 ```
 
-`fold()` gives us **only the final result**:
+Accumulation:
+
+```text
+1          → 1
+1 + 2      → 3
+1 + 2 + 3  → 6
+1 + 2 + 3 + 4
+           → 10
+```
+
+`fold()` emits only:
 
 ```text
 10
 ```
 
-A simplified example:
+For example:
 
 ```java
 var result = Stream.of(1, 2, 3, 4)
-    .gather(Gatherers.fold(() -> 0, (sum, n) -> sum + n))
-    .toList();
+        .gather(
+            Gatherers.fold(
+                () -> 0,
+                (sum, n) -> sum + n
+            )
+        )
+        .toList();
 ```
 
-The important bit isn't memorising the lambda syntax yet. The resulting stream contains the **single final accumulated value**:
+The resulting stream contains one accumulated value:
 
 ```text
 [10]
 ```
 
-So think:
+Visualise:
 
 ```text
-fold:
-
 1 ─┐
 2 ─┤
 3 ─┤──→ 10
 4 ─┘
 ```
 
+Memory:
+
+> **`fold()` → give me the final accumulated result.**
+
+### `fold()` vs `reduce()`
+
+Both can accumulate values, but they belong to different stream mechanisms.
+
+```java
+stream.reduce(...)
+```
+
+is an existing **terminal operation**.
+
+Whereas:
+
+```java
+stream.gather(Gatherers.fold(...))
+```
+
+uses a Gatherer as an **intermediate operation**.
+
+Think:
+
+```text
+reduce()
+→ terminal
+
+gather(fold(...))
+→ intermediate
+→ produces another Stream
+```
+
 ---
 
-### `scan()`
+## `scan()`
 
-`scan()` performs the same kind of accumulation, **but emits each intermediate result**.
+`scan()` performs a running accumulation and emits **each intermediate result**.
 
-Using the same numbers:
+Using:
+
+```text
+1 2 3 4
+```
+
+the running accumulation is:
 
 ```text
 1 → 1
@@ -259,103 +360,135 @@ Using the same numbers:
 4 → 10
 ```
 
-So conceptually:
-
-```java
-Stream.of(1, 2, 3, 4)
-    .gather(...)
-```
-
-produces:
+So the output is:
 
 ```text
 [1, 3, 6, 10]
 ```
 
-Visualise it as:
+Visualise:
 
 ```text
-scan:
-
 1 ──→ 1
 2 ──→ 3
 3 ──→ 6
 4 ──→ 10
 ```
 
-### The crucial difference
+Memory:
 
-| Gatherer | Output                                   |
-| -------- | ---------------------------------------- |
-| `fold()` | **final** accumulated result             |
-| `scan()` | **each intermediate** accumulated result |
+> **`scan()` → give me the accumulated result after every input.**
 
-This is similar to the distinction between:
+### Initial Value
 
-> **"What is the total?"**
+The initial state is used to begin the accumulation but is not emitted separately.
 
-and
-
-> **"Show me the running total after every item."**
-
-For example:
+Conceptually, with an initial value of:
 
 ```text
-Values:       1   2   3   4
-
-Running total:
-              1   3   6  10
+0
 ```
 
-`scan()` gives you that running-total sequence.
+and input:
+
+```text
+1 2 3 4
+```
+
+think:
+
+```text
+initial state = 0
+
+0 + 1 → 1   ← emit
+1 + 2 → 3   ← emit
+3 + 3 → 6   ← emit
+6 + 4 → 10  ← emit
+```
+
+Output:
+
+```text
+[1, 3, 6, 10]
+```
+
+not:
+
+```text
+[0, 1, 3, 6, 10]
+```
+
+### `fold()` vs `scan()`
+
+This is the crucial distinction:
+
+| Gatherer | Output |
+|---|---|
+| `fold()` | Final accumulated result |
+| `scan()` | Every intermediate accumulated result |
+
+For:
+
+```text
+1 2 3 4
+```
+
+think:
+
+```text
+fold
+────
+1 2 3 4
+   ↓
+  10
+
+
+scan
+────
+1 2 3 4
+↓ ↓ ↓  ↓
+1 3 6 10
+```
+
+Or simply:
+
+```text
+fold()
+→ What is the total?
+
+scan()
+→ Show me the running total.
+```
 
 ---
 
-### One exam wrinkle
-
-Don't confuse `fold()` with `reduce()`.
-
-Both can accumulate values, but they're not the same API.
-
-`reduce()` is an existing **terminal stream operation**:
-
-```java
-stream.reduce(...)
-```
-
-whereas:
-
-```java
-stream.gather(Gatherers.fold(...))
-```
-
-uses a **Gatherer as an intermediate operation**.
-
-That's a useful Java 25 distinction.
-
 ## `mapConcurrent()`
 
-Suppose:
+`mapConcurrent(maxConcurrency, mapper)` applies a mapping operation **concurrently**.
+
+For example:
 
 ```java
 Stream.of("A", "B", "C")
-    .gather(Gatherers.mapConcurrent(3, s -> doSomething(s)))
+        .gather(
+            Gatherers.mapConcurrent(
+                3,
+                s -> doSomething(s)
+            )
+        );
 ```
 
-The idea is that the mapping function can be applied to multiple elements **concurrently**, with the first argument controlling the maximum number of concurrent operations.
-
-So mentally:
+Instead of thinking:
 
 ```text
-normal map:
-
 A → process → result
 B → process → result
 C → process → result
+```
 
+think:
 
-mapConcurrent(3):
-
+```text
 A ──→ process ──→ result
 B ──→ process ──→ result
 C ──→ process ──→ result
@@ -363,98 +496,54 @@ C ──→ process ──→ result
    concurrently
 ```
 
-It's particularly useful when the mapping operation is relatively expensive and can be performed independently.
+The first argument controls the maximum number of mapping operations that may be active concurrently.
 
-**It can be used with both sequential and parallel streams**, but its behaviour isn't simply "parallel stream + more parallelism."
+### Concurrency Limit
 
-### The key idea
-
-`mapConcurrent(maxConcurrency, mapper)` says:
-
-> **Run up to `maxConcurrency` mapping operations concurrently.**
-
-For example:
+For:
 
 ```java
-var result = Stream.of(1, 2, 3, 4)
-    .gather(Gatherers.mapConcurrent(2, x -> slowOperation(x)))
-    .toList();
+Gatherers.mapConcurrent(
+    2,
+    x -> slowOperation(x)
+)
+```
+
+think:
+
+```text
+maximum concurrent mappings = 2
 ```
 
 Conceptually:
 
 ```text
-Concurrency limit = 2
-
 1 ────────→ result
 2 ────────→ result
-             ↑
-        running together
+     ↑
+running concurrently
 
 3 ────────→ result
 4 ────────→ result
 ```
 
-At most **2 mapping operations** are in flight at once.
+At most two mapping operations are in flight at once.
 
----
+Memory:
 
-## What happens with a parallel stream?
+> **`mapConcurrent(n, mapper)` → up to `n` concurrent mapping operations.**
 
-You could have:
+### Encounter Order
 
-```java
-Stream.of(1, 2, 3, 4)
-    .parallel()
-    .gather(Gatherers.mapConcurrent(2, x -> slowOperation(x)))
-```
+Concurrent processing does not mean the resulting stream is randomly reordered.
 
-Now there are **two different concepts of concurrency** in play:
-
-### 1. The stream itself is parallel
-
-```java
-.parallel()
-```
-
-allows the stream pipeline to be processed using multiple threads.
-
-### 2. `mapConcurrent(2)` has its own concurrency limit
-
-It controls how many mapping operations that Gatherer allows to be active concurrently.
-
-So don't think:
-
-> `parallel()` + `mapConcurrent(2)` = exactly 2 threads.
-
-That's **not** what it means.
-
-The stream's parallelism and the gatherer's concurrency limit are separate concepts.
-
-> `mapConcurrent()` **lets you introduce/control concurrency specifically around a mapping operation, rather than making the entire stream parallel.**
-
----
-
-### An important exam point
-
-`mapConcurrent()` is designed to preserve the **encounter order** of the stream.
-
-Imagine:
+Suppose the input encounter order is:
 
 ```text
-Input:
 A B C
 ```
 
-Suppose processing takes:
-
-```text
-A = 3 seconds
-B = 1 second
-C = 2 seconds
-```
-
-They could finish:
+but processing completes:
 
 ```text
 B
@@ -462,17 +551,197 @@ C
 A
 ```
 
-But the resulting stream still respects the encounter order:
+The resulting stream still respects the encounter order:
 
 ```text
 A B C
 ```
 
-So concurrency doesn't necessarily mean your output gets randomly reordered.
+Memory:
 
-## Java 25 Gatherer cheat sheet
+> **`mapConcurrent()` performs work concurrently while preserving encounter order.**
 
-If you see:
+### Sequential and Parallel Streams
+
+`mapConcurrent()` can be used with sequential or parallel streams.
+
+For example:
+
+```java
+Stream.of(1, 2, 3, 4)
+        .parallel()
+        .gather(
+            Gatherers.mapConcurrent(
+                2,
+                x -> slowOperation(x)
+            )
+        );
+```
+
+There are now two different concepts:
+
+```text
+parallel()
+→ parallelism of the stream pipeline
+
+mapConcurrent(2)
+→ concurrency limit for the mapping operation
+```
+
+Do **not** interpret:
+
+```java
+.parallel()
+.gather(Gatherers.mapConcurrent(2, ...))
+```
+
+as:
+
+```text
+exactly 2 threads
+```
+
+The stream's parallelism and the Gatherer's concurrency limit are separate concepts.
+
+Think:
+
+> **`mapConcurrent()` introduces and controls concurrency specifically around the mapping operation rather than simply making the whole stream parallel.**
+
+---
+
+# Quick Reference
+
+## Built-In Gatherers
+
+| Gatherer | Think |
+|---|---|
+| `windowFixed(n)` | Non-overlapping chunks |
+| `windowSliding(n)` | Overlapping windows |
+| `fold(...)` | Final accumulation |
+| `scan(...)` | Running accumulation |
+| `mapConcurrent(n, mapper)` | Concurrent mapping |
+
+## `gather()`
+
+```java
+stream.gather(gatherer)
+```
+
+is:
+
+```text
+INTERMEDIATE
+```
+
+not:
+
+```text
+TERMINAL
+```
+
+Therefore:
+
+```java
+stream
+    .gather(...)
+    .map(...)
+    .filter(...)
+    .toList();
+```
+
+can continue processing after the Gatherer.
+
+## Fixed vs Sliding
+
+```text
+INPUT
+1 2 3 4 5 6 7
+
+
+windowFixed(3)
+
+[1 2 3] [4 5 6] [7]
+
+→ non-overlapping
+→ final window may be smaller
+
+
+windowSliding(3)
+
+[1 2 3]
+  [2 3 4]
+    [3 4 5]
+      [4 5 6]
+        [5 6 7]
+
+→ overlapping
+```
+
+## Fold vs Scan
+
+```text
+INPUT
+1 2 3 4
+
+
+fold()
+
+1 2 3 4
+   ↓
+  10
+
+
+scan()
+
+1 2 3 4
+↓ ↓ ↓  ↓
+1 3 6 10
+```
+
+Memory:
+
+```text
+fold → FINAL
+scan → RUNNING
+```
+
+The initial state used by `scan()` is not itself emitted.
+
+## Fold vs Reduce
+
+```text
+reduce(...)
+→ terminal operation
+
+gather(Gatherers.fold(...))
+→ intermediate operation
+```
+
+## `mapConcurrent()`
+
+```text
+mapConcurrent(maxConcurrency, mapper)
+
+→ concurrent mapping
+→ maxConcurrency limits mappings in flight
+→ preserves encounter order
+```
+
+Do not equate:
+
+```text
+mapConcurrent(n)
+```
+
+with:
+
+```text
+parallel stream using exactly n threads
+```
+
+## Reliable Recognition
+
+When you see:
 
 ```java
 .gather(Gatherers.???)
@@ -480,10 +749,49 @@ If you see:
 
 think:
 
-* **`windowFixed`** → chunks
-* **`windowSliding`** → overlapping chunks
-* **`fold`** → final accumulation
-* **`scan`** → running accumulation
-* **`mapConcurrent`** → concurrent mapping
+```text
+windowFixed
+→ CHUNKS
 
----
+windowSliding
+→ OVERLAPPING CHUNKS
+
+fold
+→ FINAL RESULT
+
+scan
+→ RUNNING RESULTS
+
+mapConcurrent
+→ CONCURRENT MAP
+```
+
+Then remember:
+
+```text
+gather()
+→ intermediate
+→ another Stream
+```
+
+## Final Memory Kicks
+
+> **`gather()` is an intermediate stream operation, not a terminal operation.**
+
+> **`windowFixed(n)` creates non-overlapping chunks, and its final window may be smaller than `n`.**
+
+> **`windowSliding(n)` creates overlapping windows by dropping the oldest element and adding the next.**
+
+> **`fold()` emits the final accumulated result.**
+
+> **`scan()` emits each intermediate accumulated result; its initial state is not emitted separately.**
+
+> **`reduce()` is terminal; `gather(Gatherers.fold(...))` remains intermediate.**
+
+> **`mapConcurrent(n, mapper)` allows up to `n` mapping operations to run concurrently.**
+
+> **`mapConcurrent()` preserves encounter order even if individual operations complete out of order.**
+
+> **Stream parallelism and `mapConcurrent()` concurrency are separate concepts.**
+
+> **FIXED = chunks → SLIDING = overlap → FOLD = final → SCAN = running → MAP CONCURRENT = concurrent mapping.**

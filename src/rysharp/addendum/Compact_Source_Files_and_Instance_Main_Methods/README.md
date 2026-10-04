@@ -1,21 +1,34 @@
 # Compact Source Files and Instance Main Methods (JEP 512)
 
-Java 25 makes it possible to write very small Java programs without the usual class and `main` boilerplate.
+Quick reference for compact source files, instance `main` methods and the Java 25 launch protocol.
 
-JEP 512 has **two closely related parts**:
+## Contents
 
-1. **Compact source files** — the class declaration can be omitted.
-2. **Instance `main` methods** — `main` no longer has to be `static` or accept `String[]`.
-
-The key idea is:
-
-> **Java is still class-based. JEP 512 hides some of the boilerplate needed to write a small program.**
+- [The Two Features](#the-two-features)
+- [Compact Source Files](#compact-source-files)
+- [Instance Main Methods](#instance-main-methods)
+- [Main Signatures](#main-signatures)
+- [Launcher Selection](#launcher-selection)
+- [Compact Source File Restrictions](#compact-source-file-restrictions)
+- [Quick Reference](#quick-reference)
 
 ---
 
-## 1. Traditional Java
+## The Two Features
 
-A traditional Hello World program looks like:
+Java 25 allows small Java programs to omit much of the traditional boilerplate.
+
+JEP 512 has two closely related features:
+
+```text
+COMPACT SOURCE FILE
+→ class declaration can be omitted
+
+INSTANCE main
+→ main does not have to be static
+```
+
+Traditional Java:
 
 ```java
 public class Hello {
@@ -25,22 +38,7 @@ public class Hello {
 }
 ```
 
-There are several pieces of boilerplate here:
-
-* explicit class declaration
-* `public`
-* `static`
-* `String[] args`
-
-JEP 512 allows these to be simplified.
-
----
-
-# Compact Source Files
-
-## 2. The simplest compact source file
-
-You can write:
+A compact Java 25 program:
 
 ```java
 void main() {
@@ -48,20 +46,34 @@ void main() {
 }
 ```
 
-There is:
+This removes:
 
-* no explicit class declaration
-* no `public`
-* no `static`
-* no `String[] args`
+```text
+explicit class declaration
+public
+static
+String[] args
+```
 
-Yet this is still a Java class-based program.
+when they aren't needed.
+
+But the key rule is:
+
+> **Java is still class-based. The boilerplate is hidden, not the class model.**
 
 ---
 
-## 3. The implicit class
+## Compact Source Files
 
-Java effectively creates an **implicitly declared class** around the declarations in the source file.
+A compact source file omits the explicit class declaration.
+
+```java
+void main() {
+    System.out.println("Hello");
+}
+```
+
+Java provides an **implicitly declared class** around the declarations in the source file.
 
 For example:
 
@@ -73,10 +85,11 @@ void main() {
 }
 ```
 
-Conceptually, think of it as something like:
+A useful mental model is:
 
 ```java
 class SomeImplicitClass {
+
     String greeting = "Hello";
 
     void main() {
@@ -85,24 +98,20 @@ class SomeImplicitClass {
 }
 ```
 
-This is a **mental model**, not literally the source code you write.
+This is only a mental model — you do not actually declare or name that class.
 
-The important consequence is that the things you write at the top level are members of this implicit class.
+### Top-Level Declarations Are Members
 
----
+Declarations in a compact source file become members of the implicit class.
 
-## 4. What can appear at the top level?
-
-You can declare members such as:
-
-### Fields
+For example, fields:
 
 ```java
 String name = "Bob";
 int count = 10;
 ```
 
-### Methods
+methods:
 
 ```java
 void greet() {
@@ -110,61 +119,29 @@ void greet() {
 }
 ```
 
-### Member classes/interfaces
+and member classes/interfaces can be declared.
 
-These are also class members.
+Think:
 
-The implicit class's body contains the members declared in the compact source file.
-
----
-
-## 5. It is NOT a scripting language
-
-This is a major exam distinction.
-
-This is **not** valid merely because the file is compact:
-
-```java
-System.out.println("Hello");
+```text
+compact source file
+        ↓
+implicitly declared class
+        ↓
+top-level declarations become members
 ```
 
-Why?
+### Not a Scripting Language
 
-Because that is an executable **statement**, not a class member declaration.
+A compact source file does **not** allow arbitrary executable statements at the top level.
 
-Put the statement inside a method:
-
-```java
-void main() {
-    System.out.println("Hello");
-}
-```
-
-### Mental model
-
-> **Compact source file = hidden class, not Java script.**
-
-You don't get arbitrary executable statements at the top level.
-
----
-
-## 6. A bare `{ ... }` block doesn't solve this
-
-You might wonder whether this works:
+This is invalid:
 
 ```java
-{
-    System.out.println("Hello");
-}
+System.out.println("Hello");   // DOES NOT COMPILE
 ```
 
-It doesn't.
-
-A compact source file isn't simply an ordinary class body where you can place an instance initializer block.
-
-The implicitly declared class has specific restrictions: its body contains member declarations such as fields, methods, member classes, and member interfaces. It does **not** contain instance or static initializer declarations or constructors.
-
-So:
+The statement must appear in an executable context such as a method:
 
 ```java
 void main() {
@@ -172,21 +149,23 @@ void main() {
 }
 ```
 
-is the correct way to execute the statement.
+Memory:
+
+> **Hidden class, not script.**
 
 ---
 
-# Instance `main` Methods
+## Instance Main Methods
 
-## 7. `main` no longer needs to be `static`
+Java 25 allows `main` to be an instance method.
 
-Traditionally:
+Instead of:
 
 ```java
 public static void main(String[] args)
 ```
 
-With JEP 512:
+you can write:
 
 ```java
 void main() {
@@ -194,9 +173,7 @@ void main() {
 }
 ```
 
-This is an **instance `main` method**.
-
-It is an ordinary instance method, so it can directly access instance members:
+Because this `main()` is an instance method, it can directly access instance members:
 
 ```java
 String message = "Hello";
@@ -206,41 +183,46 @@ void main() {
 }
 ```
 
-`message` belongs to the object on which `main()` is invoked.
+It can also use:
 
----
+```java
+this
+```
 
-## 8. How does Java invoke an instance `main`?
+like an ordinary instance method.
 
-Conceptually:
+### How Instance `main` Is Invoked
+
+Conceptually, the launcher does something like:
 
 ```java
 SomeClass object = new SomeClass();
 object.main();
 ```
 
-The launcher creates an instance of the class and then invokes the instance `main`.
+So:
 
-This is why an instance `main` can use:
-
-```java
-this
+```text
+instance main
+      ↓
+object must exist
+      ↓
+launcher creates object
+      ↓
+launcher invokes main on object
 ```
 
-and access instance fields and methods.
+This explains why an instance `main` has access to instance state.
 
----
+### Constructor Requirement
 
-## 9. The constructor requirement
+For an explicitly declared normal class with an instance `main`, the launcher must be able to instantiate the class using a suitable no-argument constructor.
 
-Because Java has to create an object before calling an instance `main`, the class must be instantiable by the launcher.
-
-For a normal class, this means there must be an accessible **no-argument constructor**.
-
-For example:
+This works:
 
 ```java
 class Test {
+
     Test() {
     }
 
@@ -250,12 +232,11 @@ class Test {
 }
 ```
 
-works.
-
 But:
 
 ```java
 class Test {
+
     Test(String name) {
     }
 
@@ -265,11 +246,9 @@ class Test {
 }
 ```
 
-doesn't provide the required no-argument constructor.
+does not provide the no-argument construction required for launching that instance `main`.
 
-The launcher cannot create the object needed to invoke the instance `main`, so launching fails.
-
-A compact source file has an implicitly declared default constructor, which is one reason the simple:
+A compact source file has an implicitly declared default constructor, which is why:
 
 ```java
 void main() {
@@ -277,73 +256,89 @@ void main() {
 }
 ```
 
-form works naturally.
+works naturally.
+
+Memory:
+
+> **Instance `main` → launcher needs an instance first.**
 
 ---
 
-# `main` Signatures
+## Main Signatures
 
-## 10. `String[]` is optional
+A candidate `main` can be either **static or instance**.
 
-An instance `main` can still receive command-line arguments:
+It can also be either **parameterized or no-argument**.
 
-```java
-void main(String[] args) {
-    System.out.println(args[0]);
-}
-```
-
-But if you don't need the arguments:
-
-```java
-void main() {
-    System.out.println("Hello");
-}
-```
-
-is sufficient.
-
-`String... args` is also equivalent to `String[] args` because both represent a `String` array parameter.
-
----
-
-## 11. `main` can be static or instance
-
-Java 25 allows candidate `main` methods to be either:
+Valid forms include:
 
 ```java
 static void main(String[] args)
 ```
 
-or:
-
 ```java
 void main(String[] args)
 ```
-
-and also:
 
 ```java
 static void main()
 ```
 
-or:
-
 ```java
 void main()
 ```
 
-The access can be `public`, `protected`, or package-private; `public` is no longer mandatory.
+`String... args` is equivalent to `String[] args` for this purpose:
+
+```java
+void main(String... args)
+```
+
+### Access
+
+`main` does not have to be `public`.
+
+A candidate `main` can use:
+
+```text
+public
+protected
+package-private
+```
+
+The important change is:
+
+```text
+public → no longer mandatory
+static → no longer mandatory
+String[] → no longer mandatory
+```
+
+### Static vs Instance Is Not Part of the Signature
+
+You cannot declare both:
+
+```java
+static void main() { }
+
+void main() { }
+```
+
+in the same class.
+
+These have the same method signature.
+
+Whether a method is `static` or instance does **not** distinguish overloads.
+
+Memory:
+
+> **`static` is not part of a method signature.**
 
 ---
 
-# How the Launcher Chooses `main`
+## Launcher Selection
 
-## 12. Parameterized `main` takes priority
-
-The Java 25 launch protocol first looks for a candidate `main` with a `String[]` parameter.
-
-If one exists, that is the method selected.
+When multiple candidate `main` methods are available, the launcher prefers the version with a `String[]` parameter.
 
 For example:
 
@@ -357,60 +352,116 @@ void main() {
 }
 ```
 
-The `String[]` version is selected.
+The launcher selects:
 
-If there is no `String[]` version, Java can select the no-argument version.
-
-The selected method may be either static or instance.
-
-### Mental model
+```java
+main(String[])
+```
 
 Think:
 
 ```text
-main(String[])  → preferred
-main()          → fallback
+main(String[])
+      ↓ preferred
+
+main()
+      ↓ fallback
 ```
 
-Then:
+Once the candidate is selected:
 
 ```text
-static main     → invoke directly
-instance main   → create object, then invoke
+static main
+→ invoke directly
+
+instance main
+→ create object
+→ invoke main
 ```
+
+Memory:
+
+> **Parameterized `main(String[])` takes priority over `main()`.**
 
 ---
 
-## 13. You cannot overload static and instance `main` with the exact same signature
+## Compact Source File Restrictions
+
+The implicit class is not simply an ordinary class declaration with its name removed.
+
+It has specific restrictions.
+
+### No Package Declaration
+
+A compact source file cannot contain a package declaration.
+
+Do not write:
+
+```java
+package com.example;   // NOT ALLOWED
+```
+
+in a compact source file.
+
+If you need a package, use an explicitly declared class and a normal source file.
+
+### No Constructors
+
+You cannot explicitly declare a constructor for the implicit class.
 
 For example:
 
 ```java
-static void main() { }
-
-void main() { }
+Hello() {
+}
 ```
 
-is not a valid pair of overloads.
+is not valid as a constructor declaration for a compact source file.
 
-Static vs instance does **not** form part of a method signature.
+The implicit class receives its own implicitly declared default constructor.
 
-So these have the same signature:
+### No Initializer Blocks
+
+You cannot declare instance initializer blocks:
 
 ```java
-static void main()
-void main()
+{
+    System.out.println("Hello");
+}
 ```
 
-and cannot coexist in the same class.
+or static initializer blocks for the implicit class.
 
----
+Executable initialization should instead occur through appropriate field initializers or methods.
 
-# Compact Source Files + Instance `main`
+### Cannot Name the Implicit Class
 
-## 14. The two features work together
+You cannot write:
 
-This is the simplest JEP 512 program:
+```java
+SomeImplicitClass object =
+        new SomeImplicitClass();
+```
+
+because the implicitly declared class has no source-level name for you to use this way.
+
+Think:
+
+```text
+implicit class exists
+        ≠
+implicit class has a usable source name
+```
+
+### Top-Level Statements Still Invalid
+
+This remains invalid:
+
+```java
+System.out.println("Hello");
+```
+
+Use:
 
 ```java
 void main() {
@@ -418,221 +469,201 @@ void main() {
 }
 ```
 
-It combines both features:
+The restrictions reinforce the main mental model:
 
-### Compact source file
-
-There is no explicit class:
-
-```java
-class Hello {
-    ...
-}
-```
-
-### Instance `main`
-
-There is no `static`:
-
-```java
-void main()
-```
-
-Java provides the implicit class and creates an instance to invoke `main()`.
+> **Compact source file = restricted implicit class, not a script and not simply an ordinary class body with the class declaration deleted.**
 
 ---
 
-## 15. Instance fields work naturally
+# Quick Reference
 
-For example:
+## Traditional vs Java 25
 
-```java
-String message = "Hello";
+| Feature | Traditional Form | Java 25 |
+|---|---|---|
+| Explicit class | Normally present | Can be omitted |
+| `main` static | Yes | Not required |
+| `String[]` parameter | Yes | Not required |
+| `public` main | Yes | Not required |
+| Instance `main` | ✗ | ✓ |
+| Arbitrary top-level statements | ✗ | ✗ |
+| Class-based | ✓ | ✓ |
+| Implicit class | ✗ | ✓ for compact source files |
 
-void main() {
-    System.out.println(message);
-}
+## Compact Source File
+
+```text
+no explicit class declaration
+        ↓
+implicitly declared class
+        ↓
+top-level declarations are members
 ```
 
-Conceptually:
+Allowed kinds of declarations include:
 
-```java
-Hello object = new Hello();
-object.main();
+```text
+fields
+methods
+member classes
+member interfaces
 ```
 
-Inside `main()`, `message` can therefore be accessed as an instance member.
+But not:
 
----
-
-# What You Cannot Do
-
-## 16. You cannot reference the implicit class by name
-
-A compact source file has an implicitly declared class, but you don't get to name it yourself.
-
-For example, you can't write something like:
-
-```java
-SomeImplicitClass object = new SomeImplicitClass();
+```text
+package declaration
+constructors
+instance initializer blocks
+static initializer blocks
+arbitrary executable statements
 ```
 
-because there is no source-level name for the implicit class.
-
-The class exists for the purposes of the program and launcher, but it isn't something you normally manipulate by name.
-
----
-
-## 17. You cannot declare constructors in a compact source file
-
-Remember that the implicit class has its own implicitly declared default constructor.
-
-You cannot write:
+## Candidate `main` Forms
 
 ```java
-Hello() {
-}
-```
-
-in a compact source file.
-
-Constructors belong to explicitly declared classes; a compact source file cannot contain a constructor declaration.
-
-Similarly, compact source files cannot contain instance or static initializer declarations.
-
----
-
-# Exam Traps
-
-### Trap 1 — "No class means scripting"
-
-❌ Wrong.
-
-Compact source files still represent a class.
-
-> **Hidden class, not script.**
-
----
-
-### Trap 2 — "No `static` means `main` can't launch"
-
-❌ Wrong.
-
-Java 25 supports instance `main` methods.
-
----
-
-### Trap 3 — "Instance `main` means `main` gets a `this` automatically without an object"
-
-❌ Wrong.
-
-The launcher first creates an instance, then invokes `main()` on that instance.
-
----
-
-### Trap 4 — "The `String[]` parameter is mandatory"
-
-❌ Wrong.
-
-Both are valid:
-
-```java
-void main()
-```
-
-and:
-
-```java
+static void main(String[] args)
 void main(String[] args)
-```
 
----
-
-### Trap 5 — "A compact file allows any statement at the top level"
-
-❌ Wrong.
-
-This is still invalid:
-
-```java
-System.out.println("Hello");
-```
-
-Executable statements belong inside an appropriate executable context, such as `main()`.
-
----
-
-### Trap 6 — "Static vs instance creates different overloads"
-
-❌ Wrong.
-
-These have the same signature:
-
-```java
 static void main()
 void main()
 ```
 
-so they cannot coexist in the same class.
+Also:
 
----
+```java
+String... args
+```
 
-# Quick Comparison
+can be used instead of:
 
-| Feature                        | Traditional Java  | JEP 512                    |
-| ------------------------------ | ----------------- | -------------------------- |
-| Explicit class                 | Usually required  | Can be omitted             |
-| `main` must be `static`        | Traditionally yes | No                         |
-| `main` must have `String[]`    | Traditionally yes | No                         |
-| `public` required for `main`   | Traditionally yes | No                         |
-| Instance `main`                | ❌                 | ✅                          |
-| Top-level arbitrary statements | ❌                 | ❌                          |
-| Still class-based              | ✅                 | ✅                          |
-| Implicit class                 | ❌                 | ✅ for compact source files |
+```java
+String[] args
+```
 
----
+## Launcher Selection
 
-# Exam Checklist
+```text
+main(String[])
+      ↓
+preferred over
+      ↓
+main()
+```
 
-When you see a JEP 512 question, check:
+Then:
 
-1. **Is this a compact source file?**
+```text
+STATIC
+→ invoke directly
 
-    * No explicit class declaration.
-    * Top-level content must fit the implicit class/member rules.
+INSTANCE
+→ create object
+→ invoke main
+```
 
-2. **Is there a valid `main`?**
+## Instance `main`
 
-    * `void main()`
-    * or `void main(String[] args)` / `String... args`
-    * static or instance
-    * `public`, `protected`, or package access
+```text
+instance main
+→ real instance method
+→ can access instance members
+→ can use this
+→ launcher needs to create object
+```
 
-3. **If `main` is instance-based:**
+For an explicitly declared class, watch for a suitable no-argument constructor.
 
-    * Java must create an object first.
-    * A suitable no-argument constructor must therefore be available.
+## Method Signature
 
-4. **If multiple candidate `main` methods exist:**
+```java
+static void main() { }
+void main() { }
+```
 
-    * `main(String[])` takes priority over `main()`.
-    * Then static vs instance determines whether Java invokes directly or creates an object.
+cannot coexist merely because one is static.
 
-5. **Watch for the scripting-language trap:**
+Memory:
 
-    * No class declaration ≠ no class.
-    * No `static` ≠ no object.
-    * Compact ≠ arbitrary top-level statements.
+```text
+static vs instance
+≠ overload distinction
+```
 
----
+## Restrictions
 
-# 18. Runnable Example
+```text
+COMPACT SOURCE FILE
 
-You can find a runnable example here:
-`src\rysharp\addendum\Compact_Source_Files_and_Instance_Main_Methods\code\CompactSourceExample.java`
+package declaration       ✗
+explicit constructor      ✗
+instance initializer      ✗
+static initializer        ✗
+arbitrary top-level code  ✗
+```
 
----
+## Reliable Check
 
-## One-line memory aid
+When you see compact-source or `main` code:
 
-> **JEP 512 = hidden class + simpler `main`; Java is still Java, not a script.**
+```text
+1. Is there an explicit class?
+
+   NO
+   → compact source file rules apply
+
+
+2. Is top-level content a permitted declaration?
+
+   arbitrary statement
+   → invalid
+
+
+3. Is there a candidate main?
+
+   main(String[])
+   or
+   main()
+
+
+4. Is it static or instance?
+
+   static
+   → invoke directly
+
+   instance
+   → launcher needs an object
+
+
+5. Are multiple candidate mains present?
+
+   main(String[])
+   → preferred over main()
+
+
+6. For a compact source file, check restrictions:
+
+   no package declaration
+   no explicit constructor
+   no initializer declarations
+```
+
+## Final Memory Kicks
+
+> **JEP 512 has two related features: compact source files and instance `main` methods.**
+
+> **A compact source file still represents a class — it is not a script.**
+
+> **Top-level declarations become members of an implicitly declared class; arbitrary top-level statements are still invalid.**
+
+> **Compact source files cannot declare a package, constructor, or instance/static initializer.**
+
+> **`main` can be static or instance and can take `String[]`/`String...` or no arguments.**
+
+> **An instance `main` is invoked on an object, so it can access instance members and `this`.**
+
+> **`main(String[])` is preferred over `main()` when the launcher has multiple candidates.**
+
+> **`static` vs instance does not create a different method signature.**
+
+> **Compact source file = hidden boilerplate, not different Java.**

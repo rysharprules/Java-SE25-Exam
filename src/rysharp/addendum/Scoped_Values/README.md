@@ -1,24 +1,29 @@
 # Scoped Values (JEP 506)
 
-Java 25 makes **Scoped Values** a permanent Java feature.
+Quick reference for Java 25 Scoped Values, bindings, scope, rebinding and context sharing.
 
-A `ScopedValue` lets you make a value available to code further down the call chain **without passing it through every method parameter**.
+## Contents
 
-### Code Example
-You can find two code examples demonstrating Scoped Values:
-
-1. [A basic example](code\ScopedValueExample.java).
-2. [A more real-life example (Request Context)](code\RealLifeScopedValueExample.java).
-
-The key idea is:
-
-> **A ScopedValue is a value temporarily bound to a scope of execution.**
+- [The Basic Idea](#the-basic-idea)
+- [Creating and Binding a Scoped Value](#creating-and-binding-a-scoped-value)
+- [Reading a Scoped Value](#reading-a-scoped-value)
+- [`run()` vs `call()`](#run-vs-call)
+- [Nested Scopes and Rebinding](#nested-scopes-and-rebinding)
+- [Multiple Bindings](#multiple-bindings)
+- [Scoped Values vs `ThreadLocal`](#scoped-values-vs-threadlocal)
+- [Intended Use](#intended-use)
+- [Concurrency Context](#concurrency-context)
+- [Quick Reference](#quick-reference)
 
 ---
 
-## 1. Why Scoped Values?
+## The Basic Idea
 
-Imagine a server handling a request:
+Java 25 makes **Scoped Values** a permanent Java feature.
+
+A `ScopedValue` lets code further down a call chain access a value without passing it through every intermediate method parameter.
+
+Without a Scoped Value:
 
 ```java
 void handleRequest(String requestId) {
@@ -34,13 +39,13 @@ void loadAccount(String requestId) {
 }
 ```
 
-Only `databaseCall()` may actually need the request ID, but every method has to carry it as a parameter.
+Even if only `databaseCall()` needs the request ID, every method has to carry it.
 
-A `ScopedValue` provides another option:
+With a Scoped Value:
 
 ```java
 static final ScopedValue<String> REQUEST_ID =
-    ScopedValue.newInstance();
+        ScopedValue.newInstance();
 
 void handleRequest() {
     ScopedValue.where(REQUEST_ID, "abc-123")
@@ -60,57 +65,82 @@ void databaseCall() {
 }
 ```
 
-`databaseCall()` can access the request ID without it being explicitly passed through `authenticate()` and `loadAccount()`.
+The value flows down the call chain:
 
-This is why a `ScopedValue` can be thought of as behaving somewhat like an **implicit method parameter**.
+```text
+handleRequest()
+      ↓
+authenticate()
+      ↓
+loadAccount()
+      ↓
+databaseCall()
+      ↓
+REQUEST_ID.get()
+```
+
+The intermediate methods do not need a `requestId` parameter.
+
+Memory:
+
+> **A Scoped Value is a temporary context value that flows down the call chain.**
+
+It can be thought of somewhat like an **implicit method parameter**.
 
 ---
 
-# 2. Creating a Scoped Value
+## Creating and Binding a Scoped Value
 
-Usually a scoped value is declared as a `static final` field:
+A Scoped Value is commonly declared as a `static final` field:
 
 ```java
 static final ScopedValue<String> NAME =
-    ScopedValue.newInstance();
+        ScopedValue.newInstance();
 ```
 
-`NAME` is effectively a **key**.
+`NAME` acts like a **key**.
 
-It does not initially have a value.
+Creating it does not itself establish a value:
 
-The value is supplied when a scope is established:
+```java
+ScopedValue.newInstance()
+```
+
+creates the Scoped Value.
+
+A value is supplied by establishing a binding:
 
 ```java
 ScopedValue.where(NAME, "Alice")
            .run(() -> doSomething());
 ```
 
-Inside `doSomething()`:
-
-```java
-NAME.get()
-```
-
-returns:
+Think:
 
 ```text
-Alice
+newInstance()
+     ↓
+create key
+
+where(NAME, "Alice")
+     ↓
+bind key to value
+
+run(...)
+     ↓
+execute within binding
 ```
 
----
+### Scope
 
-# 3. The Scope
-
-The value only exists within the scope established by `where(...).run(...)` or `where(...).call(...)`.
-
-Example:
+The binding exists only while the operation is executing.
 
 ```java
 static final ScopedValue<String> NAME =
-    ScopedValue.newInstance();
+        ScopedValue.newInstance();
 
 static void main() {
+
     ScopedValue.where(NAME, "Alice")
                .run(() -> methodA());
 
@@ -129,115 +159,103 @@ Alice
 false
 ```
 
-The binding exists while `run()` is executing.
-
-Once `run()` finishes, the value is no longer bound.
-
-Mental model:
+Think:
 
 ```text
 outside scope
-    NAME = unbound
+NAME = unbound
+
+       ↓
 
 where(NAME, "Alice")
-    |
-    +-- run(...)
-        |
-        +-- methodA()
-            |
-            +-- NAME.get() -> "Alice"
 
-scope ends
-    |
-    NAME = unbound
+       ↓
+
+run(...)
+NAME = "Alice"
+
+       ↓
+
+called methods
+can read NAME
+
+       ↓
+
+run() finishes
+
+       ↓
+
+NAME = unbound
 ```
 
-This temporary nature is the central idea behind **scoped** values.
+Memory:
+
+> **The binding disappears automatically when the scope ends.**
+
+It does not remain `"Alice"` after `run()` finishes.
 
 ---
 
-# 4. Values Flow Down the Call Chain
+## Reading a Scoped Value
 
-A Scoped Value is available to methods called from within its scope.
+Several methods determine what happens when you read a Scoped Value.
 
-```java
-static void main() {
-    ScopedValue.where(NAME, "Alice")
-               .run(() -> methodA());
-}
-
-static void methodA() {
-    methodB();
-}
-
-static void methodB() {
-    methodC();
-}
-
-static void methodC() {
-    System.out.println(NAME.get());
-}
-```
-
-`methodA()` and `methodB()` don't need a `NAME` parameter.
-
-The value flows down the call chain:
-
-```text
-main()
-  |
-  v
-methodA()
-  |
-  v
-methodB()
-  |
-  v
-methodC()
-  |
-  v
-NAME.get() -> "Alice"
-```
-
-This is one of the most important things to remember for the exam.
-
----
-
-# 5. `get()`
-
-`get()` retrieves the currently bound value.
+### `get()`
 
 ```java
 NAME.get()
 ```
 
-If the value is currently bound:
+returns the currently bound value.
+
+If bound:
 
 ```java
-NAME.get();   // returns the value
+ScopedValue.where(NAME, "Alice")
+           .run(() -> System.out.println(NAME.get()));
 ```
 
-If it is **not** bound, `get()` throws:
+prints:
+
+```text
+Alice
+```
+
+If the Scoped Value is unbound:
+
+```java
+NAME.get();
+```
+
+throws:
 
 ```text
 NoSuchElementException
 ```
 
-Example:
+It does **not** return `null`.
 
-```java
-static void methodA() {
-    System.out.println(NAME.get());
-}
+Memory:
+
+```text
+get()
+
+bound
+→ value
+
+unbound
+→ NoSuchElementException
 ```
 
-This only works when `methodA()` is executing inside an appropriate scope.
+### `isBound()`
 
----
+Use:
 
-# 6. `isBound()`
+```java
+NAME.isBound()
+```
 
-Use `isBound()` to check whether a value is currently bound:
+to determine whether a binding currently exists.
 
 ```java
 if (NAME.isBound()) {
@@ -245,103 +263,99 @@ if (NAME.isBound()) {
 }
 ```
 
-It returns:
+Result:
 
 ```text
-true
+true  → currently bound
+false → currently unbound
 ```
 
-when the Scoped Value is bound in the current scope, otherwise:
+### `orElse()`
 
-```text
-false
-```
-
----
-
-# 7. `orElse()`
-
-`orElse()` provides a fallback if the value isn't bound:
+`orElse()` supplies a fallback:
 
 ```java
 String name = NAME.orElse("Guest");
 ```
 
-If `NAME` is bound:
+Think:
 
 ```text
-Alice
+bound
+→ bound value
+
+unbound
+→ fallback value
 ```
 
-is returned.
+### `orElseThrow()`
 
-If it isn't:
+`orElseThrow(...)` returns the bound value or throws the supplied exception when unbound.
 
-```text
-Guest
-```
+Method recognition:
 
-is returned.
-
-Useful methods to recognise:
-
-| Method             | Behaviour                                                 |
-| ------------------ | --------------------------------------------------------- |
-| `get()`            | Returns value; throws `NoSuchElementException` if unbound |
-| `isBound()`        | Returns whether a value is currently bound                |
-| `orElse(value)`    | Returns value or the supplied fallback                    |
-| `orElseThrow(...)` | Returns value or throws the supplied exception            |
+| Method | If Bound | If Unbound |
+|---|---|---|
+| `get()` | value | `NoSuchElementException` |
+| `isBound()` | `true` | `false` |
+| `orElse(x)` | value | `x` |
+| `orElseThrow(...)` | value | supplied exception |
 
 ---
 
-# 8. `run()` vs `call()`
+## `run()` vs `call()`
 
-There are two important ways to execute code within a Scoped Value binding.
+There are two important ways to execute code within a binding.
 
-## `run()`
+### `run()`
 
-Use when you don't need a return value:
+Use `run()` when no result is required:
 
 ```java
 ScopedValue.where(NAME, "Alice")
            .run(() -> process());
 ```
 
-Conceptually:
+Think:
 
 ```text
-run() -> perform an operation
+run()
+→ perform operation
+→ no result
 ```
 
-## `call()`
+### `call()`
 
-Use when the operation returns a value:
+Use `call()` when the operation returns a value:
 
 ```java
 String result =
-    ScopedValue.where(NAME, "Alice")
-               .call(() -> process());
+        ScopedValue.where(NAME, "Alice")
+                   .call(() -> process());
 ```
 
-Conceptually:
+Think:
 
 ```text
-call() -> perform an operation and return a result
+call()
+→ perform operation
+→ return result
 ```
 
-`call()` also supports operations that can throw checked exceptions.
+`call()` can also support operations that throw checked exceptions.
 
-For exam purposes, remember:
+Memory:
 
-> **`run()` = no result**
->
-> **`call()` = result**
+```text
+run()  → no result
+call() → result
+```
 
 ---
 
-# 9. Nested Scopes and Rebinding
+## Nested Scopes and Rebinding
 
-A Scoped Value can be rebound inside a nested scope.
+A Scoped Value can be rebound within a nested scope.
 
 ```java
 ScopedValue.where(NAME, "Alice").run(() -> {
@@ -363,8 +377,6 @@ Alice
 Bob
 Alice
 ```
-
-Why?
 
 The outer scope establishes:
 
@@ -378,42 +390,48 @@ The inner scope temporarily establishes:
 NAME = Bob
 ```
 
-When the inner scope finishes, the previous binding is restored:
+When the inner scope ends:
 
 ```text
 NAME = Alice
 ```
 
-Mental model:
+is restored.
+
+Think:
 
 ```text
-outer scope
+OUTER SCOPE
 NAME = Alice
-
-    inner scope
-    NAME = Bob
-
-    inner scope ends
-
+     │
+     ├── INNER SCOPE
+     │   NAME = Bob
+     │
+     └── inner ends
+         ↓
 NAME = Alice again
 ```
 
-This is a particularly useful exam pattern.
+The inner binding does **not** permanently replace the outer binding.
+
+Memory:
+
+> **Nested binding temporarily shadows the outer binding; when the nested scope ends, the outer binding is restored.**
 
 ---
 
-# 10. `where()` and `Carrier`
+## Multiple Bindings
 
-`where()` establishes a binding and returns a `ScopedValue.Carrier`.
+`where()` returns a `ScopedValue.Carrier`.
 
-This allows multiple bindings to be combined:
+Bindings can therefore be chained before executing the operation.
 
 ```java
 static final ScopedValue<String> USER =
-    ScopedValue.newInstance();
+        ScopedValue.newInstance();
 
 static final ScopedValue<String> REQUEST_ID =
-    ScopedValue.newInstance();
+        ScopedValue.newInstance();
 
 ScopedValue.where(USER, "Alice")
            .where(REQUEST_ID, "abc-123")
@@ -427,352 +445,384 @@ USER.get();        // Alice
 REQUEST_ID.get();  // abc-123
 ```
 
-For the exam, recognise that `where()` can be chained to establish multiple Scoped Value bindings before executing the operation.
+Think:
+
+```text
+where(USER, "Alice")
+      ↓
+where(REQUEST_ID, "abc-123")
+      ↓
+run(...)
+      ↓
+both bindings available
+```
+
+For exam purposes, recognise:
+
+> **`where()` can be chained to establish multiple bindings.**
 
 ---
 
-# 11. Scoped Values vs ThreadLocal
+## Scoped Values vs `ThreadLocal`
 
-`ThreadLocal` is useful background for understanding Scoped Values, but it is **not the main subject of JEP 506**.
+`ThreadLocal` is useful background for understanding Scoped Values.
 
-Very simply:
-
-> **ThreadLocal = a value associated with a particular thread.**
-
-Different threads can have different values:
+Very broadly:
 
 ```text
-Thread A -> user = Alice
-Thread B -> user = Bob
-```
+ThreadLocal
+→ value associated with a thread
 
-A `ThreadLocal` value can remain associated with the thread until it is removed.
-
-A Scoped Value instead provides a value for a **bounded scope of execution**:
-
-```text
 ScopedValue
-    |
-    +-- scope starts -> value available
-    |
-    +-- called methods can access it
-    |
-    +-- scope ends -> binding disappears
+→ value associated with a bounded scope of execution
 ```
 
-The important distinction for this exam is:
+A `ThreadLocal` value can remain associated with a thread until it is removed.
 
-> **ThreadLocal is thread-oriented; ScopedValue is scope-oriented.**
+A Scoped Value instead follows a defined execution scope:
 
-Scoped Values are designed particularly for one-way sharing of context without requiring every method to receive it as a parameter.
+```text
+scope starts
+     ↓
+binding available
+     ↓
+called methods can read it
+     ↓
+scope ends
+     ↓
+binding disappears
+```
 
-You do not need to learn the `ThreadLocal` API in depth for JEP 506.
+Memory:
+
+> **`ThreadLocal` is thread-oriented; `ScopedValue` is scope-oriented.**
+
+A Scoped Value is not simply a renamed `ThreadLocal`.
 
 ---
 
-# 12. Scoped Values Are Intended for One-Way Sharing
+## Intended Use
 
-A Scoped Value is designed for a value that is established by an enclosing operation and read by code further down the call chain.
+Scoped Values are designed primarily for **one-way sharing of context**.
 
-For example:
-
-```java
-ScopedValue.where(USER, "Alice")
-           .run(() -> process());
-```
-
-Code inside `process()` can read:
-
-```java
-USER.get()
-```
-
-A useful mental model is:
+Think:
 
 ```text
 caller
-  |
-  | establishes value
-  v
+  │
+  │ establishes value
+  ↓
 callee
-  |
-  | reads value
-  v
+  │
+  │ reads value
+  ↓
 deeper callee
-  |
-  | reads value
-  v
+  │
+  │ reads value
+  ↓
 scope ends
 ```
 
-This is different from treating the Scoped Value as an ordinary mutable variable shared between methods.
+Good examples include contextual information such as:
 
----
+```text
+request ID
+user context
+configuration/context data
+```
 
-# 13. Immutability
+The value is established by an enclosing operation and read further down the call chain.
 
-Scoped Values are designed for sharing **immutable data**.
+### Read-Oriented Context
+
+Do not think of a Scoped Value as an ordinary mutable variable shared between methods.
+
+The intended model is:
+
+```text
+bind
+ ↓
+read
+ ↓
+read
+ ↓
+scope ends
+```
+
+rather than:
+
+```text
+bind
+ ↓
+mutate repeatedly
+ ↓
+share mutable state
+```
+
+### Immutability
+
+Scoped Values are designed to work well with immutable context.
 
 For example:
 
 ```java
 static final ScopedValue<String> USER =
-    ScopedValue.newInstance();
+        ScopedValue.newInstance();
 ```
 
-`String` is immutable, so this is a natural use.
+is a natural use because `String` is immutable.
 
-Important distinction:
+But:
 
-> A `ScopedValue` does not magically make the object stored in it immutable.
+> **A `ScopedValue` does not make the object stored inside it immutable.**
 
-For example, a mutable `List` stored in a Scoped Value is still a mutable `List`.
+If a mutable `List` is stored in a Scoped Value, that `List` remains mutable.
 
-The design is intended to encourage safe, one-way sharing of immutable context.
-
----
-
-# 14. Virtual Threads — Exam Context
-
-Scoped Values were designed to work well with Java's modern concurrency model, including **virtual threads**.
-
-The important relationship is:
+Memory:
 
 ```text
 ScopedValue
-    |
-    +-- designed for efficient context sharing
-        |
-        +-- works well with virtual threads
+→ encourages immutable context
+
+ScopedValue
+≠ makes object immutable
 ```
-
-You do **not** need to think of Scoped Values as being "for virtual threads".
-
-They are useful independently of virtual threads.
-
-For the Java 25 exam, the important thing is simply:
-
-> **Scoped Values integrate well with Java's modern concurrency model, including virtual threads.**
-
-Do not confuse the two concepts.
 
 ---
 
-# 15. Structured Concurrency — Exam Context
+## Concurrency Context
 
-Structured Concurrency is related to Scoped Values because Scoped Value bindings can be inherited by child threads when used with `StructuredTaskScope`.
+Scoped Values work well with Java's modern concurrency model, including virtual threads.
 
-However, **Structured Concurrency is still a preview feature in Java 25**.
-
-Therefore, for an exam-focused JEP 506 lesson, you only need the relationship:
+But do not think:
 
 ```text
 ScopedValue
-    |
-    +-- can work with child threads
-        |
-        +-- StructuredTaskScope
+= virtual-thread feature only
 ```
 
-You do not need to learn the Structured Concurrency API in depth as part of understanding Scoped Values.
+Scoped Values are useful independently of virtual threads.
 
-The important permanent Java 25 feature here is:
-
-> **Scoped Values (JEP 506).**
-
----
-
-# 16. Real-World Example: Request Context
-
-A common use case is a server handling an HTTP request.
-
-Suppose a request has:
+The useful relationship is simply:
 
 ```text
-Request ID: abc-123
+ScopedValue
+     ↓
+efficient context sharing
+     ↓
+works well with virtual threads
 ```
 
-Without a Scoped Value:
+### Structured Concurrency
 
-```java
-handleRequest(requestId);
-authenticate(requestId);
-loadAccount(requestId);
-databaseCall(requestId);
+Scoped Values are also related to Structured Concurrency because bindings can be inherited by child threads when used with `StructuredTaskScope`.
+
+For Java 25:
+
+```text
+Scoped Values
+→ permanent feature
+
+Structured Concurrency
+→ preview feature
 ```
 
-Every method has to carry the value, even when some methods don't directly use it.
-
-With a Scoped Value:
-
-```java
-static final ScopedValue<String> REQUEST_ID =
-    ScopedValue.newInstance();
-
-void handleRequest() {
-    ScopedValue.where(REQUEST_ID, "abc-123")
-               .run(() -> authenticate());
-}
-
-void authenticate() {
-    loadAccount();
-}
-
-void loadAccount() {
-    databaseCall();
-}
-
-void databaseCall() {
-    System.out.println("Request: " + REQUEST_ID.get());
-}
-```
-
-Now `databaseCall()` can obtain the request ID without it being explicitly passed through every method.
-
-This is the practical problem Scoped Values are designed to solve.
+So Structured Concurrency is useful context here, but its API does not need to be learned as part of the core Scoped Value rules.
 
 ---
 
-# 17. Exam Mental Model
+# Quick Reference
 
-Think of a Scoped Value as:
-
-> **A temporary, read-oriented context value that flows down the call chain.**
-
-The basic pattern is:
+## Basic Lifecycle
 
 ```java
-static final ScopedValue<T> VALUE =
-    ScopedValue.newInstance();
+static final ScopedValue<String> NAME =
+        ScopedValue.newInstance();
 
-ScopedValue.where(VALUE, someValue)
+ScopedValue.where(NAME, "Alice")
            .run(() -> {
-               // VALUE.get() is available here
+               System.out.println(NAME.get());
            });
 ```
 
-And remember:
+Think:
 
 ```text
 newInstance()
-    ↓
-creates the ScopedValue/key
+     ↓
+create key
 
 where(...)
-    ↓
-establishes a binding
+     ↓
+establish binding
 
-run(...) / call(...)
-    ↓
-executes code within the binding
+run() / call()
+     ↓
+execute inside scope
 
 get()
-    ↓
-reads the current value
+     ↓
+read binding
 
 scope ends
-    ↓
+     ↓
 binding disappears
 ```
 
----
+## Core Methods
 
-# Exam Checklist
+| Method | Purpose |
+|---|---|
+| `newInstance()` | Creates the Scoped Value/key |
+| `where(...)` | Establishes a binding |
+| `run(...)` | Executes operation with no result |
+| `call(...)` | Executes operation and returns result |
+| `get()` | Returns binding; throws if unbound |
+| `isBound()` | Checks whether currently bound |
+| `orElse(...)` | Value or fallback |
+| `orElseThrow(...)` | Value or supplied exception |
 
-Know these:
-
-* `ScopedValue.newInstance()`
-* `ScopedValue.where(...)`
-* `run(...)`
-* `call(...)`
-* `get()`
-* `isBound()`
-* `orElse(...)`
-* `orElseThrow(...)`
-* values are available to called methods within the scope
-* nested scopes can rebind a value
-* the outer value is restored after the nested scope ends
-* a value is unbound after its scope ends
-* `get()` on an unbound value throws `NoSuchElementException`
-* `where()` can be chained for multiple bindings
-* Scoped Values are intended for one-way sharing of context
-* the relationship with virtual threads
-* Structured Concurrency is only contextual background for Java 25 because it remains a preview feature
-
----
-
-# Common Exam Traps
-
-### Trap 1
-
-```java
-ScopedValue.where(NAME, "Alice")
-           .run(() -> methodA());
-
-System.out.println(NAME.get());
-```
-
-Does `get()` still return `"Alice"`?
-
-**No.**
-
-The scope has ended, so `NAME` is unbound.
-
----
-
-### Trap 2
-
-```java
-ScopedValue.where(NAME, "Alice").run(() -> {
-    ScopedValue.where(NAME, "Bob").run(() -> {
-        System.out.println(NAME.get());
-    });
-
-    System.out.println(NAME.get());
-});
-```
-
-Output:
+## Scope
 
 ```text
-Bob
-Alice
+BEFORE
+NAME = unbound
+
+       ↓
+
+where(NAME, "Alice").run(...)
+
+       ↓
+
+INSIDE
+NAME = Alice
+
+       ↓
+
+scope ends
+
+       ↓
+
+AFTER
+NAME = unbound
 ```
 
-The inner binding does not permanently replace the outer binding.
+## Nested Binding
 
----
+```text
+NAME = Alice
 
-### Trap 3
+    NAME = Bob
+
+NAME = Alice
+```
+
+Memory:
+
+```text
+inner binding
+→ temporarily shadows outer
+
+inner scope ends
+→ outer binding restored
+```
+
+## `get()` Trap
 
 ```java
 NAME.get();
 ```
 
-Does this return `null` if there is no binding?
+when unbound:
 
-**No.**
+```text
+NoSuchElementException
+```
 
-It throws `NoSuchElementException`.
+not:
 
----
+```text
+null
+```
 
-### Trap 4
+## `run()` vs `call()`
 
-A Scoped Value is not simply a `ThreadLocal` with a different name.
+```text
+run()
+→ no result
 
-The important distinction is:
+call()
+→ result
+```
+
+## Multiple Bindings
+
+```java
+ScopedValue.where(USER, "Alice")
+           .where(REQUEST_ID, "abc-123")
+           .run(...);
+```
+
+→ both bindings available within the scope.
+
+## `ThreadLocal` Comparison
 
 ```text
 ThreadLocal
-    -> associated with a thread
+→ thread-oriented
 
 ScopedValue
-    -> associated with a bounded scope of execution
+→ scope-oriented
 ```
 
----
+## Reliable Check
 
-# One-Line Memory Aid
+When tracing Scoped Value code:
 
-> **ScopedValue = establish a value for a scope, let callees read it, then automatically lose the binding when the scope ends.**
+```text
+1. Find where(...) bindings
+
+2. Determine which run()/call()
+   establishes the active scope
+
+3. Follow execution DOWN the call chain
+
+4. For get(), determine the nearest
+   active binding
+
+5. For nested where(), use the inner
+   binding while its scope is active
+
+6. When inner scope ends, restore
+   the outer binding
+
+7. When the outer scope ends,
+   the value becomes unbound
+
+8. get() while unbound
+   → NoSuchElementException
+```
+
+## Final Memory Kicks
+
+> **`ScopedValue.newInstance()` creates the key; it does not bind a value.**
+
+> **`where(...)` establishes a temporary binding for a scope of execution.**
+
+> **The binding flows down the call chain without needing to be passed through every method parameter.**
+
+> **`get()` on an unbound Scoped Value throws `NoSuchElementException`; it does not return `null`.**
+
+> **`run()` performs an operation without a result; `call()` returns a result.**
+
+> **Nested scopes can rebind a Scoped Value; when the inner scope ends, the outer binding is restored.**
+
+> **Multiple bindings can be chained with `where()`.**
+
+> **Scoped Values are designed for one-way, read-oriented context sharing.**
+
+> **`ThreadLocal` is thread-oriented; `ScopedValue` is scope-oriented.**
+
+> **Scoped Values work well with virtual threads but are not exclusively a virtual-thread feature.**
+
+> **ScopedValue = bind for a scope → callees read it → scope ends → binding disappears.**

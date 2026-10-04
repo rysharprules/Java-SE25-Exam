@@ -15,4 +15,4 @@ Code packages match the naming of the md.
 
 | Title | File |
 |---|---|
-| *(None)* | — |
+| Inner & Static Nested Classes | [inner_classes.md](inner_classes.md) |
