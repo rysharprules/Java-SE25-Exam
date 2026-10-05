@@ -260,7 +260,7 @@ interface Calculator {
 }
 ```
 
-For the detailed rules around inherited abstract methods, defaults, statics and method conflicts, see the separate **Interfaces & Functional Interfaces** notes from Chapter 7.
+For the detailed rules around inherited abstract methods, defaults, statics and method conflicts, see the separate [**Interfaces & Functional Interfaces**](../_07_Beyond_Classes/README.md) notes from Chapter 7.
 
 ---
 
@@ -755,13 +755,6 @@ f.compose(g)
 g → f
 ```
 
-Or:
-
-```text
-andThen = ME → THEM
-compose = THEM → ME
-```
-
 ---
 
 ### `Function.identity()`
@@ -874,13 +867,14 @@ second("X")
 andThen()
 ```
 
-with both consumers receiving the same two arguments.
+`andThen()` accepts another `BiConsumer<T,U>`. When the combined consumer is
+executed, both consumers receive the same pair of input arguments, in order.
 
 ---
 
 ## Variable Capture
 
-Lambdas can access variables from their surrounding scope, but local variables have additional restrictions.
+Lambdas can access variables from their surrounding scope, but captured local variables and method parameters must be `final` or **effectively final**.
 
 | Variable | Can Lambda Access It? |
 |---|---|
@@ -890,12 +884,6 @@ Lambdas can access variables from their surrounding scope, but local variables h
 | Method parameter | ✅ If `final` or effectively final |
 | Lambda parameter | ✅ Yes |
 
-### Effectively final
-
-A variable is effectively final when it is assigned once and never reassigned.
-
-Valid:
-
 ```java
 int number = 10;
 
@@ -903,7 +891,9 @@ Runnable r =
         () -> System.out.println(number);
 ```
 
-Invalid:
+This is valid because `number` is effectively final.
+
+Reassigning it prevents capture:
 
 ```java
 int number = 10;
@@ -914,64 +904,31 @@ Runnable r =
 number = 20;       // DOES NOT COMPILE
 ```
 
-The later assignment means `number` is not effectively final.
-
-### Object mutation is different from variable reassignment
-
-This is valid:
+The restriction applies to the **local variable**, not the object it references:
 
 ```java
 List<String> list = new ArrayList<>();
 
 Consumer<String> c =
-        s -> list.add(s);
+        s -> list.add(s);      // valid
 ```
 
-The variable `list` is not reassigned.
+`list` is not reassigned; the referenced object is being modified.
 
-The object referenced by `list` is being mutated.
+Instance and static fields do not have the effectively-final restriction.
 
-This is different:
+> For the full rules around `final` and effectively-final captured variables, see
+> [**Nested Classes — Local Variable Capture**](../_07_Beyond_Classes/nested_classes.md)
 
-```java
-List<String> list = new ArrayList<>();
-
-Consumer<String> c =
-        s -> System.out.println(list);
-
-list = new ArrayList<>();      // DOES NOT COMPILE
-```
-
-The captured local variable itself is reassigned.
-
-### Fields
-
-Instance and static fields do not have the effectively-final restriction:
-
-```java
-class Example {
-
-    private int count;
-
-    void run() {
-        Runnable r = () -> count++;
-    }
-}
-```
-
-This is valid.
-
-Memory:
+### Memory
 
 ```text
-LOCAL / METHOD PARAMETER
+CAPTURED LOCAL / METHOD PARAMETER
 → final or effectively final
 
 INSTANCE / STATIC FIELD
 → may change
 ```
-
----
 
 ## Method References
 
