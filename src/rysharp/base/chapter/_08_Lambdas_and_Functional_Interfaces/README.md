@@ -14,4 +14,4 @@ Code packages match the naming of the md.
 
 | Title | File |
 |---|---|
-| *(None)* | — |
+| Lambdas & Functional Interfaces | [lambdas.md](lambdas.md) |

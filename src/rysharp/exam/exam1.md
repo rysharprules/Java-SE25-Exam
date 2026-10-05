@@ -10,18 +10,20 @@ Exam 1 of 6 from [Java 25 Professional Certification - 6 full Tests (1Z0-831)](h
 
 ## 🔎 Overview
 
-The first full practice exam was very close to a pass. The incorrect answers were not all caused by the same problem.
+The first full practice exam was very close to a pass. The result shows a reasonably broad foundation across the syllabus, with most weaknesses concentrated in a smaller number of areas rather than spread evenly across every chapter.
 
 The main patterns were:
 
-- Stream operations and stream API details were the clearest recurring weakness.
-- Several marks were lost through unfamiliar or imprecisely remembered library APIs.
-- Some core language rules were understood generally but not securely enough for exam edge cases.
-- I/O/NIO API behaviour needs some reinforcement.
-- A few questions were lost through second-guessing answers that initially looked correct.
-- Some correct answers also exposed APIs that were unfamiliar and should be recognised in future exams.
+- Stream operations and Stream API details were the clearest recurring weakness.
+- Collections & Generics contained several successful answers but also multiple API-specific gaps.
+- I/O/NIO showed a mixture of correct understanding and weaker knowledge of particular constructors and `Files` operations.
+- Modules and Lambdas & Functional Interfaces each contained more than one distinct area requiring reinforcement.
+- Class Design, Core APIs, Exceptions/Localisation and Concurrency showed generally useful knowledge with narrower gaps.
+- Several correct answers exposed APIs or rules that were not yet secure enough to answer confidently.
+- Building Blocks, Operators, Making Decisions and Methods did not expose a specific weakness.
+- The dedicated JDK 25 addendum topics were not directly tested.
 
-The goal is therefore **targeted revision**, rather than rereading every chapter.
+The goal is therefore **targeted revision**, with the greatest attention given to recurring weaknesses while preserving areas that are already working.
 
 ---
 
@@ -44,15 +46,56 @@ The goal is therefore **targeted revision**, rather than rereading every chapter
 | Q34 | `Files.move()` / `Files.delete()` | Reasoned about the initial filesystem state but did not update the state after `move()`. | `Files.move`, `REPLACE_EXISTING`, `Files.delete`, `deleteIfExists`, and state changes between operations. | [**14 - Input/Output**](../base/chapter/_14_Input_Output/README.md) |
 | Q37 | Lambda return conversion | Second-guessed valid code because `Long.valueOf(int)` looked suspicious. | `Long.valueOf(long)`, widening + unboxing, and lambda result compatibility. | [**08 - Lambdas & Functional Interfaces**](../base/chapter/_08_Lambdas_and_Functional_Interfaces/README.md) |
 | Q45 | `jdeps` | Did not know the exact command-line options and selected the real `--generate-open-module` instead of fake `--check-deps`. | `jdeps`: `--check`, `--list-deps`, `--list-reduced-deps`, `--print-module-deps`, `--generate-module-info`, `--generate-open-module`. | [**12 - Modules**](../base/chapter/_12_Modules/README.md) |
-| Q46 | Inner / nested classes | Knew which class was static but mixed up the construction syntax. | Non-static inner: `new Outer().new Inner()`; static nested: `new Outer.Nested()`. | [**06 - Class Design**](../base/chapter/_06_Class_Design/README.md) |
+| Q46 | Inner / nested classes | Knew which class was static but mixed up the construction syntax. | Non-static inner: `new Outer().new Inner()`; static nested: `new Outer.Nested()`. | [**07 - Beyond Classes**](../base/chapter/_07_Beyond_Classes/README.md) |
 | Q47 | `TreeSet.headSet()` | Had never encountered the API and therefore could not infer its exact boundary behaviour. | `headSet`, `tailSet`, `subSet`; inclusive/exclusive boundaries; backed views. | [**09 - Collections & Generics**](../base/chapter/_09_Collections_and_Generics/README.md) |
 | Q49 | Lambda terminology | Understood that a lambda can contain multiple statements but did not recognise that the entire `{ ... }` construct is one **block** body. | Lambda grammar: body is either an **expression** or a **block**. | [**08 - Lambdas & Functional Interfaces**](../base/chapter/_08_Lambdas_and_Functional_Interfaces/README.md) |
 
 ---
 
+## ✅ Correct Answers
+
+All correct answers are logged here to retain evidence of strengths as well as weaknesses. Questions that exposed uncertainty are also examined separately below.
+
+| Question | Repo Section |
+|---|---|
+| Q1 | [**06 - Class Design**](../base/chapter/_06_Class_Design/README.md) |
+| Q3 | [**08 - Lambdas & Functional Interfaces**](../base/chapter/_08_Lambdas_and_Functional_Interfaces/README.md) |
+| Q5 | [**12 - Modules**](../base/chapter/_12_Modules/README.md) |
+| Q6 | [**09 - Collections & Generics**](../base/chapter/_09_Collections_and_Generics/README.md) |
+| Q7 | [**07 - Beyond Classes**](../base/chapter/_07_Beyond_Classes/README.md) |
+| Q8 | [**10 - Streams**](../base/chapter/_10_Streams/README.md) |
+| Q9 | [**08 - Lambdas & Functional Interfaces**](../base/chapter/_08_Lambdas_and_Functional_Interfaces/README.md) |
+| Q10 | [**05 - Methods**](../base/chapter/_05_Methods/README.md) |
+| Q12 | [**04 - Core APIs**](../base/chapter/_04_Core_APIs/README.md) |
+| Q14 | [**13 - Concurrency**](../base/chapter/_13_Concurrency/README.md) |
+| Q15 | [**14 - Input/Output**](../base/chapter/_14_Input_Output/README.md) |
+| Q17 | [**09 - Collections & Generics**](../base/chapter/_09_Collections_and_Generics/README.md) |
+| Q18 | [**04 - Core APIs**](../base/chapter/_04_Core_APIs/README.md) |
+| Q21 | [**04 - Core APIs**](../base/chapter/_04_Core_APIs/README.md) |
+| Q22 | [**04 - Core APIs**](../base/chapter/_04_Core_APIs/README.md) |
+| Q23 | [**10 - Streams**](../base/chapter/_10_Streams/README.md) |
+| Q24 | [**13 - Concurrency**](../base/chapter/_13_Concurrency/README.md) |
+| Q26 | [**04 - Core APIs**](../base/chapter/_04_Core_APIs/README.md) |
+| Q27 | [**11 - Exceptions & Localisation**](../base/chapter/_11_Exceptions_and_Localisation/README.md) |
+| Q29 | [**11 - Exceptions & Localisation**](../base/chapter/_11_Exceptions_and_Localisation/README.md) |
+| Q32 | [**06 - Class Design**](../base/chapter/_06_Class_Design/README.md) |
+| Q35 | [**11 - Exceptions & Localisation**](../base/chapter/_11_Exceptions_and_Localisation/README.md) |
+| Q36 | [**09 - Collections & Generics**](../base/chapter/_09_Collections_and_Generics/README.md) |
+| Q38 | [**11 - Exceptions & Localisation**](../base/chapter/_11_Exceptions_and_Localisation/README.md) |
+| Q39 | [**10 - Streams**](../base/chapter/_10_Streams/README.md) |
+| Q40 | [**14 - Input/Output**](../base/chapter/_14_Input_Output/README.md) |
+| Q41 | [**04 - Core APIs**](../base/chapter/_04_Core_APIs/README.md) |
+| Q42 | [**10 - Streams**](../base/chapter/_10_Streams/README.md) |
+| Q43 | [**06 - Class Design**](../base/chapter/_06_Class_Design/README.md) |
+| Q44 | [**07 - Beyond Classes**](../base/chapter/_07_Beyond_Classes/README.md) |
+| Q48 | [**09 - Collections & Generics**](../base/chapter/_09_Collections_and_Generics/README.md) |
+| Q50 | [**04 - Core APIs**](../base/chapter/_04_Core_APIs/README.md) |
+
+---
+
 ## ✅ Correct Answers That Exposed Uncertainty 🤔
 
-These did not cost marks, so they are lower priority. They are worth recognising so that the same API does not cause hesitation on a later exam.
+These answers were correct but exposed knowledge that was not completely secure. They are lower priority than incorrect answers but useful indicators for targeted revision.
 
 | Question | Area | Observation | Repo Section |
 |---|---|---|---|
@@ -73,53 +116,66 @@ These did not cost marks, so they are lower priority. They are worth recognising
 
 ## 🚩 Review Priority
 
-| Priority                            | Repo Section                             | Evidence from Exam                                                       | Review Focus                                                                                   |
-|-------------------------------------|------------------------------------------|--------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
-| 🔴 **High**                         | [**10 - Streams**](../base/chapter/_10_Streams/README.md)                         | Q4, Q13, Q28, Q33 incorrect; Q8 correct for wrong reason; Q42 unfamiliar | `reduce` overloads, laziness, short-circuiting, collectors, primitive streams, stream creation |
-| 🔴 **High**                         | [**09 - Collections & Generics**](../base/chapter/_09_Collections_and_Generics/README.md)          | Q11 and Q47 incorrect; Q36 uncertain                                     | `Deque`, `TreeSet`/`NavigableSet`, collection utility methods                                  |
-| 🟠 **Medium-High**                  | [**14 - Input/Output**](../base/chapter/_14_Input_Output/README.md)                    | Q25 and Q34 incorrect                                                    | Writer/output constructors, `Files` methods, move/delete semantics                             |
-| 🟠 **Medium**                       | [**12 - Modules**](../base/chapter/_12_Modules/README.md)                         | Q31 conceptual miss; Q45 tool-option recall                              | unnamed/automatic/explicit modules; exports/readability; `jdeps`                               |
-| 🟠 **Medium**                       | [**08 - Lambdas & Functional Interfaces**](../base/chapter/_08_Lambdas_and_Functional_Interfaces/README.md) | Q37 and Q49 incorrect; Q3 slow                                           | lambda body grammar, result compatibility, SAM identification                                  |
-| 🟠 **Medium**                       | [**06 - Class Design**](../base/chapter/_06_Class_Design/README.md)                    | Q19 and Q46 incorrect; Q32 strong                                        | inner/static nested classes and constructor edge cases                                         |
-| 🟡 **Targeted**                     | [**11 - Exceptions & Localisation**](../base/chapter/_11_Exceptions_and_Localisation/README.md)       | Q20 incorrect; Q29 and Q35 correct                                       | ordinary `finally` versus TWR suppression                                                      |
-| 🟡 **Targeted**                     | [**04 - Core APIs**](../base/chapter/_04_Core_APIs/README.md)                       | Q16 incorrect; several unfamiliar-but-correct APIs                       | date/time formatting and recognition of less-common APIs                                       |
-| 🟡 **Targeted**                     | [**07 - Beyond Classes**](../base/chapter/_07_Beyond_Classes/README.md)                  | Q30 incorrect; Q44 correct                                               | interface static/default inheritance rules                                                     |
-| 🟡 **Targeted**                     | [**13 - Concurrency**](../base/chapter/_13_Concurrency/README.md)                     | Q2 incorrect                                                             | `ConcurrentHashMap` constructors                                                               |
-| 🟢 **No specific issue identified** | [**01 - Building Blocks**](../base/chapter/_01_Building_Blocks/README.md)                 | No clear weakness from reviewed questions                                | Normal revision only                                                                           |
-| 🟢 **No specific issue identified** | [**02 - Operators**](../base/chapter/_02_Operators/README.md)                       | No clear weakness from reviewed questions                                | Normal revision only                                                                           |
-| 🟢 **No specific issue identified** | [**03 - Making Decisions**](../base/chapter/_03_Making_Decisions/README.md)                | No clear weakness from reviewed questions                                | Normal revision only                                                                           |
-| 🟢 **No specific issue identified** | [**05 - Methods**](../base/chapter/_05_Methods/README.md)                         | No clear weakness from reviewed questions                                | Normal revision only                                                                           |
+| Priority | Repo Section | Evidence from Exam | Review Focus |
+|---|---|---|---|
+| 🔴 **High** | [**10 - Streams**](../base/chapter/_10_Streams/README.md) | ❌ Q4, Q13, Q28, Q33 · 🤔 Q8, Q42 · ✅ Q23, Q39 | `reduce` overloads, laziness, short-circuiting, collectors, primitive streams and stream creation |
+| 🔴 **High** | [**09 - Collections & Generics**](../base/chapter/_09_Collections_and_Generics/README.md) | ❌ Q11, Q47 · 🤔 Q36 · ✅ Q6, Q17, Q48 | `Deque`, `TreeSet`/`NavigableSet`, collection utility methods; reinforce API-specific gaps |
+| 🟠 **Medium-High** | [**14 - Input/Output**](../base/chapter/_14_Input_Output/README.md) | ❌ Q25, Q34 · ✅ Q15, Q40 | Writer/output constructors, `Files` methods, move/delete semantics |
+| 🟠 **Medium** | [**12 - Modules**](../base/chapter/_12_Modules/README.md) | ❌ Q31, Q45 · ✅ Q5 | unnamed/automatic/explicit modules; exports/readability; `jdeps` |
+| 🟠 **Medium** | [**08 - Lambdas & Functional Interfaces**](../base/chapter/_08_Lambdas_and_Functional_Interfaces/README.md) | ❌ Q37, Q49 · 🤔 Q3 · ✅ Q9 | lambda body grammar, result compatibility, SAM identification |
+| 🟡 **Targeted** | [**06 - Class Design**](../base/chapter/_06_Class_Design/README.md) | ❌ Q19 · 🤔 Q32 · ✅ Q1, Q43 | constructor modifiers and constructor/class edge cases |
+| 🟡 **Targeted** | [**11 - Exceptions & Localisation**](../base/chapter/_11_Exceptions_and_Localisation/README.md) | ❌ Q20 · 🤔 Q29, Q35 · ✅ Q27, Q38 | ordinary `finally` versus TWR suppression; maintain localisation/exception knowledge |
+| 🟡 **Targeted** | [**04 - Core APIs**](../base/chapter/_04_Core_APIs/README.md) | ❌ Q16 · 🤔 Q12, Q18, Q21, Q50 · ✅ Q22, Q26, Q41 | date/time formatting and recognition of less-common APIs |
+| 🟡 **Targeted** | [**07 - Beyond Classes**](../base/chapter/_07_Beyond_Classes/README.md) | ❌ Q30, Q46 · 🤔 Q44 · ✅ Q7 | interface static/default inheritance rules; nested-class construction; record field rules |
+| 🟡 **Targeted** | [**13 - Concurrency**](../base/chapter/_13_Concurrency/README.md) | ❌ Q2 · ✅ Q14, Q24 | `ConcurrentHashMap` constructors; maintain existing concurrency knowledge |
+| 🟢 **No specific issue identified** | [**05 - Methods**](../base/chapter/_05_Methods/README.md) | ✅ Q10 | Normal revision only |
+| 🟢 **No specific issue identified** | [**01 - Building Blocks**](../base/chapter/_01_Building_Blocks/README.md) | No questions mapped | Normal revision only |
+| 🟢 **No specific issue identified** | [**02 - Operators**](../base/chapter/_02_Operators/README.md) | No questions mapped | Normal revision only |
+| 🟢 **No specific issue identified** | [**03 - Making Decisions**](../base/chapter/_03_Making_Decisions/README.md) | No questions mapped | Normal revision only |
 
+### Evidence Key
+
+- ❌ Incorrect
+- 🤔 Correct, but exposed uncertainty
+- ✅ Correct without identified concern
 ---
 
 ## JDK 25 Addendum
 
-No incorrect answer from this practice exam clearly indicates a weakness in one of the dedicated JDK 25 addendum topics.
+Practice Exam 1 did not appear to directly test any of the dedicated JDK 25 addendum topics. The exam therefore provides no meaningful evidence of proficiency or weakness in these areas.
 
-| Addendum Topic                                           | Exam 1 Finding                  |
-|----------------------------------------------------------|---------------------------------|
-| [Flexible Constructor Bodies (JEP 513)](../addendum/Flexible_Constructor_Bodies/README.md)                    | No specific weakness identified |
-| [Unnamed Variables and Patterns (`_`)](../addendum/Unnamed_Variables/README.md)                     | No specific weakness identified |
-| [Module Import Declarations (JEP 511)](../addendum/Module_Import_Declarations/README.md)                     | No specific weakness identified |
-| [Compact Source Files and Instance Main Methods (JEP 512)](../addendum/Compact_Source_Files_and_Instance_Main_Methods/README.md) | No specific weakness identified |
-| [Stream Gatherers](../addendum/Stream_Gatherers/README.md)                                         | No specific weakness identified |
-| [Scoped Values (JEP 506)](../addendum/Scoped_Values/README.md)                                  | No specific weakness identified |
-| [Minor API Additions](../addendum/Minor_Api_Additions/README.md)                                      | No specific weakness identified |
+| Addendum Topic | Exam 1 Finding |
+|---|---|
+| [Flexible Constructor Bodies (JEP 513)](../addendum/Flexible_Constructor_Bodies/README.md) | Not directly tested |
+| [Unnamed Variables and Patterns (`_`)](../addendum/Unnamed_Variables/README.md) | Not directly tested |
+| [Module Import Declarations (JEP 511)](../addendum/Module_Import_Declarations/README.md) | Not directly tested |
+| [Compact Source Files and Instance Main Methods (JEP 512)](../addendum/Compact_Source_Files_and_Instance_Main_Methods/README.md) | Not directly tested |
+| [Stream Gatherers](../addendum/Stream_Gatherers/README.md) | Not directly tested |
+| [Scoped Values (JEP 506)](../addendum/Scoped_Values/README.md) | Not directly tested |
+| [Minor API Additions](../addendum/Minor_Api_Additions/README.md) | Not directly tested |
 
-The module questions in Q31 and Q45 belong more naturally under **12 - Modules**, because they concern existing JPMS concepts and `jdeps`, rather than the JDK 25 [module-import addition](../addendum/Module_Import_Declarations/README.md).
+The module questions concern established JPMS concepts, `ServiceLoader` and `jdeps`, rather than JDK 25 module-import declarations.
 
-Likewise, the Stream questions concern the established Stream API rather than JDK 25 [Stream Gatherers](../addendum/Stream_Gatherers/README.md).
+Likewise, the Stream questions concern the established Stream API rather than JDK 25 Stream Gatherers.
+
+Constructor chaining was tested, but not the Java 25 Flexible Constructor Bodies feature.
 
 ---
 
 ## Overall Assessment
 
-The 64% score was only **two questions below the 68% pass mark**, but the objective is not merely to recover two marks.
+The 64% score was only **two questions below the 68% pass mark**. The full answer record shows that the result was not caused by broad weakness across the syllabus: correct answers were spread across most of the Java 21 chapter areas tested.
 
-The strongest revision target from this exam is [**10 - Streams**](../base/chapter/_10_Streams/README.md). Multiple independent questions exposed gaps in reduction, laziness, collectors and primitive stream APIs.
+The strongest revision target from this exam is [**10 - Streams**](../base/chapter/_10_Streams/README.md). Although several Stream questions were answered correctly, multiple independent questions exposed gaps in reduction, laziness, collectors and primitive stream APIs.
 
-The next useful cluster is **[Collections](../base/chapter/_09_Collections_and_Generics/README.md) + [I/O](../base/chapter/_14_Input_Output/README.md)**, where several less-familiar APIs caused uncertainty or incorrect answers.
+The next significant areas are [**09 - Collections & Generics**](../base/chapter/_09_Collections_and_Generics/README.md) and [**14 - Input/Output**](../base/chapter/_14_Input_Output/README.md). Both contain successful answers as well as mistakes, indicating specific API gaps rather than a complete lack of understanding.
 
-The remaining errors are comparatively narrow language/API rules that can be repaired individually rather than requiring complete chapter rereads.
+[**12 - Modules**](../base/chapter/_12_Modules/README.md) and [**08 - Lambdas & Functional Interfaces**](../base/chapter/_08_Lambdas_and_Functional_Interfaces/README.md) contain multiple distinct gaps and warrant focused reinforcement.
 
-The JDK 25 addendum material did **not** emerge as a significant weakness in this exam. Most lost marks came from established Java language and library material already represented by the Java 21 chapter structure.
+The remaining chapters primarily show narrower issues alongside successful answers. Class Design, Concurrency, Core APIs, Beyond Classes and Exceptions/Localisation are therefore best approached through targeted revision of the identified gaps rather than comprehensive relearning.
+
+Building Blocks, Operators, Making Decisions and Methods provide no specific evidence of weakness from this exam and require only normal revision.
+
+The dedicated JDK 25 addendum topics were not directly tested, so PE1 provides little evidence either for or against proficiency in those areas.
+
+Overall, PE1 indicates a **reasonably broad foundation with a small number of concentrated weaknesses**. The main purpose of the chapter sweep is therefore to close specific gaps, reinforce uncertain knowledge and preserve areas that are already working.

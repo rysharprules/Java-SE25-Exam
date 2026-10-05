@@ -18,4 +18,7 @@ Code packages match the naming of the md.
 
 | Title | File |
 |---|---|
+| Interfaces | [interfaces.md](interfaces.md) |
+| Nested Classes | [nested_classes.md](nested_classes.md) |
+| Records | [records.md](records.md) |
 | Sealing Classes | [sealed.md](sealed.md) |
