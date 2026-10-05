@@ -1,9 +1,10 @@
 # Queue & Deque
 
-`Queue` represents elements waiting to be processed, while `Deque` extends the idea to allow operations at both ends and can therefore behave as either a queue or a stack.
+`Queue` represents elements waiting to be processed, while `Deque` allows operations at both ends and can therefore behave as either a FIFO queue or a LIFO stack.
 
 ## Contents
 
+- [Interface Hierarchy](#interface-hierarchy)
 - [Queue](#queue)
 - [Queue Method Pairs](#queue-method-pairs)
 - [FIFO Queue Behaviour](#fifo-queue-behaviour)
@@ -11,6 +12,7 @@
 - [Deque Method Pairs](#deque-method-pairs)
 - [FIFO with Deque](#fifo-with-deque)
 - [LIFO Stack with Deque](#lifo-stack-with-deque)
+- [FIFO vs LIFO](#fifo-vs-lifo)
 - [ArrayDeque](#arraydeque)
 - [LinkedList as a Deque](#linkedlist-as-a-deque)
 - [Quick Reference](#quick-reference)
@@ -18,31 +20,49 @@
 
 ---
 
+## Interface Hierarchy
+
+The important relationship is:
+
+```text
+Collection
+    ↑
+  Queue
+    ↑
+  Deque
+```
+
+`Deque` extends both `Queue` and `SequencedCollection`.
+
+Therefore a `Deque` has:
+
+- normal `Queue` operations such as `offer()`, `poll()` and `peek()`
+- first/last operations
+- stack operations such as `push()` and `pop()`
+
+Common implementations are:
+
+```java
+Queue<String> queue = new ArrayDeque<>();
+
+Deque<String> deque = new ArrayDeque<>();
+Deque<String> linked = new LinkedList<>();
+```
+
+The general `SequencedCollection` API is covered in
+[Collections](collections.md#sequenced-collections).
+
+---
+
 ## Queue
 
-`Queue<E>` extends `Collection<E>`.
-
-A queue normally processes elements in **FIFO** order:
+A `Queue` normally processes elements in **FIFO** order:
 
 ```text
 FIFO = First In, First Out
 ```
 
 For example:
-
-```text
-add A
-add B
-add C
-
-[A, B, C]
- ↑
-next element removed
-```
-
-`A` entered first, so `A` leaves first.
-
-A typical queue can be created using `ArrayDeque`:
 
 ```java
 Queue<String> queue = new ArrayDeque<>();
@@ -56,51 +76,87 @@ System.out.println(queue.poll()); // B
 System.out.println(queue.poll()); // C
 ```
 
+Conceptually:
+
+```text
+HEAD                  TAIL
+ ↓                      ↓
+[A] → [B] → [C]
+ ↑
+leaves first
+```
+
+`A` entered first, so `A` leaves first.
+
 ---
 
 ## Queue Method Pairs
 
-`Queue` provides two versions of its main operations.
+`Queue` provides two versions of its three main operations.
 
-| Operation | Throws exception on failure | Special value on failure |
+| Operation | Exception Form | Special-Value Form |
 |---|---|---|
 | Insert | `add(e)` | `offer(e)` |
 | Remove | `remove()` | `poll()` |
 | Examine | `element()` | `peek()` |
 
-The most important difference appears when an operation cannot be performed.
+The difference is what happens when the operation cannot be performed.
 
-### Empty Queue
+### Removing from an Empty Queue
 
 ```java
 Queue<String> queue = new ArrayDeque<>();
-```
 
-Removing:
-
-```java
 queue.remove(); // NoSuchElementException
-
-queue.poll();   // null
 ```
 
-Examining the head:
+But:
 
 ```java
-queue.element(); // NoSuchElementException
+Queue<String> queue = new ArrayDeque<>();
 
-queue.peek();    // null
+System.out.println(queue.poll()); // null
 ```
 
 Therefore:
 
 ```text
-remove()  → exception if empty
-poll()    → null if empty
+remove() → element
+         → NoSuchElementException if empty
 
-element() → exception if empty
-peek()    → null if empty
+poll()   → element
+         → null if empty
 ```
+
+---
+
+### Examining an Empty Queue
+
+`element()` and `peek()` examine the head without removing it.
+
+```java
+Queue<String> queue = new ArrayDeque<>();
+
+queue.element(); // NoSuchElementException
+```
+
+But:
+
+```java
+System.out.println(queue.peek()); // null
+```
+
+Therefore:
+
+```text
+element() → HEAD
+          → NoSuchElementException if empty
+
+peek()    → HEAD
+          → null if empty
+```
+
+---
 
 ### `add()` vs `offer()`
 
@@ -111,39 +167,50 @@ queue.add("A");
 queue.offer("B");
 ```
 
-For a capacity-restricted queue that cannot accept the element:
+If a capacity-restricted queue cannot accept another element:
 
 ```text
 add()   → exception
 offer() → false
 ```
 
-For an ordinary unbounded `ArrayDeque`, both normally succeed.
+For an ordinary `ArrayDeque`, both normally succeed because it dynamically
+grows as required.
 
-Memory pattern:
+---
+
+### Queue Failure Pattern
+
+The methods form a useful pattern:
 
 ```text
-EXCEPTION methods:
-add
-remove
-element
+EXCEPTION FAMILY
 
-SPECIAL-VALUE methods:
-offer → false
-poll  → null
-peek  → null
+add(e)    → exception if insertion fails
+remove()  → NoSuchElementException if empty
+element() → NoSuchElementException if empty
+```
+
+versus:
+
+```text
+SPECIAL-VALUE FAMILY
+
+offer(e) → false if insertion fails
+poll()   → null if empty
+peek()   → null if empty
 ```
 
 ---
 
 ## FIFO Queue Behaviour
 
-The three methods worth associating immediately with normal queue behaviour are:
+The three methods most strongly associated with normal queue behaviour are:
 
 ```text
-offer → add at TAIL
-poll  → remove from HEAD
-peek  → examine HEAD
+offer → TAIL
+poll  → HEAD
+peek  → HEAD
 ```
 
 Example:
@@ -164,17 +231,22 @@ System.out.println(queue);        // [B, C]
 Conceptually:
 
 ```text
-HEAD                  TAIL
- ↓                      ↓
-[A] → [B] → [C] → offer(D)
+HEAD                         TAIL
+ ↓                             ↓
+[A] → [B] → [C] ← offer("C")
 
+ ↑
 poll()
-  ↓
-
-[A] leaves first
+peek()
 ```
 
-So:
+`peek()` examines the head.
+
+`poll()` removes the head.
+
+`offer()` adds at the tail.
+
+Memory rule:
 
 ```text
 QUEUE / FIFO
@@ -190,38 +262,25 @@ peek  → HEAD
 
 `Deque` means **double-ended queue**.
 
-It extends both:
+It extends `Queue`, but allows operations at both ends:
 
 ```text
-Queue
-+
-SequencedCollection
+FIRST / HEAD                    LAST / TAIL
+     ↓                               ↓
+    [A] ↔ [B] ↔ [C] ↔ [D]
+     ↑                               ↑
+ operations                       operations
+ at first                         at last
 ```
 
-A deque allows operations at both ends:
-
-```text
-             Deque
-
-FIRST                       LAST
-  ↓                           ↓
-[A] ↔ [B] ↔ [C] ↔ [D]
- ↑                           ↑
-operations                 operations
-at first                   at last
-```
-
-This means a `Deque` can naturally be used as:
+This allows a `Deque` to be used as either:
 
 ```text
 QUEUE → FIFO
-
-or
-
 STACK → LIFO
 ```
 
-Common implementations include:
+Common implementations are:
 
 ```java
 Deque<String> deque = new ArrayDeque<>();
@@ -237,24 +296,30 @@ Deque<String> deque = new LinkedList<>();
 
 ## Deque Method Pairs
 
-`Deque` expands the Queue API with explicit operations for both ends.
+`Deque` provides explicit operations for both ends.
 
 ### Adding
 
-| First | Last |
+| First / Head | Last / Tail |
 |---|---|
 | `addFirst(e)` | `addLast(e)` |
 | `offerFirst(e)` | `offerLast(e)` |
 
-The `add` versions throw if insertion cannot be performed.
+Failure behaviour:
 
-The `offer` versions return `false`.
+```text
+addFirst / addLast
+→ exception if insertion fails
+
+offerFirst / offerLast
+→ false if insertion fails
+```
 
 ---
 
 ### Removing
 
-| First | Last |
+| First / Head | Last / Tail |
 |---|---|
 | `removeFirst()` | `removeLast()` |
 | `pollFirst()` | `pollLast()` |
@@ -273,7 +338,7 @@ pollFirst / pollLast
 
 ### Examining
 
-| First | Last |
+| First / Head | Last / Tail |
 |---|---|
 | `getFirst()` | `getLast()` |
 | `peekFirst()` | `peekLast()` |
@@ -288,7 +353,11 @@ peekFirst / peekLast
 → null
 ```
 
-The naming pattern is therefore:
+---
+
+### Deque Failure Pattern
+
+The same naming pattern appears throughout the API:
 
 ```text
 add     → exception
@@ -299,6 +368,19 @@ poll    → null
 
 get     → exception
 peek    → null
+```
+
+This applies to both ends:
+
+```text
+addFirst      addLast
+offerFirst    offerLast
+
+removeFirst   removeLast
+pollFirst     pollLast
+
+getFirst      getLast
+peekFirst     peekLast
 ```
 
 ---
@@ -322,23 +404,23 @@ System.out.println(deque.pollFirst()); // C
 Conceptually:
 
 ```text
-FIRST                     LAST
-  ↓                         ↓
-[A] → [B] → [C]
+HEAD / FIRST                 TAIL / LAST
+     ↓                            ↓
+    [A] → [B] → [C]
 
- ↑                 ← offerLast()
- |
-pollFirst()
+     ↑                       ← offerLast()
+     |
+ pollFirst()
 ```
 
-So FIFO can be expressed explicitly as:
+Therefore FIFO can be expressed explicitly as:
 
 ```text
-INSERT → LAST
-REMOVE → FIRST
+INSERT → TAIL
+REMOVE → HEAD
 ```
 
-The inherited Queue methods correspond naturally to this:
+The normal Queue methods are equivalent to:
 
 ```text
 offer(e) → offerLast(e)
@@ -348,7 +430,7 @@ poll()   → pollFirst()
 peek()   → peekFirst()
 ```
 
-Therefore:
+So:
 
 ```java
 deque.offer("A");
@@ -356,24 +438,109 @@ deque.poll();
 deque.peek();
 ```
 
-is normal FIFO queue behaviour.
+uses normal FIFO queue behaviour.
 
 ---
 
 ## LIFO Stack with Deque
 
-A deque can also behave as a **stack**.
+`Deque` also provides methods specifically for using it as a **stack**.
 
 ```text
 LIFO = Last In, First Out
 ```
 
-The stack-specific methods are:
+The stack methods are:
+
+```java
+push(e);
+pop();
+peek();
+```
+
+`push()` and `pop()` are defined by `Deque`.
+
+All three stack operations use the **head/first end**:
+
+| Stack Method | Equivalent Deque Operation | End Used | Failure Behaviour |
+|---|---|---|---|
+| `push(e)` | `addFirst(e)` | HEAD | exception if insertion fails |
+| `pop()` | `removeFirst()` | HEAD | `NoSuchElementException` if empty |
+| `peek()` | `peekFirst()` | HEAD | `null` if empty |
+
+Conceptually:
+
+```text
+HEAD / STACK TOP             TAIL
+       ↓                       ↓
+      [C] → [B] → [A]
+       ↑
+ push / pop / peek
+```
+
+### `push()`
+
+`push(e)` inserts at the **head**.
+
+It is equivalent to:
+
+```java
+deque.addFirst(e);
+```
+
+For example:
+
+```java
+Deque<String> stack = new ArrayDeque<>();
+
+stack.push("A"); // [A]
+stack.push("B"); // [B, A]
+stack.push("C"); // [C, B, A]
+```
+
+Each new element becomes the new head:
+
+```text
+push("A")
+
+[A]
+ ↑
+HEAD
+
+
+push("B")
+
+[B, A]
+ ↑
+HEAD
+
+
+push("C")
+
+[C, B, A]
+ ↑
+HEAD
+```
+
+Therefore:
 
 ```text
 push(e)
-pop()
-peek()
+→ addFirst(e)
+→ add at HEAD
+→ exception-style insertion
+```
+
+---
+
+### `pop()`
+
+`pop()` removes and returns the element at the **head**.
+
+It is equivalent to:
+
+```java
+deque.removeFirst();
 ```
 
 Example:
@@ -385,68 +552,112 @@ stack.push("A");
 stack.push("B");
 stack.push("C");
 
+// [C, B, A]
+
 System.out.println(stack.pop()); // C
-System.out.println(stack.pop()); // B
-System.out.println(stack.pop()); // A
+System.out.println(stack);       // [B, A]
 ```
 
-Why?
+If the deque is empty:
 
-`push()` operates at the **first/head** end.
-
-Starting empty:
-
-```text
-push A → [A]
-
-push B → [B, A]
-
-push C → [C, B, A]
-          ↑
-         TOP
+```java
+stack.pop(); // NoSuchElementException
 ```
-
-Then:
-
-```text
-pop() → C
-pop() → B
-pop() → A
-```
-
-The stack methods correspond to deque methods:
-
-```text
-push(e) → addFirst(e)
-
-pop()   → removeFirst()
-
-peek()  → peekFirst()
-```
-
-Notice that `pop()` uses the exception-style removal operation.
 
 Therefore:
+
+```text
+pop()
+→ removeFirst()
+→ remove HEAD
+→ return removed element
+→ NoSuchElementException if empty
+```
+
+---
+
+### `peek()`
+
+`peek()` examines the element at the **head without removing it**.
+
+It is equivalent to:
+
+```java
+deque.peekFirst();
+```
+
+Example:
 
 ```java
 Deque<String> stack = new ArrayDeque<>();
 
-stack.pop(); // NoSuchElementException
+stack.push("A");
+stack.push("B");
+
+// [B, A]
+
+System.out.println(stack.peek()); // B
+System.out.println(stack);        // [B, A]
 ```
 
-when empty.
+If the deque is empty:
+
+```java
+System.out.println(stack.peek()); // null
+```
+
+Therefore:
+
+```text
+peek()
+→ peekFirst()
+→ examine HEAD
+→ does not remove
+→ null if empty
+```
+
+---
+
+### `pop()` vs `poll()`
+
+`pop()` and `poll()` both remove from the **head**.
+
+Their difference is failure behaviour.
+
+```text
+pop()
+→ removeFirst()
+→ HEAD
+→ NoSuchElementException if empty
+
+poll()
+→ pollFirst()
+→ HEAD
+→ null if empty
+```
+
+Given:
+
+```text
+[A, B, C]
+ ↑
+HEAD
+```
+
+both `pop()` and `poll()` would remove `A`.
+
+The difference between queue and stack behaviour therefore comes primarily
+from **where elements are inserted**.
 
 ---
 
 ## FIFO vs LIFO
 
-This is the key distinction to make automatic.
+This is the key distinction.
 
-### Queue
+### Queue / FIFO
 
 ```text
-FIFO
-
 offer → TAIL
 poll  → HEAD
 peek  → HEAD
@@ -461,16 +672,18 @@ deque.offer("A");
 deque.offer("B");
 deque.offer("C");
 
+// [A, B, C]
+
 System.out.println(deque.poll()); // A
 ```
 
+The first element inserted is the first removed.
+
 ---
 
-### Stack
+### Stack / LIFO
 
 ```text
-LIFO
-
 push → HEAD
 pop  → HEAD
 peek → HEAD
@@ -485,24 +698,31 @@ deque.push("A");
 deque.push("B");
 deque.push("C");
 
+// [C, B, A]
+
 System.out.println(deque.pop()); // C
 ```
 
-The important difference is therefore where insertion occurs:
+The last element inserted is the first removed.
+
+So the crucial difference is:
 
 ```text
-QUEUE:
+QUEUE
+
 offer → TAIL
 poll  → HEAD
 
-STACK:
-push  → HEAD
-pop   → HEAD
+
+STACK
+
+push → HEAD
+pop  → HEAD
 ```
 
 Both remove from the head.
 
-They differ in where new elements are inserted.
+**Insertion at opposite ends creates FIFO vs LIFO behaviour.**
 
 ---
 
@@ -518,16 +738,17 @@ It can therefore be used as either:
 
 ```text
 FIFO queue
+
 or
+
 LIFO stack
 ```
 
 Characteristics:
 
-- maintains encounter order
-- supports efficient operations at both ends
+- supports operations at both ends
 - dynamically resizes
-- **does not allow `null`**
+- does **not** allow `null`
 - does not provide indexed access
 
 This fails:
@@ -538,24 +759,27 @@ Deque<String> deque = new ArrayDeque<>();
 deque.add(null); // NullPointerException
 ```
 
-The lack of `null` support is particularly useful because methods such as:
+The prohibition of `null` also means methods such as:
 
 ```java
-poll()
-peek()
+poll();
+peek();
 ```
 
-use `null` to indicate that the deque is empty.
+can safely use `null` to represent an empty deque.
 
 ### No Indexed Access
 
-Unlike `List`, a deque does not provide:
+Unlike a `List`, a deque does not provide indexed access:
 
 ```java
+Deque<String> deque = new ArrayDeque<>();
+
 deque.get(0); // DOES NOT COMPILE
 ```
 
-Operations are based around the **first and last ends**, not indexes.
+Deque operations work with the **first/head** and **last/tail** ends rather
+than indexes.
 
 ---
 
@@ -568,15 +792,7 @@ List<E>
 Deque<E>
 ```
 
-Therefore:
-
-```java
-LinkedList<String> linked = new LinkedList<>();
-```
-
-can use both List and Deque operations.
-
-It can also be referenced through either interface:
+Therefore it can be referenced as either:
 
 ```java
 List<String> list = new LinkedList<>();
@@ -591,16 +807,24 @@ For example:
 ```java
 List<String> list = new LinkedList<>();
 
-list.get(0);       // List operation
+list.add("A");
+list.get(0);
 ```
 
-while:
+uses the `List` API.
+
+Whereas:
 
 ```java
 Deque<String> deque = new LinkedList<>();
 
-deque.offerFirst("A"); // Deque operation
+deque.offerFirst("A");
+deque.offerLast("B");
 ```
+
+uses the `Deque` API.
+
+List-specific `LinkedList` behaviour is covered in [List](list.md).
 
 ### `null`
 
@@ -612,48 +836,65 @@ Deque<String> deque = new LinkedList<>();
 deque.offer(null); // allowed
 ```
 
-This creates an important ambiguity with methods such as:
+This creates an ambiguity with special-value methods such as `poll()` and
+`peek()`:
 
 ```java
-deque.poll();
+String value = deque.poll();
 ```
 
-because `null` could mean:
+A returned `null` could represent:
 
 ```text
 the deque was empty
 
 OR
 
-the deque actually contained null
+the deque contained null
 ```
 
-This is one reason `ArrayDeque`'s prohibition of `null` works naturally with
-the special-value Queue/Deque methods.
-
-List-specific `LinkedList` behaviour is covered in [List](list.md).
+This is one reason `null` elements are discouraged when using `Queue` and
+`Deque` APIs whose special-value methods use `null` to represent emptiness.
 
 ---
 
 ## Quick Reference
 
+### Interface Hierarchy
+
+```text
+Collection
+    ↑
+  Queue
+    ↑
+  Deque
+```
+
+`Deque` also extends `SequencedCollection`.
+
+---
+
 ### Queue Methods
 
-| Operation | Exception form | Special-value form |
+| Operation | Exception Form | Special-Value Form |
 |---|---|---|
 | Insert | `add(e)` | `offer(e)` → `false` |
 | Remove | `remove()` | `poll()` → `null` |
 | Examine | `element()` | `peek()` → `null` |
 
+---
+
 ### Deque Methods
 
-| Operation | First — exception | First — special | Last — exception | Last — special |
+| Operation | First — Exception | First — Special | Last — Exception | Last — Special |
 |---|---|---|---|---|
 | Insert | `addFirst` | `offerFirst` | `addLast` | `offerLast` |
 | Remove | `removeFirst` | `pollFirst` | `removeLast` | `pollLast` |
 | Examine | `getFirst` | `peekFirst` | `getLast` | `peekLast` |
 
-### Queue Aliases
+---
+
+### Queue Equivalents
 
 ```text
 offer(e) → offerLast(e)
@@ -661,13 +902,23 @@ poll()   → pollFirst()
 peek()   → peekFirst()
 ```
 
-### Stack Aliases
+---
+
+### Stack Equivalents
 
 ```text
 push(e) → addFirst(e)
 pop()   → removeFirst()
 peek()  → peekFirst()
 ```
+
+All stack operations use the:
+
+```text
+HEAD / FIRST
+```
+
+---
 
 ### FIFO
 
@@ -677,6 +928,8 @@ poll  → HEAD
 peek  → HEAD
 ```
 
+---
+
 ### LIFO
 
 ```text
@@ -684,6 +937,8 @@ push → HEAD
 pop  → HEAD
 peek → HEAD
 ```
+
+---
 
 ### Implementations
 
@@ -695,7 +950,7 @@ ArrayDeque
 
 LinkedList
 → List + Deque
-→ allows null
+→ null allowed
 ```
 
 ---
@@ -717,6 +972,20 @@ pop  → HEAD
 peek → HEAD
 
 
+WHY FIFO vs LIFO?
+
+Queue inserts at TAIL and removes from HEAD.
+
+Stack inserts at HEAD and removes from HEAD.
+
+
+STACK ALIASES:
+
+push → addFirst
+pop  → removeFirst
+peek → peekFirst
+
+
 EXCEPTION FAMILY:
 
 add
@@ -726,6 +995,9 @@ element
 addFirst / addLast
 removeFirst / removeLast
 getFirst / getLast
+
+push → addFirst
+pop  → removeFirst
 
 
 SPECIAL-VALUE FAMILY:
@@ -739,11 +1011,23 @@ pollFirst / pollLast
 peekFirst / peekLast
 
 
-ARRAYDEQUE
-→ Deque
-→ NO null
+POP vs POLL:
 
-LINKEDLIST
-→ List + Deque
-→ null allowed
+both remove HEAD
+
+pop  → exception if empty
+poll → null if empty
+
+
+ARRAYDEQUE:
+
+Deque
+NO null
+NO indexed access
+
+
+LINKEDLIST:
+
+List + Deque
+null allowed
 ```

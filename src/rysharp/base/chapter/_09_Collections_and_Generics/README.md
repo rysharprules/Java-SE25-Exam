@@ -13,4 +13,9 @@ Code packages match the naming of the md.
 
 | Title | File |
 |---|---|
-| *(None)* | — |
+| Collections | [collections.md](collections.md) |
+| Generics | [generics.md](generics.md) |
+| List | [list.md](list.md) |
+| Map | [map.md](map.md) |
+| Queue & Deque | [queue_deque.md](queue_deque.md) |
+| Set | [set.md](set.md) |
