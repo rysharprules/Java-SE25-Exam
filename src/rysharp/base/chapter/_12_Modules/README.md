@@ -14,4 +14,5 @@ Code packages match the naming of the md.
 
 | Title | File |
 |---|---|
-| *(None)* | — |
+| Java Modules | [modules.md](modules.md) |
+| Java Modules Commands | [commands.md](commands.md) |
