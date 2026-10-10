@@ -1,5 +1,7 @@
 # Exceptions and Localisation
 
+[🔙 Back](../../../../../README.md)
+
 | #  | Question Type/Description | My Answer | Actual Answer | Code Reference                                                                                                        | Notes                                                                                                                                                                                                                                                     |
 |----|---------------------------|-----------|---------------|-----------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 1  | exceptions                | ad        | acde          |                                                                                                                       | A method that declares an exception isn’t required to throw one. Unchecked exceptions can be thrown in any method                                                                                                                                         |
@@ -29,7 +31,6 @@
 | 25 | localization              | b         | a             |                                                                                                                       |                                                                                                                                                                                                                                                           |
 | 26 | exceptions                | acef      | bf            |                                                                                                                       | It is not a good idea to catch Error in practice, although because it is possible, it may come up on the exam.                                                                                                                                            |
 
-Date Completed:
 Minimum Score to Pass: 68% (34/50 in real exam)
 Correct: 12 out of 26
 Percentage: 46%

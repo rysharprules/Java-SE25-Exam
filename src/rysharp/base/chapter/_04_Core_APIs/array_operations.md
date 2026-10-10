@@ -1,5 +1,7 @@
 # Array Operations
 
+[🔙 Back](README.md)
+
 Quick reference for common array operations and the `java.util.Arrays` API.
 
 ```java

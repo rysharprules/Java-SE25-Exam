@@ -1,5 +1,7 @@
 # Primitive Streams
 
+[🔙 Back](README.md)
+
 Primitive streams provide specialised stream types for `int`, `long` and `double`, avoiding the need to box every primitive value into a wrapper object.
 
 ## Contents

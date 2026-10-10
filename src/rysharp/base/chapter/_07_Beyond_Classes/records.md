@@ -1,5 +1,7 @@
 # Records
 
+[🔙 Back](README.md)
+
 Quick reference for Java records, their generated members, constructors, fields and inheritance rules.
 
 ## Contents

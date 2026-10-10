@@ -1,5 +1,7 @@
 # Collectors
 
+[🔙 Back](README.md)
+
 Collectors perform mutable reductions on streams, accumulating elements into collections, maps, strings, statistics, groups, partitions, or other result types.
 
 ## Contents

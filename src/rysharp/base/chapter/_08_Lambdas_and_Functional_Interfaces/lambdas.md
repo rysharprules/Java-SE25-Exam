@@ -1,5 +1,7 @@
 # Lambdas & Functional Interfaces
 
+[🔙 Back](README.md)
+
 Quick reference for lambda syntax, functional-interface families, primitive specialisations, variable capture and functional-interface convenience methods.
 
 ## Contents

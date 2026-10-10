@@ -1,5 +1,7 @@
 # Collections and Generics
 
+[🔙 Back](../../../../../README.md)
+
 
 | #  | Question Type/Description | My Answer | Actual Answer | Code Reference | Notes                                                                                                                                                                        |
 |----|---------------------------|-----------|---------------|----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -27,7 +29,6 @@
 | 22 | collections               | b         | b             |                | A TreeMap sorts its items in the natural order of keys (not the values).                                                                                                     |
 | 23 | collections               | g         | h             |                |                                                                                                                                                                              |
 
-Date Completed: 17-Aug
 Minimum Score to Pass: 68% (34/50 in real exam)
 Correct: 13 out of 23
 Percentage: 57%

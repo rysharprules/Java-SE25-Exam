@@ -1,5 +1,7 @@
 # Streams
 
+[🔙 Back](../../../../../README.md)
+
 | #  | Question Type/Description | My Answer | Actual Answer | Code Reference                                                                                                                 | Notes                                                                       |
 |----|---------------------------|-----------|---------------|--------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
 | 1  | streams                   | b         | d             |                                                                                                                                | No terminal operation is called, so the stream never executes.              |
@@ -24,7 +26,6 @@
 | 20 | optional                  | cdef      | cef           |                                                                                                                                |                                                                             |
 | 21 | spliterator               | b         | b             |                                                                                                                                |                                                                             |
 
-Date Completed: 26-Aug
 Minimum Score to Pass: 68% (34/50 in real exam)
 Correct: 9 out of 30
 Percentage: 30%

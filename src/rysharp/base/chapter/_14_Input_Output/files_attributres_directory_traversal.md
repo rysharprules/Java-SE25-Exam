@@ -1,5 +1,7 @@
 # File Attributes & Directory Traversal
 
+[🔙 Back](README.md)
+
 A focused Java NIO.2 reference covering file metadata, directory traversal, streams of paths, file visitors, symbolic links and important API distinctions.
 
 ## Contents

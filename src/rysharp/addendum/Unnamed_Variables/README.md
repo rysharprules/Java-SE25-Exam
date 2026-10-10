@@ -1,5 +1,7 @@
 # Unnamed Variables and Patterns (_)
 
+[🔙 Back](../../../../README.md)
+
 Quick reference for Java unnamed variables and patterns using `_`.
 
 ## Contents

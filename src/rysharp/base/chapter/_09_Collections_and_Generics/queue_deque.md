@@ -1,5 +1,7 @@
 # Queue & Deque
 
+[🔙 Back](README.md)
+
 `Queue` represents elements waiting to be processed, while `Deque` allows operations at both ends and can therefore behave as either a FIFO queue or a LIFO stack.
 
 ## Contents

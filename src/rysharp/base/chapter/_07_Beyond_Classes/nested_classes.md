@@ -1,5 +1,7 @@
 # Nested Classes
 
+[🔙 Back](README.md)
+
 Quick reference for static nested classes, inner classes, local classes and anonymous classes.
 
 ## Contents

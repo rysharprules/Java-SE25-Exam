@@ -1,5 +1,7 @@
 # 01 Building Blocks
 
+[🔙 Back](../../../../../README.md)
+
 | #  | Question Type/Description                         | My Answer | Actual Answer | Code Reference                                     | Notes                                                                                                                                                |
 |----|---------------------------------------------------|-----------|---------------|----------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 1  | `main` method                                     | de        | de            |                                                    |                                                                                                                                                      |
@@ -26,7 +28,6 @@
 | 22 | valid numerics (underscores, casting, unwrapping) | acfg      | cfg           |                                                    |                                                                                                                                                      |
 | 23 | numeric promotion                                 | a         | ad            |                                                    |                                                                                                                                                      |
 
-Date Completed: 2026-03-20
 Minimum Score to Pass: 68% (34/50 in real exam)
 Correct: 9 out of 23
 Percentage: 39.13%

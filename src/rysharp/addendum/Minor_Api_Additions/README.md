@@ -1,5 +1,7 @@
 # Minor API Additions
 
+[🔙 Back](../../../../README.md)
+
 Quick reference for smaller API additions and behavioural changes introduced after JDK 21 that may be relevant to Java 25.
 
 Major features such as **Module Import Declarations**, **Compact Source Files and Instance Main Methods**, **Flexible Constructor Bodies**, **Scoped Values**, **Stream Gatherers**, and **Unnamed Variables and Patterns** are covered in separate guides.

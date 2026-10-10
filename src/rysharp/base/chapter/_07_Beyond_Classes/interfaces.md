@@ -1,5 +1,7 @@
 # Interfaces & Functional Interfaces
 
+[🔙 Back](README.md)
+
 Quick reference for interface members, functional-interface rules, inheritance and method conflicts.
 
 ## Contents

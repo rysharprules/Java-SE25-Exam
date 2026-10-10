@@ -1,5 +1,7 @@
 # Java Modules
 
+[🔙 Back](README.md)
+
 A quick reference for JPMS module types, directives, services and migration.
 
 For compilation, execution, dependency analysis and packaging commands, see

@@ -1,5 +1,7 @@
 # Generics
 
+[🔙 Back](README.md)
+
 Generics provide compile-time type safety while allowing classes, interfaces and methods to work with different reference types.
 
 ## Contents

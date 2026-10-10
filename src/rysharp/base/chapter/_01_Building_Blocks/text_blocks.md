@@ -1,5 +1,7 @@
 # Text Blocks
 
+[🔙 Back](README.md)
+
 Quick reference for Java text blocks, whitespace, line endings and escape sequences.
 
 ## Contents

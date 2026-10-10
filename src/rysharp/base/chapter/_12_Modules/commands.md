@@ -1,5 +1,7 @@
 # Java Module Commands
 
+[🔙 Back](README.md)
+
 A quick reference for compiling, running, inspecting, analysing and packaging Java modules.
 
 For module types, directives, services and migration, see

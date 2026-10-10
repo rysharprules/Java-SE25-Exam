@@ -1,5 +1,7 @@
 # Collections
 
+[🔙 Back](README.md)
+
 Quick reference for the Java Collections Framework hierarchy, ordering, comparison, sorting, searching, factory methods and `Collections` utility methods.
 
 ## Contents

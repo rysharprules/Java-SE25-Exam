@@ -1,5 +1,7 @@
 # Stream Gatherers
 
+[🔙 Back](../../../../README.md)
+
 Quick reference for Java 25 Stream Gatherers and the built-in `windowFixed()`, `windowSliding()`, `fold()`, `scan()` and `mapConcurrent()` gatherers.
 
 ## Contents

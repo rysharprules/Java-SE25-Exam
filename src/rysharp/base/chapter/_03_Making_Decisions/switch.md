@@ -1,5 +1,7 @@
 # Switch
 
+[🔙 Back](README.md)
+
 Quick reference for Java `switch` statements, expressions, patterns and common compile-time traps.
 
 ## Contents

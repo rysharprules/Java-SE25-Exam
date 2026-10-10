@@ -1,5 +1,7 @@
 # Files & Paths
 
+[🔙 Back](README.md)
+
 A focused reference for Java NIO.2 paths, filesystem operations, copy/move/delete behaviour and exam-relevant API distinctions.
 
 ## Contents

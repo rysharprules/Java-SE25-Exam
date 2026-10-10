@@ -1,5 +1,7 @@
 # Lambdas and Functional Interfaces
 
+[🔙 Back](../../../../../README.md)
+
 
 | #  | Question Type/Description | My Answer | Actual Answer | Code Reference | Notes                                                                                                                                                           |
 |----|---------------------------|-----------|---------------|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -25,7 +27,6 @@
 | 20 | lambda                    | e         | e             |                |                                                                                                                                                                 |
 | 21 | functional interface      | aef       | aef           |                | A valid functional interface is one that contains a single abstract method, excluding any public methods that are already defined in the java.lang.Object class |
 
-Date Completed:
 Minimum Score to Pass: 68% (34/50 in real exam)
 Correct: 15 out of 21
 Percentage: 71%

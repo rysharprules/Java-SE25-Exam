@@ -1,5 +1,7 @@
 # Pattern Matching
 
+[🔙 Back](README.md)
+
 Quick reference for `instanceof` pattern matching and flow scoping.
 
 ## Contents

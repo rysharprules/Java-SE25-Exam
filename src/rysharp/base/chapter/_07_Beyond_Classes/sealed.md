@@ -1,5 +1,7 @@
 # Sealed Classes
 
+[🔙 Back](README.md)
+
 Quick reference for restricting inheritance with `sealed`, `permits`, `final`, `sealed` and `non-sealed`.
 
 ## Contents

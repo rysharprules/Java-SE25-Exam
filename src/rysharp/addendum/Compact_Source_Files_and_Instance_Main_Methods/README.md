@@ -1,5 +1,7 @@
 # Compact Source Files and Instance Main Methods (JEP 512)
 
+[🔙 Back](../../../../README.md)
+
 Quick reference for compact source files, instance `main` methods and the Java 25 launch protocol.
 
 ## Contents
