@@ -606,6 +606,8 @@ Return type:
 void
 ```
 
+Note, `delete()` from `java.io.File` instance does not throw. It returns true if and only if the file or directory is successfully deleted; false otherwise.
+
 ### Files.deleteIfExists()
 
 ```java
@@ -1018,4 +1020,37 @@ MOVE(source, target)
 
 NEXT OPERATION ON SOURCE
 → MAY FAIL
+```
+
+Methods that declare IOException:
+```java
+Files.createFile(path);
+Files.createDirectory(path);
+Files.copy(source, target);
+Files.move(source, target);
+Files.delete(path);
+Files.deleteIfExists(path);
+Files.isHidden(path);
+
+Files.readString(path);
+Files.writeString(path, "Hello");
+Files.size(path);
+
+Files.list(path);
+Files.walk(path);
+Files.find(path, 3, (p, attrs) -> true);
+Files.walkFileTree(path, visitor);
+```
+Methods that do NOT declare `IOException`:
+```java
+Files.exists(path);
+Files.notExists(path);
+
+Files.isDirectory(path);
+Files.isRegularFile(path);
+Files.isSymbolicLink(path);
+
+Files.isReadable(path);
+Files.isWritable(path);
+Files.isExecutable(path);
 ```
