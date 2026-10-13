@@ -1,6 +1,6 @@
 # Console
 
-[🔙 Back](../README.md)
+[🔙 Back](README.md)
 
 ## Overview
 
@@ -27,7 +27,6 @@ Console console = System.console();
 | `readPassword()` | `char[]` | Reads a password without echoing input |
 | `readPassword(String, Object...)` | `char[]` | Displays a formatted prompt before reading a password |
 | `reader()` | `Reader` | Returns the console's character reader |
-| `read()` | — | **Does not exist on `Console`** |
 
 ### Example
 
@@ -45,22 +44,6 @@ if (console != null) {
 ```java
 Arrays.fill(password, '\0');
 ```
-
-## `reader()` versus `read()`
-
-This distinction caused the incorrect answer in PE2 Q17.
-
-```java
-Console console = System.console();
-
-Reader reader = console.reader(); // Valid
-
-int character = reader.read();    // Valid
-
-console.read();                   // DOES NOT COMPILE
-```
-
-The `read()` method belongs to `Reader`, not `Console`.
 
 **Remember:**
 
@@ -99,7 +82,7 @@ console.printf("Hello%n").printf("World%n");
 
 ## Locale-Aware Formatting
 
-Java 25 includes locale-aware formatting support on `Console`.
+Java 25 includes locale-aware formatting support on `Console`. See [Console Locale Formatting](../../../addendum/Minor_Api_Additions/README.md) for more details.
 
 | Method | Purpose |
 |---|---|

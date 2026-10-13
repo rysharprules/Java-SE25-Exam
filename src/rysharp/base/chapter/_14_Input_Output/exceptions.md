@@ -1,6 +1,6 @@
 # Exceptions — Execution Order and Try-with-Resources
 
-[🔙 Back](../README.md)
+[🔙 Back](README.md)
 
 ## Overview
 

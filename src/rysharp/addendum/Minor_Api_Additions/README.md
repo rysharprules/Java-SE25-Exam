@@ -9,7 +9,7 @@ Major features such as **Module Import Declarations**, **Compact Source Files an
 ## Contents
 
 - [`Instant.until(Instant)`](#instantuntilinstant)
-- [`Console` Locale Formatting](#console-locale-formatting)
+- [Console Locale Formatting](#console-locale-formatting)
 - [`Reader.of(CharSequence)`](#readerofcharsequence)
 - [`CharSequence.getChars()`](#charsequencegetchars)
 - [`CharBuffer.getChars()`](#charbuffergetchars)
@@ -136,7 +136,7 @@ For the wider date/time API, see **Date & Time API**.
 
 ---
 
-## `Console` Locale Formatting
+## Console Locale Formatting
 
 Java 23 adds locale-aware overloads including:
 

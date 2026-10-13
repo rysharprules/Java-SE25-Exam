@@ -111,6 +111,27 @@ Use an explicit array creation expression instead:
 a = new int[]{1, 2, 3};   // OK
 ```
 
+### Arrays with `var`
+
+`var` can infer an array type, but requires an explicit array creation expression.
+
+```java
+var a = new int[3];          // VALID: int[]
+var b = new int[]{1, 2, 3};  // VALID: int[]
+
+var c[] = new int[3];        // DOES NOT COMPILE
+var d = {1, 2, 3};           // DOES NOT COMPILE
+var e = new int[3]{1, 2, 3}; // DOES NOT COMPILE
+```
+
+Remember:
+
+- `var` cannot be followed by `[]`.
+- `var` cannot use the `{...}` initializer shorthand.
+- Specifying both an array size and initializer is invalid, regardless of `var`.
+
+> **With `var`, use `new int[size]` or `new int[]{values}`.**
+
 ---
 
 ## Multidimensional Arrays
