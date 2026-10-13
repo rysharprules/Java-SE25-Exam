@@ -17,3 +17,14 @@ Code packages match the naming of the md.
 | Title | File |
 |---|---|
 | Lambdas & Functional Interfaces | [lambdas.md](lambdas.md) |
+
+## </> Code Examples
+AI generated code examples with detailed comments.
+
+| Example file | Support |
+|---|---|
+| [BiFunctionExample](code/BiFunctionExample.java) | - |
+| [ConsumerExample](code/ConsumerExample.java) | - |
+| [FunctionExample](code/FunctionExample.java) | - |
+| [PredicateExample](code/PredicateExample.java) | - |
+| [SupplierExample](code/SupplierExample.java) | - |

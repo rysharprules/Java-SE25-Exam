@@ -8,8 +8,15 @@ Exam 1 of 6 from [Java 25 Professional Certification - 6 full Tests (1Z0-831)](h
 
 **Score:** 32 / 50 (64%)  
 **Pass mark:** 68%  
-**Difference from pass:** 2 questions
-**Time taken**: 1 hour 28 minutes
+**Difference from pass:** 2 questions  
+**Time taken:** 1 hour 28 minutes
+
+```mermaid
+%%{init: {'themeVariables': { 'pie1': '#008000', 'pie2': '#FF0000' }}}%%
+pie title Exam Results
+    "Correct (32)" : 32
+    "Incorrect (18)" : 18
+```
 
 ## 🔎 Overview
 

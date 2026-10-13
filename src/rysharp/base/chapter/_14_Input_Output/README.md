@@ -22,3 +22,10 @@ Code packages match the naming of the md.
 | File Attributes & Directory Traversal | [files_attributres_directory_traversal.md](files_attributres_directory_traversal.md) |
 | Files & Paths | [files_paths.md](files_paths.md) |
 | I/O Streams, Readers & Writers | [io.md](io.md) |
+
+## </> Code Examples
+AI generated code examples with detailed comments.
+
+| Example file | Support |
+|---|---|
+| [FilesExample](code/FilesExample.java) | - |

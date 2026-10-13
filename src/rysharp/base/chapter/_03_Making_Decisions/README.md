@@ -19,3 +19,14 @@ Code packages match the naming of the md.
 |---|---|
 | Pattern Matching | [pattern_matching.md](pattern_matching.md) |
 | Switch | [switch.md](switch.md) |
+
+## </> Code Examples
+AI generated code examples with detailed comments.
+
+| Example file | Support |
+|---|---|
+| [FlowScopingExample](code/pattern_matching/FlowScopingExample.java) | - |
+| [InstanceOfPatternMatchingExample](code/pattern_matching/InstanceOfPatternMatchingExample.java) | - |
+| [SwitchBasicsExample](code/switches/SwitchBasicsExample.java) | - |
+| [SwitchExpressionExample](code/switches/SwitchExpressionExample.java) | - |
+| [SwitchPatternMatchingExample](code/switches/SwitchPatternMatchingExample.java) | - |

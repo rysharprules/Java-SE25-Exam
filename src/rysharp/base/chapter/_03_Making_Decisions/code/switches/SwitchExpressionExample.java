@@ -25,7 +25,7 @@ void main() {
         case 1 -> "Monday";
         case 2 -> "Tuesday";
         case 3 -> "Wednesday";
-        default -> "Other";
+        default -> "Other"; // required
     };
 
     System.out.println(name);

@@ -17,3 +17,13 @@ Code packages match the naming of the md.
 |---|---|
 | Operator Precedence | [precedence.md](precedence.md) |
 | Primitive Casting & Numeric Promotion | [primitive_casting_promotion.md](primitive_casting_promotion.md) |
+
+## </> Code Examples
+AI generated code examples with detailed comments.
+
+| Example file | Support |
+|---|---|
+| [OperatorPrecedenceExample](code/precedence/OperatorPrecedenceExample.java) | - |
+| [PrecedenceAndEvaluationOrderExample](code/precedence/PrecedenceAndEvaluationOrderExample.java) | - |
+| [ConstantExpressionsAndCompoundAssignmentExample](code/primitive_casting_promotion/ConstantExpressionsAndCompoundAssignmentExample.java) | - |
+| [PrimitiveCastingAndPromotionExample](code/primitive_casting_promotion/PrimitiveCastingAndPromotionExample.java) | - |

@@ -12,6 +12,13 @@ Exam 2 of 6 from [Java 25 Professional Certification - 6 full Tests (1Z0-831)](h
 **Time taken:** 1 hour 22 minutes  
 **Improvement:** **+4 questions / +8 percentage points**
 
+```mermaid
+%%{init: {'themeVariables': { 'pie1': '#008000', 'pie2': '#FF0000' }}}%%
+pie title Exam Results
+    "Correct (36)" : 36
+    "Incorrect (14)" : 14
+```
+
 ## 🔎 Overview
 
 Practice Exam 2 was the first passing result, improving from 64% in PE1 to 72%.

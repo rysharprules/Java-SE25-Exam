@@ -22,3 +22,10 @@ Code packages match the naming of the md.
 | Array Creation | [array_creation.md](array_creation.md) |
 | Array Operations | [array_operations.md](array_operations.md) |
 | Date & Time API | [datetime.md](datetime.md) |
+
+## </> Code Examples
+AI generated code examples with detailed comments.
+
+| Example file | Support |
+|---|---|
+| [StringExample](code/StringExample.java) | - |

@@ -21,3 +21,10 @@ Code packages match the naming of the md.
 |---|---|
 | Concurrent Collections | [concurrent_collections.md](concurrent_collections.md) |
 | Executor Services & Threads | [executor_services_threads.md](executor_services_threads.md) |
+
+## </> Code Examples
+AI generated code examples with detailed comments.
+
+| Example file | Support |
+|---|---|
+| [NewVirtualThreadPerTaskExecutorExample](code/NewVirtualThreadPerTaskExecutorExample.java) | [Support](code_support/NewVirtualThreadPerTaskExecutorExample.md) |

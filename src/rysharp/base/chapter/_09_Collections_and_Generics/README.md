@@ -21,3 +21,13 @@ Code packages match the naming of the md.
 | Map | [map.md](map.md) |
 | Queue & Deque | [queue_deque.md](queue_deque.md) |
 | Set | [set.md](set.md) |
+
+## </> Code Examples
+AI generated code examples with detailed comments.
+
+| Example file | Support |
+|---|---|
+| [DequeEquivalentMethodsExample](code/DequeEquivalentMethodsExample.java) | - |
+| [DequeFifoExample](code/DequeFifoExample.java) | - |
+| [DequeLifoExample](code/DequeLifoExample.java) | - |
+| [QueueFifoExample](code/QueueFifoExample.java) | - |

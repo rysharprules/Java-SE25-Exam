@@ -20,3 +20,15 @@ Code packages match the naming of the md.
 |---|---|
 | Class Initialization & Constructor Execution | [class_init](class_init.md) |
 | Text Blocks | [text_blocks.md](text_blocks.md) |
+
+## </> Code Examples
+AI generated code examples with detailed comments.
+
+| Example file | Support |
+|---|---|
+| [ClassInitializationOrderExample](code/class_init/ClassInitializationOrderExample.java) | - |
+| [ConstructorChainingExample](code/class_init/ConstructorChainingExample.java) | - |
+| [ConstructorOverrideTrapExample](code/class_init/ConstructorOverrideTrapExample.java) | - |
+| [TextBlockBasicsExample](code/text_blocks/TextBlockBasicsExample.java) | - |
+| [TextBlockEscapesExample](code/text_blocks/TextBlockEscapesExample.java) | - |
+| [TextBlockWhitespaceExample](code/text_blocks/TextBlockWhitespaceExample.java) | - |

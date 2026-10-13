@@ -85,7 +85,7 @@ void main() {
         case 1 -> System.out.println("January");
         case 2 -> System.out.println("February");
         case 3 -> System.out.println("March");
-        default -> System.out.println("Other month");
+        default -> System.out.println("Other month"); // optional default
     }
 
     /*
