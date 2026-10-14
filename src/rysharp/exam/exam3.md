@@ -9,8 +9,8 @@ Exam 3 of 6 from [Java 25 Professional Certification - 6 full Tests (1Z0-831)](h
 **Score:** 39 / 50 (78%)  
 **Pass mark:** 68%  
 **Difference from pass:** 5 questions above the pass mark  
-**Time taken:** 1 hour 25 minutes
-**Improvement:**: +6 percentage points from PE2 (72%) and +14 percentage points from PE1 (64%)**
+**Time taken:** 1 hour 25 minutes<br />
+**Improvement:**: **+6 percentage points from PE2 (72%) and +14 percentage points from PE1 (64%)**
 
 ```mermaid
 %%{init: {'themeVariables': { 'pie1': '#008000', 'pie2': '#FF0000' }}}%%
