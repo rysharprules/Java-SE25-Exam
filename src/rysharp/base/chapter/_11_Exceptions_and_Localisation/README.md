@@ -17,4 +17,5 @@ Code packages match the naming of the md.
 
 | Title | File |
 |---|---|
+| Exceptions | [exceptions.md](exceptions.md) |
 | Formatting & Localisation | [formatting_localization.md](formatting_localization.md) |
