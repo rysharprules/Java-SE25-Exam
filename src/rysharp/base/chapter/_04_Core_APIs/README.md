@@ -28,4 +28,13 @@ AI generated code examples with detailed comments.
 
 | Example file | Support |
 |---|---|
+| [IntegerExample](code/IntegerExample.java) | - |
+| [StringBuilderExample](code/StringBuilderExample.java) | - |
 | [StringExample](code/StringExample.java) | - |
+| [DateTimeFormatterExample](code/time/DateTimeFormatterExample.java) | - |
+| [LocalDateExample](code/time/LocalDateExample.java) | - |
+| [LocalDateTimeExample](code/time/LocalDateTimeExample.java) | - |
+| [LocalTimeExample](code/time/LocalTimeExample.java) | - |
+| [PeriodDurationExample](code/time/PeriodDurationExample.java) | - |
+| [YearMonthDayExample](code/time/YearMonthDayExample.java) | - |
+| [ZonedDateTimeExample](code/time/ZonedDateTimeExample.java) | - |

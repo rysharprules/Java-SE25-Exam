@@ -19,3 +19,10 @@ Code packages match the naming of the md.
 | Streams | [streams.md](streams.md) |
 | Primitive Streams | [primitive_streams.md](primitive_streams.md) |
 | Collectors | [collectors.md](collectors.md) |
+
+## </> Code Examples
+AI generated code examples with detailed comments.
+
+| Example file | Support |
+|---|---|
+| [OptionalExample](code/OptionalExample.java) | - |
