@@ -25,10 +25,12 @@ public class OptionalExample {
         System.out.println("\n1. Creation");
 
         Optional<String> a = Optional.of("Java");
+        Optional<String> a1 = Optional.ofNullable("Java");
         Optional<String> b = Optional.ofNullable(null);
         Optional<String> c = Optional.empty();
 
         System.out.println(a); // Optional[Java]
+        System.out.println(a1); // Optional[Java]
         System.out.println(b); // Optional.empty
         System.out.println(c); // Optional.empty
 
@@ -147,7 +149,7 @@ public class OptionalExample {
 
         present.ifPresentOrElse(
                 System.out::println,
-                () -> System.out.println("Empty")
+                () -> createDefault() // lazy supplier
         ); // Java
 
         empty.ifPresentOrElse(
@@ -168,8 +170,9 @@ public class OptionalExample {
 
         Optional<String> empty = Optional.empty();
 
-        System.out.println(empty.map(String::length));
-        // Optional.empty
+        Optional<Integer> length2 = empty.map(String::length);
+        System.out.println(length2);// Optional.empty
+        System.out.println(empty.map(String::length));// Optional.empty
 
         // map() wraps the result in Optional.
         // If the mapper returns null, the result is Optional.empty.

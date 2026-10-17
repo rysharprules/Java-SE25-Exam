@@ -710,7 +710,7 @@ try (BufferedReader reader =
 
 `Files.lines()` returns a stream that should be closed, typically using try-with-resources.
 
-File operations and their options are covered in the separate **Files & Paths** guide.
+File operations and their options are covered in the separate [**Files & Paths**](files_paths.md) guide.
 
 ---
 
