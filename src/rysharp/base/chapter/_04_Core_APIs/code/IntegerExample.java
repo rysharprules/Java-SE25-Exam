@@ -79,10 +79,31 @@ public class IntegerExample {
         Integer c = 1000;
         Integer d = 1000;
 
+        Integer e = 1000;
+        int f = 1000;
+        Integer g = null;
+
+        Integer h = 128;
+        Integer i = 128;
+
+        Integer j = 127;
+        Integer k = 127;
+
         // The cached range comes from the signed 8-bit byte range: -128 to 127.
         System.out.println(a == b);      // true
         System.out.println(c == d);      // Not guaranteed true
         System.out.println(c.equals(d)); // true
+        System.out.println(e.equals(null)); // false
+        //System.out.println(g.equals(f)); NPE
+        //System.out.println(f == g); NPE
+        System.out.println(d.equals(g)); // false
+        System.out.println(e.equals(f)); // true
+        System.out.println(e.intValue() == f); // true
+        System.out.println(f == e); // true
+
+        System.out.println(h == i); // false
+        System.out.println(j == k); // true
+
 
         int primitive = a; // Unboxing
         Integer boxed = primitive; // Autoboxing

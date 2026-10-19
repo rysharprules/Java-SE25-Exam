@@ -18,3 +18,10 @@ Code packages match the naming of the md.
 |---|---|
 | Java Modules | [modules.md](modules.md) |
 | Java Modules Commands | [commands.md](commands.md) |
+
+## </> Code Examples
+AI generated code examples with detailed comments.
+
+| Example file | Support |
+|---|---|
+| [ServiceLoaderExample](code/service/ServiceLoaderExample.java) | [Support](code_support/ServiceLoaderExample.md) |

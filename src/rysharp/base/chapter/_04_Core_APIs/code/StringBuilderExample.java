@@ -151,33 +151,107 @@ public class StringBuilderExample {
         // codePoints() streams Unicode code points.
     }
 
-    // 6. length() versus capacity()
+
+    // 6. length() versus capacity() - PE4 Q14
     private static void example6_capacityLength() {
         System.out.println("\n6. Length and capacity");
 
         StringBuilder sb = new StringBuilder("abc");
 
         System.out.println(sb.length());   // 3
-        System.out.println(sb.capacity()); // 19
+        System.out.println(sb.capacity()); // 19 (16 + 3)
 
         sb.ensureCapacity(40);
-        System.out.println(sb.capacity()); // At least 40
+        System.out.println(sb.capacity()); // 40
 
         sb.setLength(5);
         System.out.println(sb.length()); // 5
 
         System.out.println((int) sb.charAt(0)); // 97
         System.out.println((int) sb.charAt(4)); // 0
+        System.out.println(sb); // abc\u0000\u0000 (escape sequence for the null character (NUL))
+        // System.out.println((int) sb.charAt(5)); // StringIndexOutOfBoundsException: Index 5 out of bounds for length 5
 
         sb.setLength(2);
         System.out.println(sb); // ab
 
-        sb.trimToSize();
+        sb.trimToSize(); // attempts to reduce the capacity of a StringBuilder to match its current length, freeing any unused storage.
         System.out.println(sb.capacity()); // 2
+        System.out.println("trimToSize");
+        StringBuilder trimToSize = new StringBuilder(50);
 
-        // Capacity grows automatically when needed.
-        // New characters from setLength() are '\u0000'.
+        trimToSize.append("Java");
+
+        System.out.println(trimToSize.length());   // 4
+        System.out.println(trimToSize.capacity()); // 50
+
+        trimToSize.trimToSize();
+
+        System.out.println(trimToSize.length());   // 4
+        System.out.println(trimToSize.capacity()); // Typically 4
+        System.out.println(trimToSize);            // Java
+
+        // --------------------------------------------------
+        // PE4 Q14 - Automatic capacity growth
+        // --------------------------------------------------
+        System.out.println("Automatic capacity growth");
+        // Constructor argument specifies CAPACITY, not length.
+        StringBuilder builder = new StringBuilder(8);
+
+        System.out.println(builder.length());   // 0
+        System.out.println(builder.capacity()); // 8
+
+        // Append 12 characters, exceeding capacity 8.
+        builder.append("123456789012");
+
+        System.out.println(builder.length());   // 12
+        System.out.println(builder.capacity()); // 18
+
+        // Growth formula:
+        // newCapacity = max(oldCapacity * 2 + 2, requiredLength)
+        //
+        // oldCapacity    = 8
+        // requiredLength = 12
+        //
+        // max(8 * 2 + 2, 12)
+        // max(18, 12) = 18
+
+        // If the required length exceeds the growth formula,
+        // the capacity grows directly to the required length.
+
+        StringBuilder large = new StringBuilder(8);
+        large.append("12345678901234567890");
+
+        System.out.println(large.length());   // 20
+        System.out.println(large.capacity()); // 20
+
+        // max(8 * 2 + 2, 20)
+        // max(18, 20) = 20
+
+        new StringBuilder();        // length 0, capacity 16
+        new StringBuilder(10);      // length 0, capacity 10
+        var norm = new StringBuilder("Java");  // length 4, capacity 20
+        norm.append("25");
+        System.out.println(norm.capacity());
+
+
+        // --------------------------------------------------
+        // Exam reminders
+        // --------------------------------------------------
+
+        // length()   = number of characters currently stored.
+        // capacity() = allocated space before resizing is needed.
+
+        // new StringBuilder(8) starts EMPTY with capacity 8.
+        // new StringBuilder("12345678") starts with length 8
+        // and capacity 24 (16 + 8).
+
+        // setLength() changes length, not necessarily capacity.
+        // ensureCapacity() increases capacity if necessary.
+        // trimToSize() attempts to reduce capacity to length.
+        // append() automatically expands capacity when required.
     }
+
 
     // 7. StringBuilder is mutable
     private static void example7_mutability() {
