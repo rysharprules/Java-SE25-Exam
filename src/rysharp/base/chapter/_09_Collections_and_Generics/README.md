@@ -27,7 +27,8 @@ AI generated code examples with detailed comments.
 
 | Example file | Support |
 |---|---|
-| [DequeEquivalentMethodsExample](code/DequeEquivalentMethodsExample.java) | - |
-| [DequeFifoExample](code/DequeFifoExample.java) | - |
-| [DequeLifoExample](code/DequeLifoExample.java) | - |
-| [QueueFifoExample](code/QueueFifoExample.java) | - |
+| [GenericsExample](code/GenericsExample.java) | - |
+| [DequeEquivalentMethodsExample](code/collections/DequeEquivalentMethodsExample.java) | - |
+| [DequeFifoExample](code/collections/DequeFifoExample.java) | - |
+| [rysharp.base.chapter._09_Collections_and_Generics.code.collections.DequeLifoExample](code/collections/rysharp.base.chapter._09_Collections_and_Generics.code.collections.DequeLifoExample.java) | - |
+| [QueueFifoExample](code/collections/QueueFifoExample.java) | - |

@@ -1,4 +1,4 @@
-package rysharp.base.chapter._09_Collections_and_Generics.code;
+package rysharp.base.chapter._09_Collections_and_Generics.code.collections;
 
 import module java.base;
 
