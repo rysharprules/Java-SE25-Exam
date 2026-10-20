@@ -19,3 +19,11 @@ Code packages match the naming of the md.
 |---|---|
 | Exceptions | [exceptions.md](exceptions.md) |
 | Formatting & Localisation | [formatting_localization.md](formatting_localization.md) |
+
+## </> Code Examples
+AI generated code examples with detailed comments.
+
+| Example file | Support |
+|---|---|
+| [ListResourceBundleExample.java.java](code/bundles/ListResourceBundleExample.java) | - |
+| [FinallyExample.java](code/FinallyExample.java) | - |

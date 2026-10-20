@@ -1,3 +1,6 @@
+package rysharp.base.chapter._04_Core_APIs.code;
+
+import java.util.Arrays;
 
 public class StringExample {
 
@@ -78,5 +81,38 @@ public class StringExample {
 
         // text.concat(nullText);
         // Would throw NullPointerException
+
+        example12_splitWithDelimiters();
     }
+
+
+    private static void example12_splitWithDelimiters() {
+        System.out.println("\n12. splitWithDelimiters()");
+
+        String text = "boo:::and::foo::poo::moo";
+
+        // split() discards delimiters.
+        System.out.println(Arrays.toString(text.split(":+")));
+        // [boo, and, foo, poo, moo]
+
+        // splitWithDelimiters() retains matched delimiters.
+        System.out.println(Arrays.toString(text.splitWithDelimiters(":+", -1)));
+        // [boo, :::, and, ::, foo, ::, poo, ::, moo]
+
+        // Positive limit: at most limit - 1 delimiter matches.
+        System.out.println(Arrays.toString(text.splitWithDelimiters(":+", 2)));
+        // [boo, :::, and::foo::poo::moo]
+
+        System.out.println(Arrays.toString(text.splitWithDelimiters(":+", 3)));
+        // [boo, :::, and, ::, foo::poo::moo]
+
+        // Zero: unlimited splitting; trailing empty strings removed.
+        System.out.println(Arrays.toString("a:b:".splitWithDelimiters(":", 0)));
+        // [a, :, b, :]
+
+        // Negative: unlimited splitting; trailing empty strings preserved.
+        System.out.println(Arrays.toString("a:b:".splitWithDelimiters(":", -1)));
+        // [a, :, b, :, ]
+    }
+
 }

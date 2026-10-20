@@ -51,5 +51,20 @@ public class PeriodDurationExample {
         } catch (DateTimeException e) {
             System.out.println("Dates cannot supply seconds: " + e.getClass().getSimpleName());
         }
+
+        // normalization
+        System.out.println("normalization");
+        System.out.println(Period.of(1, 13, 1));
+        // P1Y13M1D
+
+        System.out.println(Period.of(1, 13, 1).normalized());
+        // P2Y1M1D
+
+        System.out.println(Period.ofMonths(26).normalized());
+        // P2Y2M
+
+        // normalized() converts excess months into years, but does not convert days into months, because calendar months have different lengths.
+        System.out.println(Period.ofDays(40).normalized());
+        // P40D
     }
 }

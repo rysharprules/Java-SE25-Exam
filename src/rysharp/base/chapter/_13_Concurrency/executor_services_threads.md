@@ -15,6 +15,7 @@ A focused reference for Java executor services, asynchronous tasks, scheduling, 
 - [invokeAll and invokeAny](#invokeall-and-invokeany)
 - [ScheduledExecutorService](#scheduledexecutorservice)
 - [Executor Lifecycle](#executor-lifecycle)
+- [Thread Interruption](#thread-interruption)
 - [Quick Reference](#quick-reference)
 - [Final Memory Kicks](#final-memory-kicks)
 
@@ -789,6 +790,106 @@ SHUTDOWN
 ≠
 TERMINATED
 ```
+
+---
+
+## Thread Interruption
+
+Interruption is a cooperative cancellation mechanism. It does not forcibly stop a thread.
+
+### Interrupt Flag
+
+| Method | Behaviour |
+|---|---|
+| `thread.interrupt()` | Requests interruption |
+| `thread.isInterrupted()` | Checks flag without clearing |
+| `Thread.interrupted()` | Checks and clears current thread's flag |
+| `Thread.sleep()` | Throws `InterruptedException` if interrupted |
+| `future.cancel(true)` | Cancels future and attempts interruption |
+| `future.cancel(false)` | Cancels future without interrupting running task |
+
+### What Happens When Interrupted?
+
+**Thread is sleeping or waiting in an interruptible operation:**
+
+1. Interruption is requested.
+2. `InterruptedException` is thrown.
+3. Interrupt flag is cleared.
+4. Execution continues in the matching `catch` block.
+5. Thread does not automatically terminate.
+
+```java
+try {
+    Thread.sleep(10_000);
+} catch (InterruptedException e) {
+    Thread.currentThread().interrupt(); // Restore flag
+    return; // Exit task
+}
+```
+
+**Thread is executing ordinary code:**
+
+1. Interruption is requested.
+2. Interrupt flag is set.
+3. Code continues unless it checks/responds to interruption.
+
+```java
+while (!Thread.currentThread().isInterrupted()) {
+    // Perform work
+}
+```
+
+### Executor Shutdown and Cancellation
+
+| Method | New tasks | Running tasks | Queued tasks |
+|---|---|---|---|
+| `shutdown()` | Rejected | Continue | Execute normally |
+| `shutdownNow()` | Rejected | Interrupt attempted | Removed and returned |
+| `future.cancel(true)` | Unaffected | Interrupt attempted for target task | Target task cancelled if not started |
+| `future.cancel(false)` | Unaffected | No interruption | Target task cancelled if not started |
+
+`shutdownNow()` returns `List<Runnable>` containing tasks that never started.
+
+`shutdown()` and `shutdownNow()` do not wait for termination.
+
+### Waiting for Termination
+
+```java
+executor.shutdown();
+
+if (!executor.awaitTermination(5, TimeUnit.SECONDS)) {
+    executor.shutdownNow();
+}
+```
+
+- `awaitTermination()` waits; it does not initiate shutdown.
+- Returns `true` if executor terminated.
+- Returns `false` on timeout.
+- Throws `InterruptedException` if the waiting thread is interrupted.
+
+### Future Cancellation
+
+```java
+Future<?> future = executor.submit(task);
+
+future.cancel(true);
+future.isCancelled(); // true if successfully cancelled
+future.isDone();      // true if cancelled
+future.get();         // CancellationException
+```
+
+Successful cancellation marks the `Future` cancelled even if the underlying task ignores interruption and continues running.
+
+### Key Rules
+
+- `InterruptedException` is checked.
+- Throwing `InterruptedException` clears the interrupt flag.
+- `isInterrupted()` does not clear the flag.
+- `Thread.interrupted()` clears the flag.
+- `shutdownNow()` does not guarantee termination.
+- `shutdown()` does not interrupt running tasks.
+- A thread may continue running after being interrupted.
+- A cancelled `Future` does not guarantee the underlying task has stopped.
 
 ---
 
