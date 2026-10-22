@@ -1078,3 +1078,128 @@ jlink
 jpackage
 → DISTRIBUTE MY APP
 ```
+
+---
+
+## Reviewing Command-Line Options
+
+### Comparing Command-Line Operations
+
+| Description | Syntax |
+|---|---|
+| Compile nonmodular code | `javac -cp classpath -d directory classesToCompile` |
+| Compile nonmodular code | `javac --class-path classpath -d directory classesToCompile` |
+| Compile nonmodular code | `javac -classpath classpath -d directory classesToCompile` |
+| Run nonmodular code | `java -cp classpath package.className` |
+| Run nonmodular code | `java -classpath classpath package.className` |
+| Run nonmodular code | `java --class-path classpath package.className` |
+| Compile module | `javac -p moduleFolderName -d directory classesToCompileIncludingModuleInfo` |
+| Compile module | `javac --module-path moduleFolderName -d directory classesToCompileIncludingModuleInfo` |
+| Run module | `java -p moduleFolderName -m moduleName/package.className` |
+| Run module | `java --module-path moduleFolderName --module moduleName/package.className` |
+| Describe module | `java -p moduleFolderName -d moduleName` |
+| Describe module | `java --module-path moduleFolderName --describe-module moduleName` |
+| Describe module | `jar --file jarName --describe-module` |
+| Describe module | `jar -f jarName -d` |
+| List available modules | `java --module-path moduleFolderName --list-modules` |
+| List available modules | `java -p moduleFolderName --list-modules` |
+| List available modules | `java --list-modules` |
+| View dependencies | `jdeps -summary --module-path moduleFolderName jarName` |
+| View dependencies | `jdeps -s --module-path moduleFolderName jarName` |
+| View dependencies | `jdeps --jdk-internals jarName` |
+| View dependencies | `jdeps -jdkinternals jarName` |
+| Show module resolution | `java --show-module-resolution -p moduleFolderName -m moduleName` |
+| Show module resolution | `java --show-module-resolution --module-path moduleFolderName --module moduleName` |
+| Create runtime image | `jlink -p moduleFolderName --add-modules moduleName --output zooApp` |
+| Create runtime image | `jlink --module-path moduleFolderName --add-modules moduleName --output zooApp` |
+| Create self-contained Java application | `jpackage -n name -p moduleFolderName -m moduleName/package.className` |
+| Create self-contained Java application | `jpackage --name name --module-path moduleFolderName --module moduleName/package.className` |
+| Create self-contained Java application | `jpackage -n myApp -i myDir --main-class package.className --main-jar appJar.jar` |
+| Create self-contained Java application | `jpackage --name myApp --input myDir --main-class package.className --main-jar appJar.jar` |
+
+---
+
+### javac Options
+
+| Option | Description |
+|---|---|
+| `-cp <classpath>` | Location of JARs in a nonmodular program |
+| `-classpath <classpath>` | Same as `-cp` |
+| `--class-path <classpath>` | Same as `-cp` |
+| `-d <dir>` | Directory in which to place generated class files |
+| `-p <path>` | Location of JARs in a modular program |
+| `--module-path <path>` | Same as `-p` |
+
+---
+
+### java Options
+
+| Option | Description |
+|---|---|
+| `-cp <classpath>` | Location of JARs in a nonmodular program |
+| `-classpath <classpath>` | Same as `-cp` |
+| `--class-path <classpath>` | Same as `-cp` |
+| `-p <path>` | Location of JARs in a modular program |
+| `--module-path <path>` | Same as `-p` |
+| `-m <name>` | Module name to run |
+| `--module <name>` | Same as `-m` |
+| `-d` | Describes details of a module |
+| `--describe-module` | Same as `-d` |
+| `--list-modules` | Lists observable modules without running a program |
+| `--show-module-resolution` | Shows module resolution when running a program |
+
+---
+
+### jar Options
+
+| Option | Description |
+|---|---|
+| `-c` | Creates a new JAR file |
+| `--create` | Same as `-c` |
+| `-v` | Prints details when working with JAR files |
+| `--verbose` | Same as `-v` |
+| `-f` | JAR filename |
+| `--file` | Same as `-f` |
+| `-C <dir>` | Directory containing files to be used to create a JAR |
+| `-d` | Describes details of a module |
+| `--describe-module` | Same as `-d` |
+
+---
+
+### jdeps Options
+
+| Option | Description |
+|---|---|
+| `--module-path <path>` | Location of JARs in a modular program |
+| `-s` | Summarizes output |
+| `-summary` | Same as `-s` |
+| `--jdk-internals` | Lists uses of internal APIs |
+| `-jdkinternals` | Same as `--jdk-internals` |
+
+---
+
+### jlink Options
+
+| Option | Description |
+|---|---|
+| `-p <path>` | Location of JARs in a modular program |
+| `--module-path <path>` | Same as `-p` |
+| `--add-modules <name>` | List of modules to package |
+| `--output` | Name of output directory |
+
+---
+
+### jpackage Options
+
+| Option | Description |
+|---|---|
+| `-n <name>` | Prefix of output filename, combined with version number and suffix |
+| `--name <name>` | Same as `-n` |
+| `-p <path>` | Location of JARs in a modular program |
+| `--module-path <path>` | Same as `-p` |
+| `--add-modules <name>` | List of modules to package |
+| `--app-version` | Optional version number for output filename; defaults to `1.0` |
+| `-i <dir>` | Input directory containing files to package for a nonmodular application |
+| `--input <dir>` | Same as `-i` |
+| `--main-class` | Fully qualified class name to run in a nonmodular JAR |
+| `--main-jar` | Nonmodular JAR containing the class to run |
