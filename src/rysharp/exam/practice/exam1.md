@@ -1,6 +1,6 @@
 # Practice Exam 1 — Review
 
-[🔙 Back](../../../README.md)
+[🔙 Back](../../../../README.md)
 
 Exam 1 of 6 from [Java 25 Professional Certification - 6 full Tests (1Z0-831)](https://www.udemy.com/course/ocp-oracle-certified-professional-java-developer-prep/).
 
