@@ -1,5 +1,8 @@
+package rysharp.exam.retake.examples;
+
 import java.util.*;
 import java.util.stream.*;
+// Q12 POST_EXAM_REPORT.md
 public class GathererWindows {
     // Java 25 required (Gatherers were finalized in Java 24).
     public static void main(String[] args) {

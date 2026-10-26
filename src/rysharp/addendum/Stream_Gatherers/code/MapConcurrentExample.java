@@ -9,7 +9,7 @@ public class MapConcurrentExample {
         // A stateful gatherer that transforms elements concurrently.
         System.out.println("Map Concurrent Example (Squaring):");
         Stream.of(1, 2, 3, 4)
-            .gather(Gatherers.mapConcurrent(2, x -> x * x))
+            .gather(Gatherers.mapConcurrent(4, x -> x * x))
             .forEach(System.out::println);
     }
 }
