@@ -62,6 +62,14 @@ public class StringBuilderExample {
 
         sb.append((String) null);
         System.out.println(sb); // Java 25truenull
+
+        // insert(int offset, CharSequence s, int start, int end)
+        // offset Position in the destination StringBuilder where insertion begins
+        // s Source character sequence
+        // start Inclusive starting index in the source
+        // end Exclusive ending index in the source
+        sb.insert(7, "BRYAN", 1, 5);
+        System.out.println(sb);
     }
 
     // 3. delete(), deleteCharAt(), replace()
