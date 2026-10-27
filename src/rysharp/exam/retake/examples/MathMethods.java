@@ -13,6 +13,7 @@ public class MathMethods {
 
         round();
         addExact();
+        random();
     }
 
     /*
@@ -35,5 +36,12 @@ public class MathMethods {
      */
     static void addExact(){
         System.out.println(Math.addExact(45, 34L)); // 79
+    }
+
+    static void random(){
+        System.out.println("\nMath.random");
+        System.out.println(Math.random());
+        System.out.println(Math.random());
+        System.out.println((int) (Math.random() * 11)); // Generates a whole number from 0 to 10
     }
 }

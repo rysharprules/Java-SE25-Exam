@@ -1,6 +1,7 @@
 package rysharp.exam.retake.kindle;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
@@ -19,7 +20,8 @@ public class StreamsQuiz {
         q5();
         // Kindle 21.3.2 Quiz (p.1334)
         q6();
-
+        // Kindle 21.3.4 Quiz (p.1355)
+        q7();
     }
 
     static void q1() {
@@ -133,6 +135,19 @@ public class StreamsQuiz {
         // Set is not ordered. Therefore, the stream may encounter the elements in any order.
         List<String> result2 = sos.stream().dropWhile(s->s.isEmpty()).toList();
         System.out.println(result2);// will never print [ , a, b] but may print [b, , a] or [a, , b] or [b, a, ] etc.
+    }
+
+    static void q7(){
+        System.out.println("\nQ7");
+        Optional<String> result = Stream.of(1, 2, 3, 4)
+                .parallel()
+                .map(i -> {
+                    System.out.println("Mapping "+i);
+                    return "" + i;
+                }).findFirst();
+        System.out.println(result);
+        // It will always print Optional[1], even if parallel() is removed from the pipeline.
+        // It may not always print Optional[1] if unordered() operation is added to the stream pipeline.
     }
 
     static Supplier<Stream<String>> words = () -> Stream.of( "a", "b", "c", "a", "b");

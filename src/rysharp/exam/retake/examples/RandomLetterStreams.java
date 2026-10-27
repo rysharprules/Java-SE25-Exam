@@ -1,6 +1,9 @@
+package rysharp.exam.retake.examples;
+
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+// Q21 POST_EXAM_REPORT.md
 public class RandomLetterStreams {
     public static void main(String[] args) {
         StringBuilder builder = new StringBuilder();
@@ -16,10 +19,11 @@ public class RandomLetterStreams {
         System.out.println("Collected length = " + result.length());
 
         long count = ThreadLocalRandom.current().ints('A', 'Z' + 1)
-                .filter(n -> n < 10_000)
-                .limit(10_000)
+//                .peek(System.out::println)
+                .takeWhile(n -> n < 10_000) // no impact
+                .filter(n -> n < 10_000) // no impact
+                .limit(10_000) // required to avoid infinite stream
                 .count();
         System.out.println("Filtered then limited count = " + count);
-        // An unbounded takeWhile(n -> n < 10_000) never terminates here.
     }
 }
