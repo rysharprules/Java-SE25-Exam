@@ -1,5 +1,7 @@
 package rysharp.exam.retake.kindle;
 
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -15,9 +17,13 @@ public class StreamsQuiz {
         q4();
         // Kindle 21.2.9 Quiz (p.1330)
         q5();
+        // Kindle 21.3.2 Quiz (p.1334)
+        q6();
+
     }
 
     static void q1() {
+        System.out.println("\nQ1");
         // Remember that sorted is an intermediate operation. It does not trigger the execution of the stream pipeline.
         System.out.println(marks.get().sorted());// java.util.stream.SortedOps$OfRef@a09ee92
 
@@ -54,6 +60,7 @@ public class StreamsQuiz {
     }
 
     static void q2() {
+        System.out.println("\nQ2");
         // limit(2) will limit the stream to the first two elements, i.e., 55, 65. anyMatch > 70 will return false
         System.out.println(marks.get().limit(2).anyMatch(i -> i > 70));
         System.out.println(marks.get().limit(10).noneMatch(i -> i > 70));// false
@@ -65,6 +72,7 @@ public class StreamsQuiz {
     }
 
     static void q3() {
+        System.out.println("\nQ3");
         System.out.println(words.get().reduce(0, (c, w) -> targetWord.equals(w) ? c + 1 : c, (c1, c2) -> c1 + c2));// 2
         System.out.println(words.get().map(s -> targetWord.equals(s) ? 1 : 0).reduce((a, b) -> a + b));// Optional[2]
         System.out.println(words.get().map(s -> targetWord.equals(s) ? 1 : 0).reduce(Integer::sum));// Optional[2]
@@ -72,6 +80,7 @@ public class StreamsQuiz {
     }
 
     static void q4() {
+        System.out.println("\nQ4");
 //        Integer count1 = words.get().collect(
 //                ()->0,
 //                (oldCount, word) -> { if(targetWord.equals(word)) oldCount++; },
@@ -95,6 +104,7 @@ public class StreamsQuiz {
     }
 
     static void q5() {
+        System.out.println("\nQ5");
         record Account(int id, String type, double balance){};
         Stream<Account> sa = Stream.of(
                 new Account(1,"CHK", 1000.0),
@@ -107,6 +117,22 @@ public class StreamsQuiz {
                                 groupingBy(a->a.type(),
                                         counting()))));
         // {false={CHK=1}, true={CHK=1, SAV=1, FD=1}}
+    }
+
+    static void q6(){
+        System.out.println("\nQ6");
+        List<String> los = List.of("", "", "a", "", "b");
+        Set<String> sos = Set.of("", "a", "b");
+
+        // dropWhile(Predicate p) method drops the elements of a stream until it gets an element that fails the predicate.
+
+        // List is ordered while Set is not. Therefore, the stream will always encounter elements in the order of the elements in the source list,
+        List<String> result1 = los.stream().dropWhile(String::isEmpty).toList();
+        System.out.println(result1); // will always print [a, , b].
+
+        // Set is not ordered. Therefore, the stream may encounter the elements in any order.
+        List<String> result2 = sos.stream().dropWhile(s->s.isEmpty()).toList();
+        System.out.println(result2);// will never print [ , a, b] but may print [b, , a] or [a, , b] or [b, a, ] etc.
     }
 
     static Supplier<Stream<String>> words = () -> Stream.of( "a", "b", "c", "a", "b");
