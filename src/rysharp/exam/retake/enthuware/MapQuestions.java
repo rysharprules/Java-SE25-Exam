@@ -22,5 +22,21 @@ public class MapQuestions {
 
         System.out.println(tailmap.pollFirstEntry()); // c=cat - The view is backed by the original map.
         System.out.println(mymap.size()); // 3
+
+        tailmap.put("d", "derp");
+//        tailmap.put("aaa", "anus"); // IllegalArgumentException: key out of range
+        System.out.println(tailmap);
+        System.out.println(mymap);
+
+//        var submap = tailmap.subMap("bb", "z");// IllegalArgumentException: fromKey out of range
+        var submap = tailmap.subMap("bbb", "z");// bbb is after bb, so valid
+        System.out.println(submap); // {d=derp}
+        submap.clear(); // clear derp only
+        System.out.println(submap); // {}
+        System.out.println(mymap);// {aa=apple1, b=boy, bb=boy1} no derp
+        /*
+        A small challenge for later: Once you're comfortable with Q44,
+        try predicting what happens when you call clear() on a subMap() view. That's the same underlying rule tested from another angle.
+         */
     }
 }

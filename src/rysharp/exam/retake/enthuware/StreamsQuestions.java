@@ -3,6 +3,11 @@ import module java.base;
 
 public class StreamsQuestions {
     void main() {
+        q1();
+        q2();
+    }
+
+    static void q1() {
         Integer[] intArray = {1, 2, 3, 4, 5, 6, 7, 8};
         Arrays.stream(intArray)
                 // 1. The takeWhile method passes the elements to the next operation in the stream pipeline as long as the element satisfies the given predicate.
@@ -19,5 +24,35 @@ public class StreamsQuestions {
                 .limit(3)
                 // Thus, forEach will get only three elements 2, 3, and 4.
                 .forEach(System.out::print);
+    }
+
+    /*
+    static <T,R1,R2,R> Collector<T,?,R> teeing(Collector<? super T,?,R1> downstream1, Collector<? super T,?,R2> downstream2, BiFunction<? super R1,? super R2,R> merger)
+
+                     [ Stream<Character> ]
+                       /       \
+                      /         \
+    [ downstream1 ]  /           \  [ downstream2 ]
+    Processes stream              Processes stream
+    Returns: String               Returns: Long
+              \                     /
+               \                   /
+             (word)              (length)
+                \                 /
+                 v               v
+           [ BiFunction<String, Long, String> ]
+
+     */
+    static void q2(){
+        Stream<Character> stream = Stream.of('a', 'b', 'c', 'd');
+
+        Collector<Character, ?, String> downstream1 = Collectors.mapping(ch->""+ch, Collectors.joining());
+        Collector<Character, ?, Long> downstream2 = Collectors.counting();
+        BiFunction<String, Long, String> merger = (word, length) -> word+" "+length;
+
+        String result = stream.collect(
+                //Collectors.teeing(downstream1, downstream2, (word, length)->word+" "+length));
+                Collectors.teeing(downstream1, downstream2, merger));
+        System.out.println(" " + result); //prints abcd 4
     }
 }

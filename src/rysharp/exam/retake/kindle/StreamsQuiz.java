@@ -4,13 +4,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-// Kindle 21.1.6 Quiz (p.1298)
+import static java.util.stream.Collectors.*;
+
 public class StreamsQuiz {
     void main() {
+        // Kindle 21.1.6 Quiz (p.1298)
         q1();
         q2();
         q3();
         q4();
+        // Kindle 21.2.9 Quiz (p.1330)
+        q5();
     }
 
     static void q1() {
@@ -88,6 +92,21 @@ public class StreamsQuiz {
                 (oldCount, word) -> { if(targetWord.equals(word)) oldCount.incrementAndGet(); },
                 (c1, c2) -> c1.getAndAdd(c2.get()));
         System.out.println(count2.get());
+    }
+
+    static void q5() {
+        record Account(int id, String type, double balance){};
+        Stream<Account> sa = Stream.of(
+                new Account(1,"CHK", 1000.0),
+                new Account(2,"CHK", -500.0),
+                new Account(3, "SAV", 400.0),
+                new Account(4,"FD", 9000.0));
+        System.out.println(sa
+                .collect(
+                        partitioningBy( a->a.balance()>0 ,
+                                groupingBy(a->a.type(),
+                                        counting()))));
+        // {false={CHK=1}, true={CHK=1, SAV=1, FD=1}}
     }
 
     static Supplier<Stream<String>> words = () -> Stream.of( "a", "b", "c", "a", "b");
