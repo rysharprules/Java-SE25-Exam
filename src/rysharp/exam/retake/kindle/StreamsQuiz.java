@@ -1,10 +1,11 @@
 package rysharp.exam.retake.kindle;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
@@ -22,6 +23,8 @@ public class StreamsQuiz {
         q6();
         // Kindle 21.3.4 Quiz (p.1355)
         q7();
+        q8();
+        q9();
     }
 
     static void q1() {
@@ -150,6 +153,48 @@ public class StreamsQuiz {
         // It may not always print Optional[1] if unordered() operation is added to the stream pipeline.
     }
 
+    static void q8() {
+        System.out.println("\nQ8");
+        // Create an infinite IntStream whose first element is 2 and next element is previous element + 3.
+        // Find the sum of 10th to 15th element (both inclusive) of the stream.
+        int sum = IntStream.iterate(2, n -> n + 3)
+                .skip(9)
+                .limit(6)
+                .sum();
+
+        System.out.println(sum); // 207
+    }
+
+    static void q9() {
+        System.out.println("\nQ9");
+        // Count words by length
+        Map<Integer, Long> counts = words2.get().collect(
+                Collectors.groupingBy(
+                        String::length,
+                        Collectors.counting()
+                )
+        );
+        System.out.println(counts);// {2=3, 3=2, 4=1}
+
+        // Group unique words by length
+        Map<Integer, List<String>> grouped = words2.get().collect(
+                Collectors.groupingBy(
+                        String::length,
+                        Collectors.collectingAndThen(
+                                Collectors.toSet(),
+                                ArrayList::new
+                        )
+                )
+        );
+        System.out.println(grouped); // {2=[AB, CD], 3=[CAT, DOG], 4=[JAVA]}
+
+        // A simpler solution
+        Map<Integer, List<String>> grouped2 = words2.get().distinct()
+                .collect(Collectors.groupingBy(String::length));
+        System.out.println(grouped2); // {2=[AB, CD], 3=[CAT, DOG], 4=[JAVA]}
+    }
+
+    static Supplier<Stream<String>> words2 = () -> Stream.of("AB", "CD", "AB", "CAT", "DOG", "JAVA");
     static Supplier<Stream<String>> words = () -> Stream.of( "a", "b", "c", "a", "b");
     static Supplier<Stream<Integer>> marks = () -> Stream.of(55, 65, 70, 80, 70);
     static String targetWord = "a";
