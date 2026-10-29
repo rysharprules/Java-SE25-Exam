@@ -1,4 +1,8 @@
+package rysharp.exam.retake.examples;
+
 import java.io.*;
+
+// Q3 POST_EXAM_REPORT.md
 public class SerializationInheritance {
     static class Game implements Serializable {
         private static final long serialVersionUID = 1L;
