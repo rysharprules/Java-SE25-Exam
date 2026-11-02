@@ -83,6 +83,7 @@ public class StringExample {
         // Would throw NullPointerException
 
         example12_splitWithDelimiters();
+        isBlanks();
     }
 
 
@@ -113,6 +114,44 @@ public class StringExample {
         // Negative: unlimited splitting; trailing empty strings preserved.
         System.out.println(Arrays.toString("a:b:".splitWithDelimiters(":", -1)));
         // [a, :, b, :, ]
+    }
+
+    private static void isBlanks() {
+        System.out.println("--- isBlanks ---");
+        String whitespace = "   ";
+        String empty = "";
+        String newEmpty = new String("");
+        String nonWhitespace = "a";
+
+        // isBlank() returns true if the string is empty or contains only white space codepoints, otherwise false.
+        System.out.println("isBlank");
+        System.out.println(whitespace.isBlank()); // true
+        System.out.println(empty.isBlank()); // true
+        System.out.println(newEmpty.isBlank()); // true
+        System.out.println(nonWhitespace.isBlank()); // false
+
+        // isEmpty returns true if, and only if, length() is 0. Thus, it will return false even if the string contains only spaces.
+        System.out.println("isEmpty");
+        System.out.println(whitespace.isEmpty()); // false
+        System.out.println(empty.isEmpty()); // true
+        System.out.println(newEmpty.isEmpty()); // true
+        System.out.println(nonWhitespace.isEmpty()); // false
+
+        // String comparisons should never be done using == or != operators because these operators check whether two references point to the same object or not
+        System.out.println("strip ==");
+        System.out.println(whitespace.strip() == ""); // true
+        System.out.println(empty.strip() == ""); // true
+        // even though newEmpty is a separate object, strip() returns the pooled empty string.
+        System.out.println(newEmpty.strip() == ""); // true
+        System.out.println("".strip() == new String("")); // false
+        System.out.println(nonWhitespace.strip() == ""); // false
+
+        // String does have a compareTo method but unless you strip the string from its leading and trailing white spaces, a string containing just the white spaces will not match with ""
+        System.out.println("compareTo");
+        System.out.println(whitespace.compareTo("") == 0); // false
+        System.out.println(empty.compareTo("") == 0); // true
+        System.out.println(newEmpty.compareTo("") == 0); // true
+        System.out.println(nonWhitespace.compareTo("") == 0); // false
     }
 
 }

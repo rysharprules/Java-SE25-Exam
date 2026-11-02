@@ -1,6 +1,11 @@
+package rysharp.exam.retake.examples;
+
 import java.util.List;
+
+// Q2 POST_EXAM_REPORT.md
 public class RecordPatternLists {
     record Person(String name, List<String> hobbies) {}
+
     static void inspect(Object value) {
         if (value instanceof Person(String name, List<String> hobbies)) {
             System.out.println(name + " -> " + hobbies.get(0));
