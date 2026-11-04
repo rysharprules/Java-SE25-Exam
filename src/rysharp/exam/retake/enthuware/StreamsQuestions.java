@@ -1,13 +1,16 @@
 package rysharp.exam.retake.enthuware;
+
 import module java.base;
 
 public class StreamsQuestions {
     void main() {
         q1();
         q2();
+        q3();
     }
 
     static void q1() {
+        System.out.println("\nQ1");
         Integer[] intArray = {1, 2, 3, 4, 5, 6, 7, 8};
         Arrays.stream(intArray)
                 // 1. The takeWhile method passes the elements to the next operation in the stream pipeline as long as the element satisfies the given predicate.
@@ -43,16 +46,30 @@ public class StreamsQuestions {
            [ BiFunction<String, Long, String> ]
 
      */
-    static void q2(){
+    static void q2() {
+        System.out.println("\nQ2");
         Stream<Character> stream = Stream.of('a', 'b', 'c', 'd');
 
-        Collector<Character, ?, String> downstream1 = Collectors.mapping(ch->""+ch, Collectors.joining());
+        Collector<Character, ?, String> downstream1 = Collectors.mapping(ch -> "" + ch, Collectors.joining());
         Collector<Character, ?, Long> downstream2 = Collectors.counting();
-        BiFunction<String, Long, String> merger = (word, length) -> word+" "+length;
+        BiFunction<String, Long, String> merger = (word, length) -> word + " " + length;
 
         String result = stream.collect(
                 //Collectors.teeing(downstream1, downstream2, (word, length)->word+" "+length));
                 Collectors.teeing(downstream1, downstream2, merger));
         System.out.println(" " + result); //prints abcd 4
+    }
+
+    static void q3() {
+        System.out.println("\nQ3");
+        List<Integer> names = Arrays.asList(1, 2, 3);
+        System.out.println(names.stream().mapToInt(x -> x).sum());
+
+        System.out.println(names.stream().reduce(0, (a, b) -> a + b));
+        System.out.println(names.stream().gather(Gatherers.fold(() -> 0, (a, b) -> a + b)).findAny().orElse(0));
+
+        System.out.println(names.stream().collect(Collectors.mapping(x -> x, Collectors.summarizingInt(x -> x))).getSum());
+        System.out.println(names.stream().map(x -> x).collect(Collectors.summarizingInt(x -> x)).getSum());//'collect(mapping())' (above) can be replaced with 'map().collect()'
+        System.out.println(names.stream().collect(Collectors.summarizingInt(x -> x)).getSum());//Redundant 'map()' call (above)
     }
 }
