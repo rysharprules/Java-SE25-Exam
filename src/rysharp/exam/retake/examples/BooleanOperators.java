@@ -1,3 +1,6 @@
+package rysharp.exam.retake.examples;
+
+// Q9 POST_EXAM_REPORT.md
 public class BooleanOperators {
     public static void main(String[] args) {
         int x = 0, y = 0;

@@ -1,3 +1,6 @@
+package rysharp.exam.retake.examples;
+
+// Q7 POST_EXAM_REPORT.md
 public class LoopTrace {
     public static void main(String[] args) {
         int c = 1;
