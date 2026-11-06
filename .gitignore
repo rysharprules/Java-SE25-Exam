@@ -25,4 +25,4 @@ replay_pid*
 .idea/**
 /out
 *.iml
-src/rysharp/exam/retake/enthuware/Dump.java
+src/rysharp/exam/actionplan/enthuware/Dump.java
