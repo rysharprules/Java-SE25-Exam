@@ -3,7 +3,7 @@ package rysharp.exam.actionplan.enthuware;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class IOQuestions {
+public class IOPathQuestions {
     void main (){
         q1();
     }
