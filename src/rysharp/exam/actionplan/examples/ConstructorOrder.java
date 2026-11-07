@@ -1,3 +1,6 @@
+package rysharp.exam.actionplan.examples;
+
+// Q20 POST_EXAM_REPORT.md
 public class ConstructorOrder {
     static class Parent {
         static { System.out.println("Parent static"); }
@@ -10,5 +13,5 @@ public class ConstructorOrder {
         Child() { this(1); System.out.println("Child no-arg body"); }
         Child(int x) { super(); System.out.println("Child int body"); }
     }
-    public static void main(String[] args) { new Child(); new Child(); }
+    public static void main(String[] args) { new Child(); IO.println("---");new Child(); }
 }
