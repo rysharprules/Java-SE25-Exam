@@ -52,7 +52,6 @@ public class AtomicIntegerQuestions {
 
         ai.set(20);
         System.out.println(ai.get()); // 20
-
         System.out.println(ai.getAndSet(30)); // 20
         System.out.println(ai.get());         // 30
 
