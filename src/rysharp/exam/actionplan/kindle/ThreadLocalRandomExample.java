@@ -1,7 +1,9 @@
 
 package rysharp.exam.actionplan.kindle;
 
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 public class ThreadLocalRandomExample {
@@ -79,5 +81,37 @@ public class ThreadLocalRandomExample {
 
         System.out.println("Filtered count: " + filtered);
         System.out.println("TakeWhile count: " + taken);
+
+
+        // 8. ME12 Q37 - Random double streams.
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+
+        // Finite stream: exactly 10 random doubles.
+        DoubleStream ds1 = random.doubles(10);
+
+        System.out.println("10 doubles: "
+                + ds1.boxed().toList());
+
+
+        // Unlimited stream, limited to 10 elements.
+        DoubleStream ds2 = random.doubles();
+
+        System.out.println("10 limited doubles: "
+                + ds2.limit(10).boxed().toList());
+
+
+        // DoubleStream.generate() accepts a DoubleSupplier.
+        // nextDouble() supplies each value.
+        DoubleStream ds3 = DoubleStream.generate(random::nextDouble);
+
+        System.out.println("10 generated doubles: "
+                + ds3.limit(10).boxed().toList());
+
+
+        // Random has the same doubles() methods.
+        Random r = new Random();
+
+        System.out.println("Random doubles: "
+                + r.doubles(10).boxed().toList());
     }
 }
