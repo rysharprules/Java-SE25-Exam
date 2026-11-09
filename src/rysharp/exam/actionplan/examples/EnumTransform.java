@@ -1,4 +1,8 @@
+package rysharp.exam.actionplan.examples;
+
 import java.util.function.UnaryOperator;
+
+// Q6 POST_EXAM_REPORT.md
 public class EnumTransform {
     enum Transform {
         UPPER(String::toUpperCase), LOWER(String::toLowerCase), KEEP(s -> s);
