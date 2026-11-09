@@ -17,6 +17,11 @@ public class MathMethods {
         round();
         addExact();
         random();
+
+        // 9. Math.random() and Math.round() - exam traps
+        System.out.println("round + random");
+        System.out.println((int) (Math.random() * 10)); // 0-9
+        System.out.println(Math.round(Math.random() * 10)); // 0-10
     }
 
     /*

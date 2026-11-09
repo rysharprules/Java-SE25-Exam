@@ -111,7 +111,21 @@ public class ThreadLocalRandomExample {
         // Random has the same doubles() methods.
         Random r = new Random();
 
-        System.out.println("Random doubles: "
-                + r.doubles(10).boxed().toList());
+        System.out.println("Random doubles: " // and ints and longs
+                + r.doubles(10).boxed().toList());// DoubleStream
+
+        System.out.println(r.nextBoolean());
+        System.out.println(r.nextDouble()); // [0.0, 1.0)
+        System.out.println(r.nextFloat());  // [0.0, 1.0)
+        System.out.println(r.nextLong());
+
+        // 10. Single values vs streams
+
+        int a = r.nextInt();        // Any int
+        int b = r.nextInt(10);      // 0 to 9
+        int c = r.nextInt(5, 10);   // 5 to 9
+
+        IntStream stream = r.ints(5, 10, 20);
+// Exactly 5 integers, each from 10 to 19
     }
 }

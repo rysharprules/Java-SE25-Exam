@@ -16,6 +16,16 @@ public class StringBuilderExample {
         example8_comparison();
         example9_otherMethods();
         example10_examTraps();
+
+        System.out.println("------");
+        StringBuilder sb = new StringBuilder("Java");
+        sb.setLength(2);
+        sb.setLength(6);
+
+        System.out.println(sb.length());
+        System.out.println(sb.capacity());
+        System.out.println((int) sb.charAt(2));
+        System.out.println(sb.toString().equals("Ja"));
     }
 
     // 1. Constructors
