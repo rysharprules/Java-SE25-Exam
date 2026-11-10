@@ -1,3 +1,5 @@
+package rysharp.exam.actionplan.examples;
+
 public class NestedExceptions {
     static class Custom extends RuntimeException {
         Custom(String message) { super(message); }
