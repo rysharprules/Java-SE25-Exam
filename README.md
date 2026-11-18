@@ -61,6 +61,12 @@ For a comprehensive breakdown of the platform updates, you can check the [Oracle
 
 For tracking the exact exam blueprint changes against Java 21, the [Enthuware OCP Java 25 Resources Page](https://enthuware.com/ocajp-8-fundamentals/114-resources/ocajp-ocpjp-resources) maps out the line-by-line topic differences.
 
+## Runnable practice examples
+
+Runnable Java exercises are organised alongside the relevant JDK 21 base chapters or JDK 25 addendum topics, under their `code` or `code/practice` packages. This keeps examples together by language feature rather than by study session or source.
+
+Notes on third-party practice tests are kept separately in [`docs/practice-exams`](docs/practice-exams).
+
 ## Additional Study Material
 
 ### Udemy
