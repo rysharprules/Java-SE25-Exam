@@ -1,6 +1,5 @@
 package rysharp.exam.actionplan.examples;
 
-// Q8 POST_EXAM_REPORT.md
 public class InterfaceRules {
     sealed interface Action permits Music, Dance {
         default String label() { return "art"; }
