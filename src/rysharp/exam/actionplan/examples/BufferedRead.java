@@ -4,7 +4,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-// Q14 POST_EXAM_REPORT.md
 public class BufferedRead {
     public static void main(String[] args) throws Exception {
         byte[] buffer = new byte[5];
