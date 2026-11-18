@@ -18,3 +18,13 @@ Code packages match the naming of the md.
 | Title | File |
 |---|---|
 | *(None)* | — |
+
+
+## Additional runnable examples
+
+The following examples are organised by Java feature and can be opened directly in the source tree.
+
+| Example | Source |
+|---|---|
+| `ConstructorOrder` | [code/practice/ConstructorOrder.java](code/practice/ConstructorOrder.java) |
+| `OverridingOverloadingQuestions` | [code/practice/OverridingOverloadingQuestions.java](code/practice/OverridingOverloadingQuestions.java) |
