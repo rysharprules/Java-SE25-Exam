@@ -2,7 +2,6 @@ package rysharp.exam.actionplan.examples;
 
 import java.util.*;
 
-// Q4 POST_EXAM_REPORT.md
 public class MapPut {
     public static void main(String[] args) {
         Map<String,Double> map = new HashMap<>();
