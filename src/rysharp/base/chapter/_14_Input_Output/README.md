@@ -31,3 +31,17 @@ AI generated code examples with detailed comments.
 | [ExternalizableExample.java](code/ExternalizableExample.java) | - |
 | [SerializationExample.java](code/SerializationExample.java) | - |
 | [FilesExample](code/FilesExample.java) | - |
+
+
+## Additional runnable examples
+
+The following examples are organised by Java feature and can be opened directly in the source tree.
+
+| Example | Source |
+|---|---|
+| `BufferedRead` | [code/BufferedRead.java](code/BufferedRead.java) |
+| `IOBufferExperiments` | [code/practice/IOBufferExperiments.java](code/practice/IOBufferExperiments.java) |
+| `IOFileStreams` | [code/practice/IOFileStreams.java](code/practice/IOFileStreams.java) |
+| `IOPathQuestions` | [code/practice/IOPathQuestions.java](code/practice/IOPathQuestions.java) |
+| `IOStreamQuestions` | [code/practice/IOStreamQuestions.java](code/practice/IOStreamQuestions.java) |
+| `SerializationInheritance` | [code/practice/SerializationInheritance.java](code/practice/SerializationInheritance.java) |
