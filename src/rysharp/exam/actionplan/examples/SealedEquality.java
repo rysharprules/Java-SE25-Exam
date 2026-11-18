@@ -1,6 +1,5 @@
 package rysharp.exam.actionplan.examples;
 
-// Q7 POST_EXAM_REPORT.md
 public class SealedEquality {
     sealed static abstract class Art permits Music, Dance {
         private final double meters;
