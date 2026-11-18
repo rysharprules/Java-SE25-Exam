@@ -27,3 +27,13 @@ AI generated code examples with detailed comments.
 |---|---|
 | [ListResourceBundleExample.java.java](code/bundles/ListResourceBundleExample.java) | - |
 | [FinallyExample.java](code/FinallyExample.java) | - |
+
+
+## Additional runnable examples
+
+The following examples are organised by Java feature and can be opened directly in the source tree.
+
+| Example | Source |
+|---|---|
+| `NestedExceptions` | [code/practice/NestedExceptions.java](code/practice/NestedExceptions.java) |
+| `NumberFormatQuestions` | [code/practice/NumberFormatQuestions.java](code/practice/NumberFormatQuestions.java) |
