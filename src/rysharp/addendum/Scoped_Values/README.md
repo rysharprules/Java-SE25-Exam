@@ -828,3 +828,11 @@ When tracing Scoped Value code:
 > **Scoped Values work well with virtual threads but are not exclusively a virtual-thread feature.**
 
 > **ScopedValue = bind for a scope → callees read it → scope ends → binding disappears.**
+
+## Additional runnable examples
+
+The following examples are organised by Java feature and can be opened directly in the source tree.
+
+| Example | Source |
+|---|---|
+| `ScopedValueQuestions` | [code/practice/ScopedValueQuestions.java](code/practice/ScopedValueQuestions.java) |
