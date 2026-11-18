@@ -4,7 +4,6 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.stream.*;
 
-// Q16 POST_EXAM_REPORT.md
 public class FilesLinesReduce {
     public static void main(String[] args) throws Exception {
         Path file = Files.createTempFile("java-review-", ".txt");
