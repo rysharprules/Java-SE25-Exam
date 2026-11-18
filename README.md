@@ -137,8 +137,4 @@ For the broader platform changes, see the [Oracle JDK 25 release notes](https://
 
 The Java files sit alongside their relevant chapters or addendum topics in `code` and `code/practice` directories. Each topic README links to the corresponding examples, so you can explore a feature and run the code without hunting through a separate exam-preparation folder.
 
-Notes from some third-party practice tests are in [`docs/practice-exams`](docs/practice-exams).
 
----
-
-**💡 Final thought:** the combination that worked best for me was **targeted reading → realistic practice → thorough review → runnable experiments**. The mock exams showed me what I needed to improve; investigating the answers was what made the difference.
