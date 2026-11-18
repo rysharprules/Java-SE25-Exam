@@ -27,3 +27,12 @@ AI generated code examples with detailed comments.
 | [PrecedenceAndEvaluationOrderExample](code/precedence/PrecedenceAndEvaluationOrderExample.java) | - |
 | [ConstantExpressionsAndCompoundAssignmentExample](code/primitive_casting_promotion/ConstantExpressionsAndCompoundAssignmentExample.java) | - |
 | [PrimitiveCastingAndPromotionExample](code/primitive_casting_promotion/PrimitiveCastingAndPromotionExample.java) | - |
+
+
+## Additional runnable examples
+
+The following examples are organised by Java feature and can be opened directly in the source tree.
+
+| Example | Source |
+|---|---|
+| `BooleanOperators` | [code/practice/BooleanOperators.java](code/practice/BooleanOperators.java) |
