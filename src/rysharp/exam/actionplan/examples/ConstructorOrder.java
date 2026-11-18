@@ -1,6 +1,5 @@
 package rysharp.exam.actionplan.examples;
 
-// Q20 POST_EXAM_REPORT.md
 public class ConstructorOrder {
     static class Parent {
         static { System.out.println("Parent static"); }
