@@ -38,3 +38,18 @@ AI generated code examples with detailed comments.
 | [PeriodDurationExample](code/time/PeriodDurationExample.java) | - |
 | [YearMonthDayExample](code/time/YearMonthDayExample.java) | - |
 | [ZonedDateTimeExample](code/time/ZonedDateTimeExample.java) | - |
+
+
+## Additional runnable examples
+
+The following examples are organised by Java feature and can be opened directly in the source tree.
+
+| Example | Source |
+|---|---|
+| `MathMethods` | [code/MathMethods.java](code/MathMethods.java) |
+| `BigDecimalQuestions` | [code/practice/BigDecimalQuestions.java](code/practice/BigDecimalQuestions.java) |
+| `ThreadLocalRandomExample` | [code/practice/ThreadLocalRandomExample.java](code/practice/ThreadLocalRandomExample.java) |
+| `ThreadLocalRandomQuiz` | [code/practice/ThreadLocalRandomQuiz.java](code/practice/ThreadLocalRandomQuiz.java) |
+| `DateTimeOffsetsDST` | [code/time/practice/DateTimeOffsetsDST.java](code/time/practice/DateTimeOffsetsDST.java) |
+| `DateTimeQuestions` | [code/time/practice/DateTimeQuestions.java](code/time/practice/DateTimeQuestions.java) |
+| `DaylightSaving` | [code/time/practice/DaylightSaving.java](code/time/practice/DaylightSaving.java) |
