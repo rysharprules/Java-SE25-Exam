@@ -46,6 +46,8 @@ However, I found it too close in approach to the Java SE 17 material to rely on 
 
 ### 📘 2. Java 25 Exam Fundamentals — ★★★★☆ (4/5)
 
+<a href="https://enthuware.com/books/302-java-25-certification-fundamentals"><img src="img/ocp25-fundamentals.webp" alt="OCP Java 25 Exam Fundamentals book cover" width="170" /></a>
+
 [**OCP Java 25 Exam Fundamentals (1Z0-831)**](https://enthuware.com/books/302-java-25-certification-fundamentals) by Hanumant Deshmukh.
 
 This book felt more closely tailored to the Java 25 syllabus, particularly where the objectives extend beyond the material covered by a Java 21 foundation guide. It helped me focus on the relevant APIs, newer features and exam-specific details.
@@ -57,6 +59,8 @@ The book suggests a study schedule of around two hours a night for six months. I
 ---
 
 ### 🏆 3. Enthuware Java SE 25 practice exams — ★★★★★ (5/5)
+
+<a href="https://sites.fastspring.com/enthuware/product/1z0831"><img src="img/enthuware-ocp25-mocks.webp" alt="Enthuware OCP Java SE 25 practice exams cover" width="170" /></a>
 
 [Enthuware OCP Java Programmer SE 25 practice exams (1Z0-831)](https://sites.fastspring.com/enthuware/product/1z0831)
 
