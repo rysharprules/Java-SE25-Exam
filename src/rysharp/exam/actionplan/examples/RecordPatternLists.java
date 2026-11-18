@@ -2,7 +2,6 @@ package rysharp.exam.actionplan.examples;
 
 import java.util.List;
 
-// Q2 POST_EXAM_REPORT.md
 public class RecordPatternLists {
     record Person(String name, List<String> hobbies) {}
 
