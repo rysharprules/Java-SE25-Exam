@@ -1,4 +1,4 @@
-# Oracle Java SE 25 Developer Professional (1Z0-831)
+# ☕ Oracle Java SE 25 Developer Professional (1Z0-831)
 
 A practical study guide, topic notes and runnable Java examples for the **Oracle Java SE 25 Developer Professional** certification.
 
@@ -6,7 +6,9 @@ This repository brings together the resources I used, the approaches I found eff
 
 <a href="https://education.oracle.com/" ><img src="https://raw.githubusercontent.com/rysharprules/Java-SE8-Upgrade-Exam/master/ocp_logo.gif" alt="Oracle Certified Professional" /></a>
 
-## How I approached preparation
+---
+
+## 🧭 How I approached preparation
 
 My preparation worked best when I combined a **broad foundation**, **Java 25-specific material**, **realistic mock exams** and **careful review of mistakes**.
 
@@ -16,9 +18,19 @@ The biggest improvement in my understanding came from reviewing mock-exam result
 
 **My main advice:** don't measure progress only by chapters read or mock exams completed. Spend time explaining each mistake, testing your assumptions in code and revisiting your weak areas.
 
-## The resources I used
+---
 
-### 1. Java SE 21 study guide — ★★★☆☆ (3/5)
+## 📚 The resources I used
+
+| Resource | My rating | Where it helped most |
+|---|:---:|---|
+| Java SE 21 Study Guide | ⭐⭐⭐☆☆ | Refreshing the foundations |
+| Java 25 Exam Fundamentals | ⭐⭐⭐⭐☆ | Java 25-specific coverage |
+| Enthuware practice exams | ⭐⭐⭐⭐⭐ | Realistic practice and identifying weaknesses |
+
+The ratings below reflect **how useful I found each resource for preparing for Java SE 25**, not a general review of the authors or their books.
+
+### 📖 1. Java SE 21 study guide — ★★★☆☆ (3/5)
 
 <img src="img/ocp21book.jpg" alt="OCP Java SE 21 Developer Study Guide cover" width="170"/>
 
@@ -30,9 +42,11 @@ However, I found it too close in approach to the Java SE 17 material to rely on 
 
 **Best use:** build or refresh your foundation, then supplement it with material targeted at Java SE 25.
 
-### 2. Java 25 Exam Fundamentals — ★★★★☆ (4/5)
+---
 
-**OCP Java 25 Exam Fundamentals (1Z0-831)** by Hanumant Deshmukh.
+### 📘 2. Java 25 Exam Fundamentals — ★★★★☆ (4/5)
+
+[**OCP Java 25 Exam Fundamentals (1Z0-831)**](https://enthuware.com/books/302-java-25-certification-fundamentals) by Hanumant Deshmukh.
 
 This book felt more closely tailored to the Java 25 syllabus, particularly where the objectives extend beyond the material covered by a Java 21 foundation guide. It helped me focus on the relevant APIs, newer features and exam-specific details.
 
@@ -40,7 +54,9 @@ The book suggests a study schedule of around two hours a night for six months. I
 
 **Best use:** bridge the gap between Java 21 fundamentals and the specific demands of Java SE 25.
 
-### 3. Enthuware Java SE 25 practice exams — ★★★★★ (5/5)
+---
+
+### 🏆 3. Enthuware Java SE 25 practice exams — ★★★★★ (5/5)
 
 [Enthuware OCP Java Programmer SE 25 practice exams (1Z0-831)](https://sites.fastspring.com/enthuware/product/1z0831)
 
@@ -50,7 +66,9 @@ Working through the exams gave me a clear sense of progression. But the real ben
 
 **Best use:** treat each mock as a diagnostic tool. Review every incorrect answer and any correct answer you reached through guesswork or uncertain reasoning. Use the results to decide what to study next.
 
-### 4. Other practice exams
+---
+
+### 🧪 4. Other practice exams
 
 I also tried two Udemy courses. Both provided extra practice, although I found their usefulness varied considerably.
 
@@ -61,7 +79,9 @@ I also tried two Udemy courses. Both provided extra practice, although I found t
 
 For the strongest exam-specific practice, I would prioritise **Enthuware** over these alternatives.
 
-## A study method I'd recommend
+---
+
+## 🛠️ A study method I'd recommend
 
 1. **Start with the official objectives.** Use them as a checklist, rather than assuming any single book covers every detail.
 2. **Build a foundation.** Work through the core Java language, collections, streams, concurrency, I/O, modules and related APIs. Don't spend equal time on topics you already know well.
@@ -72,11 +92,13 @@ For the strongest exam-specific practice, I would prioritise **Enthuware** over 
 
 I used ChatGPT as a review partner to challenge my reasoning and explain alternatives. It was especially helpful when I could paste a question, explain my chosen answer and work through why it did or did not hold. I still verified important behaviour using the JDK and runnable code rather than relying on an AI explanation alone.
 
-## Explore the repository
+---
+
+## 🗂️ Explore the repository
 
 The notes below follow the 14-chapter structure of the Java SE 21 study guide. They focus on points I wanted to reinforce, including exam-specific nuances and places where Java 25 differs. **They are selective notes, not a complete replacement for the books or the official syllabus.**
 
-### Java 21 foundation topics
+### 📗 Java 21 foundation topics
 
 | Chapter | README | Description |
 |---|---|---|
@@ -95,7 +117,7 @@ The notes below follow the 14-chapter structure of the Java SE 21 study guide. T
 | 13 - Concurrency                     | [README](src/rysharp/base/chapter/_13_Concurrency/README.md) | Threads, concurrency         |
 | 14 - Input/Output                    | [README](src/rysharp/base/chapter/_14_Input_Output/README.md) | Input/Output                 |
 
-### Java 25 addendum
+### 🚀 Java 25 addendum
 
 These notes cover relevant additions introduced across JDK 22–25.
 
@@ -111,7 +133,7 @@ These notes cover relevant additions introduced across JDK 22–25.
 
 For the broader platform changes, see the [Oracle JDK 25 release notes](https://www.oracle.com/asean/java/technologies/javase/25-relnote-issues.html). Enthuware also publishes a [Java 25 exam objectives comparison](https://enthuware.com/ocajp-8-fundamentals/114-resources/ocajp-ocpjp-resources).
 
-### Runnable Java examples
+### 💻 Runnable Java examples
 
 The Java files sit alongside their relevant chapters or addendum topics in `code` and `code/practice` directories. Each topic README links to the corresponding examples, so you can explore a feature and run the code without hunting through a separate exam-preparation folder.
 
@@ -119,4 +141,4 @@ Notes from some third-party practice tests are in [`docs/practice-exams`](docs/p
 
 ---
 
-**Final thought:** the combination that worked best for me was **targeted reading → realistic practice → thorough review → runnable experiments**. The mock exams showed me what I needed to improve; investigating the answers was what made the difference.
+**💡 Final thought:** the combination that worked best for me was **targeted reading → realistic practice → thorough review → runnable experiments**. The mock exams showed me what I needed to improve; investigating the answers was what made the difference.
