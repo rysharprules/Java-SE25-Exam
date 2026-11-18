@@ -1,6 +1,5 @@
 package rysharp.exam.actionplan.examples;
 
-// Q5 POST_EXAM_REPORT.md
 public class MathMethods {
     public static void main(String[] args) {
         System.out.println(Math.round(2.5f));   // 3 (int)
