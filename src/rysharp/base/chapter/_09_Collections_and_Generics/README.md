@@ -32,3 +32,19 @@ AI generated code examples with detailed comments.
 | [DequeFifoExample](code/collections/DequeFifoExample.java) | - |
 | [rysharp.base.chapter._09_Collections_and_Generics.code.collections.DequeLifoExample](code/collections/rysharp.base.chapter._09_Collections_and_Generics.code.collections.DequeLifoExample.java) | - |
 | [QueueFifoExample](code/collections/QueueFifoExample.java) | - |
+
+
+## Additional runnable examples
+
+The following examples are organised by Java feature and can be opened directly in the source tree.
+
+| Example | Source |
+|---|---|
+| `MapPut` | [code/MapPut.java](code/MapPut.java) |
+| `CollectionMutabilityQuestions` | [code/practice/CollectionMutabilityQuestions.java](code/practice/CollectionMutabilityQuestions.java) |
+| `ComparaterQuestions` | [code/practice/ComparaterQuestions.java](code/practice/ComparaterQuestions.java) |
+| `GenericsOverrideQuestions` | [code/practice/GenericsOverrideQuestions.java](code/practice/GenericsOverrideQuestions.java) |
+| `IteratorQuestions` | [code/practice/IteratorQuestions.java](code/practice/IteratorQuestions.java) |
+| `ListCopyVsView` | [code/practice/ListCopyVsView.java](code/practice/ListCopyVsView.java) |
+| `MapQuestions` | [code/practice/MapQuestions.java](code/practice/MapQuestions.java) |
+| `SequencedCollectionExamples` | [code/practice/SequencedCollectionExamples.java](code/practice/SequencedCollectionExamples.java) |
