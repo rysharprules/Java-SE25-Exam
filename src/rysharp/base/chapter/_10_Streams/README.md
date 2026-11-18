@@ -26,3 +26,16 @@ AI generated code examples with detailed comments.
 | Example file | Support |
 |---|---|
 | [OptionalExample](code/OptionalExample.java) | - |
+
+
+## Additional runnable examples
+
+The following examples are organised by Java feature and can be opened directly in the source tree.
+
+| Example | Source |
+|---|---|
+| `FilesLinesReduce` | [code/practice/FilesLinesReduce.java](code/practice/FilesLinesReduce.java) |
+| `RandomLetterStreams` | [code/practice/RandomLetterStreams.java](code/practice/RandomLetterStreams.java) |
+| `StreamsPrimitiveCollectors` | [code/practice/StreamsPrimitiveCollectors.java](code/practice/StreamsPrimitiveCollectors.java) |
+| `StreamsQuestions` | [code/practice/StreamsQuestions.java](code/practice/StreamsQuestions.java) |
+| `StreamsQuiz` | [code/practice/StreamsQuiz.java](code/practice/StreamsQuiz.java) |
