@@ -3,7 +3,6 @@ package rysharp.exam.actionplan.examples;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-// Q21 POST_EXAM_REPORT.md
 public class RandomLetterStreams {
     public static void main(String[] args) {
         StringBuilder builder = new StringBuilder();
