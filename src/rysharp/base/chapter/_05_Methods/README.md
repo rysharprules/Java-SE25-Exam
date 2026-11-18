@@ -17,3 +17,12 @@ Code packages match the naming of the md.
 | Title | File |
 |---|---|
 | *(None)* | — |
+
+
+## Additional runnable examples
+
+The following examples are organised by Java feature and can be opened directly in the source tree.
+
+| Example | Source |
+|---|---|
+| `OverloadVarargs` | [code/practice/OverloadVarargs.java](code/practice/OverloadVarargs.java) |
