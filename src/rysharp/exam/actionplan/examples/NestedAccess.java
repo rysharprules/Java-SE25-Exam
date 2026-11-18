@@ -1,6 +1,5 @@
 package rysharp.exam.actionplan.examples;
 
-// Q11 POST_EXAM_REPORT.md
 public class NestedAccess {
     private int outerPrivate = 10;
     public int outerPublic = 20;
