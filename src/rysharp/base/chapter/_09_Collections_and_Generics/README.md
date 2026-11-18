@@ -30,7 +30,7 @@ AI generated code examples with detailed comments.
 | [GenericsExample](code/GenericsExample.java) | - |
 | [DequeEquivalentMethodsExample](code/collections/DequeEquivalentMethodsExample.java) | - |
 | [DequeFifoExample](code/collections/DequeFifoExample.java) | - |
-| [rysharp.base.chapter._09_Collections_and_Generics.code.collections.DequeLifoExample](code/collections/rysharp.base.chapter._09_Collections_and_Generics.code.collections.DequeLifoExample.java) | - |
+| [DequeLifoExample](code/collections/DequeLifoExample.java) | - |
 | [QueueFifoExample](code/collections/QueueFifoExample.java) | - |
 
 
