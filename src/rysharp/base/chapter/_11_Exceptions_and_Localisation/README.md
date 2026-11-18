@@ -1,0 +1,39 @@
+# Exceptions & Localisation
+
+[🔙 Back](../../../../../README.md)
+
+## 📚 Chapter Objectives
+As per the [OCP Oracle Certified Professional Java SE 21 Developer Study Guide: Exam 1z0-830](https://www.amazon.co.uk/Oracle-Certified-Professional-Developer-Study/dp/1394286619) book:
+
+>- **Handling Exceptions**
+>  - Handle exceptions using try/catch/finally, try-with-resources, and multi-catch blocks, including custom exceptions.
+>- **Implementing Localization**
+>  - Implement localization using locales and resource bundles. Parse and format messages, dates, times, and numbers, including currency and percentage values.
+
+## 🎯 Targeted Revision
+AI generated guides based on areas I deem benefit from further explanation or JDK25 amendments.
+
+Code packages match the naming of the md.
+
+| Title | File |
+|---|---|
+| Exceptions | [exceptions.md](exceptions.md) |
+| Formatting & Localisation | [formatting_localization.md](formatting_localization.md) |
+
+## </> Code Examples
+AI generated code examples with detailed comments.
+
+| Example file | Support |
+|---|---|
+| [ListResourceBundleExample.java.java](code/bundles/ListResourceBundleExample.java) | - |
+| [FinallyExample.java](code/FinallyExample.java) | - |
+
+
+## Additional runnable examples
+
+The following examples are organised by Java feature and can be opened directly in the source tree.
+
+| Example | Source |
+|---|---|
+| `NestedExceptions` | [code/practice/NestedExceptions.java](code/practice/NestedExceptions.java) |
+| `NumberFormatQuestions` | [code/practice/NumberFormatQuestions.java](code/practice/NumberFormatQuestions.java) |

@@ -1,0 +1,47 @@
+# Input/Output
+
+[🔙 Back](../../../../../README.md)
+
+## 📚 Chapter Objectives
+As per the [OCP Oracle Certified Professional Java SE 21 Developer Study Guide: Exam 1z0-830](https://www.amazon.co.uk/Oracle-Certified-Professional-Developer-Study/dp/1394286619) book:
+
+>- **Using Java I/O API**
+>  - Read and write console and file data using I/O streams.
+>  - Serialize and de-serialize Java objects.
+>  - Construct, traverse, create, read, and write Path objects and their properties using the java.nio.file API.
+
+## 🎯 Targeted Revision
+AI generated guides based on areas I deem benefit from further explanation or JDK25 amendments.
+
+Code packages match the naming of the md.
+
+| Title | File |
+|---|---|
+| Console | [console.md](console.md) |
+| File Attributes & Directory Traversal | [files_attributres_directory_traversal.md](files_attributres_directory_traversal.md) |
+| Files & Paths | [files_paths.md](files_paths.md) |
+| I/O Streams, Readers & Writers | [io.md](io.md) |
+| Serialization | [serialization.md](serialization.md) |
+
+## </> Code Examples
+AI generated code examples with detailed comments.
+
+| Example file | Support |
+|---|---|
+| [ExternalizableExample.java](code/ExternalizableExample.java) | - |
+| [SerializationExample.java](code/SerializationExample.java) | - |
+| [FilesExample](code/FilesExample.java) | - |
+
+
+## Additional runnable examples
+
+The following examples are organised by Java feature and can be opened directly in the source tree.
+
+| Example | Source |
+|---|---|
+| `BufferedRead` | [code/BufferedRead.java](code/BufferedRead.java) |
+| `IOBufferExperiments` | [code/practice/IOBufferExperiments.java](code/practice/IOBufferExperiments.java) |
+| `IOFileStreams` | [code/practice/IOFileStreams.java](code/practice/IOFileStreams.java) |
+| `IOPathQuestions` | [code/practice/IOPathQuestions.java](code/practice/IOPathQuestions.java) |
+| `IOStreamQuestions` | [code/practice/IOStreamQuestions.java](code/practice/IOStreamQuestions.java) |
+| `SerializationInheritance` | [code/practice/SerializationInheritance.java](code/practice/SerializationInheritance.java) |

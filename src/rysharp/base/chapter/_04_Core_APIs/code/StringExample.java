@@ -1,0 +1,157 @@
+package rysharp.base.chapter._04_Core_APIs.code;
+
+import java.util.Arrays;
+
+public class StringExample {
+
+    public static void main(String[] args) {
+
+        // 1. String immutability
+        String a = "Hello";
+        String b = a;
+
+        a.concat(" World"); // Result discarded
+
+        System.out.println("1. " + a); // Hello
+        System.out.println("2. " + b); // Hello
+
+        // 2. concat() returns a new String
+        a = a.concat(" World");
+
+        System.out.println("3. " + a); // Hello World
+        System.out.println("4. " + b); // Hello
+
+        // 3. Concatenation using +
+        String c = "Java";
+        String d = c + " 25";
+
+        System.out.println("5. " + c); // Java
+        System.out.println("6. " + d); // Java 25
+
+        // 4. Concatenation using +=
+        String e = "Good";
+        String f = e;
+
+        e += " Morning";
+
+        System.out.println("7. " + e); // Good Morning
+        System.out.println("8. " + f); // Good
+
+        // 5. String pool: literals
+        String s1 = "Java";
+        String s2 = "Java";
+
+        System.out.println("9. " + (s1 == s2));      // true
+        System.out.println("10. " + s1.equals(s2)); // true
+
+        // 6. new String() creates a separate object
+        String s3 = new String("Java");
+
+        System.out.println("11. " + (s1 == s3));      // false
+        System.out.println("12. " + s1.equals(s3)); // true
+
+        // 7. Compile-time constant concatenation
+        String s4 = "Ja" + "va";
+
+        System.out.println("13. " + (s1 == s4)); // true
+
+        // 8. Runtime concatenation
+        String part = "Ja";
+        String s5 = part + "va";
+
+        System.out.println("14. " + (s1 == s5));      // false
+        System.out.println("15. " + s1.equals(s5)); // true
+
+        // 9. intern() returns the pooled reference
+        String s6 = s5.intern();
+
+        System.out.println("16. " + (s1 == s6)); // true
+
+        // 10. final compile-time constants
+        final String prefix = "Ja";
+        String s7 = prefix + "va";
+
+        System.out.println("17. " + (s1 == s7)); // true
+
+        // 11. concat() versus + with null
+        String text = "Hello";
+        String nullText = null;
+
+        System.out.println("18. " + (text + nullText)); // Hellonull
+
+        // text.concat(nullText);
+        // Would throw NullPointerException
+
+        example12_splitWithDelimiters();
+        isBlanks();
+    }
+
+
+    private static void example12_splitWithDelimiters() {
+        System.out.println("\n12. splitWithDelimiters()");
+
+        String text = "boo:::and::foo::poo::moo";
+
+        // split() discards delimiters.
+        System.out.println(Arrays.toString(text.split(":+")));
+        // [boo, and, foo, poo, moo]
+
+        // splitWithDelimiters() retains matched delimiters.
+        System.out.println(Arrays.toString(text.splitWithDelimiters(":+", -1)));
+        // [boo, :::, and, ::, foo, ::, poo, ::, moo]
+
+        // Positive limit: at most limit - 1 delimiter matches.
+        System.out.println(Arrays.toString(text.splitWithDelimiters(":+", 2)));
+        // [boo, :::, and::foo::poo::moo]
+
+        System.out.println(Arrays.toString(text.splitWithDelimiters(":+", 3)));
+        // [boo, :::, and, ::, foo::poo::moo]
+
+        // Zero: unlimited splitting; trailing empty strings removed.
+        System.out.println(Arrays.toString("a:b:".splitWithDelimiters(":", 0)));
+        // [a, :, b, :]
+
+        // Negative: unlimited splitting; trailing empty strings preserved.
+        System.out.println(Arrays.toString("a:b:".splitWithDelimiters(":", -1)));
+        // [a, :, b, :, ]
+    }
+
+    private static void isBlanks() {
+        System.out.println("--- isBlanks ---");
+        String whitespace = "   ";
+        String empty = "";
+        String newEmpty = new String("");
+        String nonWhitespace = "a";
+
+        // isBlank() returns true if the string is empty or contains only white space codepoints, otherwise false.
+        System.out.println("isBlank");
+        System.out.println(whitespace.isBlank()); // true
+        System.out.println(empty.isBlank()); // true
+        System.out.println(newEmpty.isBlank()); // true
+        System.out.println(nonWhitespace.isBlank()); // false
+
+        // isEmpty returns true if, and only if, length() is 0. Thus, it will return false even if the string contains only spaces.
+        System.out.println("isEmpty");
+        System.out.println(whitespace.isEmpty()); // false
+        System.out.println(empty.isEmpty()); // true
+        System.out.println(newEmpty.isEmpty()); // true
+        System.out.println(nonWhitespace.isEmpty()); // false
+
+        // String comparisons should never be done using == or != operators because these operators check whether two references point to the same object or not
+        System.out.println("strip ==");
+        System.out.println(whitespace.strip() == ""); // true
+        System.out.println(empty.strip() == ""); // true
+        // even though newEmpty is a separate object, strip() returns the pooled empty string.
+        System.out.println(newEmpty.strip() == ""); // true
+        System.out.println("".strip() == new String("")); // false
+        System.out.println(nonWhitespace.strip() == ""); // false
+
+        // String does have a compareTo method but unless you strip the string from its leading and trailing white spaces, a string containing just the white spaces will not match with ""
+        System.out.println("compareTo");
+        System.out.println(whitespace.compareTo("") == 0); // false
+        System.out.println(empty.compareTo("") == 0); // true
+        System.out.println(newEmpty.compareTo("") == 0); // true
+        System.out.println(nonWhitespace.compareTo("") == 0); // false
+    }
+
+}
