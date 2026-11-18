@@ -797,3 +797,14 @@ gather()
 > **Stream parallelism and `mapConcurrent()` concurrency are separate concepts.**
 
 > **FIXED = chunks → SLIDING = overlap → FOLD = final → SCAN = running → MAP CONCURRENT = concurrent mapping.**
+
+## Additional runnable examples
+
+The following examples are organised by Java feature and can be opened directly in the source tree.
+
+| Example | Source |
+|---|---|
+| `GathererWindows` | [code/practice/GathererWindows.java](code/practice/GathererWindows.java) |
+| `GatherersCustomExample` | [code/practice/GatherersCustomExample.java](code/practice/GatherersCustomExample.java) |
+| `GatherersQuestions` | [code/practice/GatherersQuestions.java](code/practice/GatherersQuestions.java) |
+| `GatherersQuiz` | [code/practice/GatherersQuiz.java](code/practice/GatherersQuiz.java) |
