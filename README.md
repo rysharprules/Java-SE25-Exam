@@ -25,24 +25,22 @@ Chapters are derived from the JDK 21 Base learning book (noted above).
 
 **Note: READMEs cover aspects which I personally felt needed exam-specific shortcuts/notes/references to support memorization and nuance awareness. I also attempt to call out where JDK25 differs from JDK21. The READMEs do not cover _every_ topic of that chapter, nor do the associated example code. They are an addition to the content of the JDK 21 Base learning book.**
 
-| Chapter                              | README                                                                             | Assessment                                                                                 | Description                  |
-|--------------------------------------|------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|------------------------------|
-| 00 - Assessment                      | -                                                                                  | [Pre-Assessment](src/rysharp/base/chapter/_00_Assessment/preassessment.md)                 | Pre-Assessment               |
-| 01 - Building Blocks                 | [README](src/rysharp/base/chapter/_01_Building_Blocks/README.md)                   | [Assessment](src/rysharp/base/chapter/_01_Building_Blocks/assessment.md)                   | Java basics, variables, flow |
-| 02 - Operators                       | [README](src/rysharp/base/chapter/_02_Operators/README.md)                         | [Assessment](src/rysharp/base/chapter/_02_Operators/assessment.md)                         | Operators and expressions    |
-| 03 - Making Decisions                | [README](src/rysharp/base/chapter/_03_Making_Decisions/README.md)                  | [Assessment](src/rysharp/base/chapter/_03_Making_Decisions/assessment.md)                  | Conditionals, switch, loops  |
-| 04 - Core APIs                       | [README](src/rysharp/base/chapter/_04_Core_APIs/README.md)                         | [Assessment](src/rysharp/base/chapter/_04_Core_APIs/assessment.md)                         | Strings, arrays, dates       |
-| 05 - Methods                         | [README](src/rysharp/base/chapter/_05_Methods/README.md)                           | [Assessment](src/rysharp/base/chapter/_05_Methods/assessment.md)                           | Methods, parameters          |
-| 06 - Class Design                    | [README](src/rysharp/base/chapter/_06_Class_Design/README.md)                      | [Assessment](src/rysharp/base/chapter/_06_Class_Design/assessment.md)                      | Classes, inheritance         |
-| 07 - Beyond Classes                  | [README](src/rysharp/base/chapter/_07_Beyond_Classes/README.md)                    | [Assessment](src/rysharp/base/chapter/_07_Beyond_Classes/assessment.md)                    | Abstract, sealed, records    |
-| 08 - Lambdas & Functional Interfaces | [README](src/rysharp/base/chapter/_08_Lambdas_and_Functional_Interfaces/README.md) | [Assessment](src/rysharp/base/chapter/_08_Lambdas_and_Functional_Interfaces/assessment.md) | Lambdas, functional APIs     |
-| 09 - Collections & Generics          | [README](src/rysharp/base/chapter/_09_Collections_and_Generics/README.md)          | [Assessment](src/rysharp/base/chapter/_09_Collections_and_Generics/assessment.md)          | Collections, generics        |
-| 10 - Streams                         | [README](src/rysharp/base/chapter/_10_Streams/README.md)                           | [Assessment](src/rysharp/base/chapter/_10_Streams/assessment.md)                           | Streams, pipelines           |
-| 11 - Exceptions & Localisation       | [README](src/rysharp/base/chapter/_11_Exceptions_and_Localisation/README.md)       | [Assessment](src/rysharp/base/chapter/_11_Exceptions_and_Localisation/assessment.md)       | Exceptions, localisation     |
-| 12 - Modules                         | [README](src/rysharp/base/chapter/_12_Modules/README.md)                           | [Assessment](src/rysharp/base/chapter/_12_Modules/assessment.md)                           | Java modules                 |
-| 13 - Concurrency                     | [README](src/rysharp/base/chapter/_13_Concurrency/README.md)                       | [Assessment](src/rysharp/base/chapter/_13_Concurrency/assessment.md)                       | Threads, concurrency         |
-| 14 - Input/Output                    | [README](src/rysharp/base/chapter/_14_Input_Output/README.md)                      | [Assessment](src/rysharp/base/chapter/_14_Input_Output/assessment.md)                      | Input/Output                 |
-| Summary                              | -                                                                                  | [Assessment Summary](src/rysharp/base/chapter/_00_Assessment/assessment_summary.md)        | Overall scores and stats     |
+| Chapter | README | Description |
+|---|---|---|
+| 01 - Building Blocks                 | [README](src/rysharp/base/chapter/_01_Building_Blocks/README.md) | Java basics, variables, flow |
+| 02 - Operators                       | [README](src/rysharp/base/chapter/_02_Operators/README.md) | Operators and expressions    |
+| 03 - Making Decisions                | [README](src/rysharp/base/chapter/_03_Making_Decisions/README.md) | Conditionals, switch, loops  |
+| 04 - Core APIs                       | [README](src/rysharp/base/chapter/_04_Core_APIs/README.md) | Strings, arrays, dates       |
+| 05 - Methods                         | [README](src/rysharp/base/chapter/_05_Methods/README.md) | Methods, parameters          |
+| 06 - Class Design                    | [README](src/rysharp/base/chapter/_06_Class_Design/README.md) | Classes, inheritance         |
+| 07 - Beyond Classes                  | [README](src/rysharp/base/chapter/_07_Beyond_Classes/README.md) | Abstract, sealed, records    |
+| 08 - Lambdas & Functional Interfaces | [README](src/rysharp/base/chapter/_08_Lambdas_and_Functional_Interfaces/README.md) | Lambdas, functional APIs     |
+| 09 - Collections & Generics          | [README](src/rysharp/base/chapter/_09_Collections_and_Generics/README.md) | Collections, generics        |
+| 10 - Streams                         | [README](src/rysharp/base/chapter/_10_Streams/README.md) | Streams, pipelines           |
+| 11 - Exceptions & Localisation       | [README](src/rysharp/base/chapter/_11_Exceptions_and_Localisation/README.md) | Exceptions, localisation     |
+| 12 - Modules                         | [README](src/rysharp/base/chapter/_12_Modules/README.md) | Java modules                 |
+| 13 - Concurrency                     | [README](src/rysharp/base/chapter/_13_Concurrency/README.md) | Threads, concurrency         |
+| 14 - Input/Output                    | [README](src/rysharp/base/chapter/_14_Input_Output/README.md) | Input/Output                 |
 
 ## JDK 25 Addendum
 An addendum for additions introduced across JDK 22–25 that show up in the 1Z0-831 exam objectives.

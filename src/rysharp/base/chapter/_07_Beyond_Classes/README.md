@@ -24,3 +24,18 @@ Code packages match the naming of the md.
 | Nested Classes | [nested_classes.md](nested_classes.md) |
 | Records | [records.md](records.md) |
 | Sealing Classes | [sealed.md](sealed.md) |
+
+
+## Additional runnable examples
+
+The following examples are organised by Java feature and can be opened directly in the source tree.
+
+| Example | Source |
+|---|---|
+| `EnumTransform` | [code/EnumTransform.java](code/EnumTransform.java) |
+| `InterfaceRules` | [code/InterfaceRules.java](code/InterfaceRules.java) |
+| `NestedAccess` | [code/NestedAccess.java](code/NestedAccess.java) |
+| `InterfaceInheritanceRules` | [code/practice/InterfaceInheritanceRules.java](code/practice/InterfaceInheritanceRules.java) |
+| `InterfaceQuestions` | [code/practice/InterfaceQuestions.java](code/practice/InterfaceQuestions.java) |
+| `RecordPatternLists` | [code/practice/RecordPatternLists.java](code/practice/RecordPatternLists.java) |
+| `SealedEquality` | [code/practice/SealedEquality.java](code/practice/SealedEquality.java) |

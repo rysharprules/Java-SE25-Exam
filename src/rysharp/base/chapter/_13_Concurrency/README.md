@@ -30,3 +30,16 @@ AI generated code examples with detailed comments.
 |---|---|
 | [NewVirtualThreadPerTaskExecutorExample](code/NewVirtualThreadPerTaskExecutorExample.java) | [Support](code_support/NewVirtualThreadPerTaskExecutorExample.md) |
 | [ExecutorServiceExample](code/ExecutorServiceExample.java) | - |
+
+## Additional runnable examples
+
+The following examples are organised by Java feature and can be opened directly in the source tree.
+
+| Example | Source |
+|---|---|
+| `AtomicIntegerQuestions` | [code/practice/AtomicIntegerQuestions.java](code/practice/AtomicIntegerQuestions.java) |
+| `RunnableFuture` | [code/practice/RunnableFuture.java](code/practice/RunnableFuture.java) |
+| `ThreadInterruptQuestions` | [code/practice/ThreadInterruptQuestions.java](code/practice/ThreadInterruptQuestions.java) |
+| `ThreadInterruptedExceptionQuestions` | [code/practice/ThreadInterruptedExceptionQuestions.java](code/practice/ThreadInterruptedExceptionQuestions.java) |
+| `ThreadLockQuestions` | [code/practice/ThreadLockQuestions.java](code/practice/ThreadLockQuestions.java) |
+| `ThreadStateQuestions` | [code/practice/ThreadStateQuestions.java](code/practice/ThreadStateQuestions.java) |

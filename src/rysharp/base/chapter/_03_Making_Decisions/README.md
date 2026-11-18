@@ -30,3 +30,11 @@ AI generated code examples with detailed comments.
 | [SwitchBasicsExample](code/switches/SwitchBasicsExample.java) | - |
 | [SwitchExpressionExample](code/switches/SwitchExpressionExample.java) | - |
 | [SwitchPatternMatchingExample](code/switches/SwitchPatternMatchingExample.java) | - |
+
+## Additional runnable examples
+
+The following examples are organised by Java feature and can be opened directly in the source tree.
+
+| Example | Source |
+|---|---|
+| `LoopTrace` | [code/LoopTrace.java](code/LoopTrace.java) |
