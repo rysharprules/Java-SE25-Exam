@@ -1,6 +1,5 @@
 package rysharp.exam.actionplan.examples;
 
-// Q10 POST_EXAM_REPORT.md
 public class OverloadVarargs {
     static String choose(int a, int b) { return "int,int"; }
     static String choose(Integer a, int b) { return "Integer,int"; }
